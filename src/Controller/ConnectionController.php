@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class ConnectionController extends AbstractController
 {
     #[Route('/', name: 'home_index', methods: ['GET'])]
     public function index(): Response
