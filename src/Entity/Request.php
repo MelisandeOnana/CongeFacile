@@ -84,7 +84,7 @@ class Request
         return $this->department;
     }
 
-    public function setDepartment(Person $department): void
+    public function setDepartment(Department $department): void
     {
         $this->department =$department;
     }
