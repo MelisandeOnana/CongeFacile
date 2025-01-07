@@ -1,52 +1,53 @@
 <nav class="shadow-lg w-[280px] text-white h-full">
     {% if app.user %}
         <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">
-            <a class="px-4 text-[#004C6C] text-base block w-full {% if app.request.attributes.get('_route') == 'home' %}bg-[#004C6C0D] text-[#004C6C] {% else %}text-[#004C6C]{% endif %}" href="{{ path('home') }}">Accueil</a>
+            <a class="px-4 text-[#004C6C] text-base block w-full {% if app.request.attributes.get('_route') == 'home' %}bg-[#004C6C0D] text-[#004C6C] {% else %}text-[#004C6C]{% endif %}" href="">Accueil</a>
         </div>
         {% if is_granted('ROLE_COLLABORATEUR') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('collab') }}">Nouvelle demande</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Nouvelle demande</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('collab_history') }}">Historique des demandes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Historique des demandes</a>
             </div>
         {% elseif is_granted('ROLE_MANAGER') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin') }}">Demandes en attentes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Demandes en attentes</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_history') }}">Historique des demandes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Historique des demandes</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_teams' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_teams') }}">Mon équipe</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_teams' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Mon équipe</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_stats' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_stats') }}">Statistiques</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_stats' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Statistiques</a>
             </div>
         {% endif %}
         <div class="h-[1px] mt-[25px] w-[210px] bg-gray-300 mx-auto"></div>
         <div class="h-[44px] mt-[30px] w-full flex items-center">
-            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_info' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('logout_info') }}">Mes informations</a>
+            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_info' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Mes informations</a>
         </div>
         <div class="h-[44px] mt-[10px] w-full flex items-center">
-            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('logout_preferences') }}">Mes préférences</a>
+            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="">Mes préférences</a>
         </div>
         {% if is_granted('ROLE_MANAGER') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer" onclick="toggleLinks('admin-links')">
-                <p class="px-4 text-[#637381] text-base block w-full">Admin</p>
+                <p class="px-4 text-[#637381] text-base block w-full">Administration</p>
+                <p class="px-6 text-[#004C6C] ml-[44px]">⋁</p>
             </div>
             <div id="admin-links" class="admin-links hidden">
                 <div class=" h-[44px] mt-[10px] w-full flex items-center">
-                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Types de demandes</a>
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="">Types de demandes</a>
                 </div>
                 <div class=" h-[44px] mt-[10px] w-full flex items-center">
-                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Directions/Services</a>
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="">Directions/Services</a>
                 </div>
                 <div class=" h-[44px] mt-[10px] w-full flex items-center">
-                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Managers</a>
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="">Managers</a>
                 </div>
                 <div class=" h-[44px] mt-[10px] w-full flex items-center">
-                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Postes</a>
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="">Postes</a>
                 </div>
             </div>
         {% endif %}
