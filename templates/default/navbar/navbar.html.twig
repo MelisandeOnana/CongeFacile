@@ -1,38 +1,55 @@
 <nav class="shadow-lg w-[280px] text-white h-full">
     {% if app.user %}
         <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">
-            <a class="px-4 text-[#004C6C] text-base block w-full" href="#home">Accueil</a>
+            <a class="px-4 text-[#004C6C] text-base block w-full {% if app.request.attributes.get('_route') == 'home' %}bg-[#004C6C0D] text-[#004C6C] {% else %}text-[#004C6C]{% endif %}" href="{{ path('home') }}">Accueil</a>
         </div>
         {% if is_granted('ROLE_COLLABORATEUR') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#collab">Nouvelle demande</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('collab') }}">Nouvelle demande</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#collab">Historique des demandes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('collab_history') }}">Historique des demandes</a>
             </div>
         {% elseif is_granted('ROLE_MANAGER') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#admin"> Demandes en attentes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin') }}">Demandes en attentes</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Historique des demandes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_history' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_history') }}">Historique des demandes</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Mon équipes</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_teams' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_teams') }}">Mon équipe</a>
             </div>
             <div class="h-[44px] mt-[10px] w-full flex items-center">
-                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Statistiques</a>
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin_stats' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('admin_stats') }}">Statistiques</a>
             </div>
         {% endif %}
-
-
-
+        <div class="h-[1px] mt-[25px] w-[210px] bg-gray-300 mx-auto"></div>
         <div class="h-[44px] mt-[30px] w-full flex items-center">
-            <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Mes informations</a>
+            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_info' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('logout_info') }}">Mes informations</a>
         </div>
         <div class="h-[44px] mt-[10px] w-full flex items-center">
-            <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Mes préférences</a>
+            <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#637381]{% endif %}" href="{{ path('logout_preferences') }}">Mes préférences</a>
         </div>
+        {% if is_granted('ROLE_MANAGER') %}
+            <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer" onclick="toggleLinks('admin-links')">
+                <p class="px-4 text-[#637381] text-base block w-full">Admin</p>
+            </div>
+            <div id="admin-links" class="admin-links hidden">
+                <div class=" h-[44px] mt-[10px] w-full flex items-center">
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Types de demandes</a>
+                </div>
+                <div class=" h-[44px] mt-[10px] w-full flex items-center">
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Directions/Services</a>
+                </div>
+                <div class=" h-[44px] mt-[10px] w-full flex items-center">
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Managers</a>
+                </div>
+                <div class=" h-[44px] mt-[10px] w-full flex items-center">
+                    <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] text-[#004C6C]{% else %}text-[#004C6C]{% endif %}" href="#">Postes</a>
+                </div>
+            </div>
+        {% endif %}
         <div class="h-[44px] mt-[10px] w-full flex items-center">
             <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Déconnexion</a>
         </div>
@@ -42,3 +59,13 @@
         </div>
     {% endif %}
 </nav>
+<script>
+    function toggleLinks(id) {
+        var element = document.getElementById(id);
+        if (element.classList.contains('hidden')) {
+            element.classList.remove('hidden');
+        } else {
+            element.classList.add('hidden');
+        }
+    }
+</script>
