@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,15 +23,14 @@ class User
     #[ORM\Column(type: 'boolean')]
     private bool $enabled;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTime $createdAt;
-
     #[ORM\Column(type: 'string', length: 255)]
     private string $role;
 
-    #[ORM\OneToOne(targetEntity: Person::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Person $person;
+    #[ORM\Column(type: 'datetime')]
+    private \DateTime $created_at;
+
+    #[ORM\Column(type: 'integer')]
+    private int $person_id;
 
     public function getId(): int
     {
@@ -47,6 +48,11 @@ class User
         return $this;
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
@@ -56,6 +62,23 @@ class User
     {
         $this->password = $password;
         return $this;
+    }
+    
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->role];
     }
 
     public function isEnabled(): bool
@@ -71,34 +94,33 @@ class User
 
     public function getCreatedAt(): \DateTime
     {
-        return $this->createdAt;
+        return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $created_at): self
     {
-        $this->createdAt = $createdAt;
+        $this->created_at = $created_at;
         return $this;
     }
 
-    public function getRole(): string
+    public function getPersonId(): int
     {
-        return $this->role;
+        return $this->person_id;
     }
 
-    public function setRole(string $role): self
+    public function setPersonId(int $person_id): self
     {
-        $this->role = $role;
+        $this->person_id = $person_id;
         return $this;
     }
 
-    public function getPerson(): Person
+    public function getSalt(): ?string
     {
-        return $this->person;
+        return null;
     }
 
-    public function setPerson(Person $person): self
+    public function eraseCredentials(): void
     {
-        $this->person = $person;
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
     }
 }
