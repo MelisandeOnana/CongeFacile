@@ -13,4 +13,10 @@ class ConnectionController extends AbstractController
     {
         return $this->render('default/connexion.html.twig');
     }
+
+    #[Route('/MotDePasseOublie', name: 'motdepasseoublie', methods: ['GET'])]
+    public function motdepasseoublie(): Response
+    {
+        return $this->render('default/motdepasseoublie.html.twig');
+    }
 }
