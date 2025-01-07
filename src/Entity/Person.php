@@ -2,202 +2,130 @@
 
 namespace App\Entity;
 
-use App\Repository\PersonRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PersonRepository::class)]
+#[ORM\Entity]
 class Person
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private int $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $last_name = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $lastName;
 
-    #[ORM\Column(length: 255)]
-    private ?string $first_name = null;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $firstName;
 
-    #[ORM\Column(nullable:true)]
-    private ?int $manager_id = null;
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    private ?self $manager = null;
 
-    #[ORM\Column]
-    private ?int $department_id = null;
+    #[ORM\ManyToOne(targetEntity: Department::class)]
+    private ?Department $department = null;
 
-    #[ORM\Column]
-    private ?int $position_id = null;
+    #[ORM\ManyToOne(targetEntity: Position::class)]
+    private ?Position $position = null;
 
-    #[ORM\Column]
-    private ?bool $alert_new_request = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $alertNewRequest;
 
-    #[ORM\Column]
-    private ?bool $alert_on_answer = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $alertOnAnswer;
 
-    #[ORM\Column]
-    private ?bool $alert_before_vacation = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $alertBeforeVacation;
 
-    //relation entre person et department
-    #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'departments')]
-    private Department $department;
-
-    // relation entre person et position
-    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'positions')]
-    private Position $position;
-
-    //relation entre person et manager
-    #[ORM\ManyToOne(targetEntity: user::class, inversedBy: 'managers')]
-    private user $manager;
-
-    //relation entre person et request
-    #[ORM\ManyToMany(targetEntity: Request::class, inversedBy: 'requests')]
-    private Collection $requests;
-
-    //fonctions de la relation request
-    public function getRequests(): ?Collection
+    public function getId(): int
     {
-        return $this->requests;
+        return $this->id;
     }
 
-    public function addRequests(Request $request): void
+    public function getLastName(): string
     {
-        if (!$this->requests->contains($request)) {
-            $this->requests->add($request);
-        }
+        return $this->lastName;
     }
 
-    //fonctions de la relation department
+    public function setLastName(string $lastName): self
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getManager(): ?self
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?self $manager): self
+    {
+        $this->manager = $manager;
+        return $this;
+    }
+
     public function getDepartment(): ?Department
     {
         return $this->department;
     }
 
-    public function setDepartment(Department $department): void
+    public function setDepartment(?Department $department): self
     {
-        $this->department =$department;
+        $this->department = $department;
+        return $this;
     }
 
-    //fonctions de la relation position
     public function getPosition(): ?Position
     {
         return $this->position;
     }
 
-    public function setPosition(Position $position): void
+    public function setPosition(?Position $position): self
     {
-        $this->position =$position;
-    }
-
-    //fonctions de la relation manager
-    public function getManager(): ?user
-    {
-        return $this->manager;
-    }
-
-    public function setManager(user $manager): void
-    {
-        $this->manager =$manager;
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->last_name;
-    }
-
-    public function setLastName(string $last_name): static
-    {
-        $this->last_name = $last_name;
-
+        $this->position = $position;
         return $this;
     }
 
-    public function getFirstName(): ?string
+    public function isAlertNewRequest(): bool
     {
-        return $this->first_name;
+        return $this->alertNewRequest;
     }
 
-    public function setFirstName(string $first_name): static
+    public function setAlertNewRequest(bool $alertNewRequest): self
     {
-        $this->first_name = $first_name;
-
+        $this->alertNewRequest = $alertNewRequest;
         return $this;
     }
 
-    public function getManagerId(): ?int
+    public function isAlertOnAnswer(): bool
     {
-        return $this->manager_id;
+        return $this->alertOnAnswer;
     }
 
-    public function setManagerId(int $manager_id): static
+    public function setAlertOnAnswer(bool $alertOnAnswer): self
     {
-        $this->manager_id = $manager_id;
-
+        $this->alertOnAnswer = $alertOnAnswer;
         return $this;
     }
 
-    public function getDepartmentId(): ?int
+    public function isAlertBeforeVacation(): bool
     {
-        return $this->department_id;
+        return $this->alertBeforeVacation;
     }
 
-    public function setDepartmentId(int $department_id): static
+    public function setAlertBeforeVacation(bool $alertBeforeVacation): self
     {
-        $this->department_id = $department_id;
-
-        return $this;
-    }
-
-    public function getPositionId(): ?int
-    {
-        return $this->position_id;
-    }
-
-    public function setPositionId(int $position_id): static
-    {
-        $this->position_id = $position_id;
-
-        return $this;
-    }
-
-    public function isAlertNewRequest(): ?bool
-    {
-        return $this->alert_new_request;
-    }
-
-    public function setAlertNewRequest(bool $alert_new_request): static
-    {
-        $this->alert_new_request = $alert_new_request;
-
-        return $this;
-    }
-
-    public function isAlertOnAnswer(): ?bool
-    {
-        return $this->alert_on_answer;
-    }
-
-    public function setAlertOnAnswer(bool $alert_on_answer): static
-    {
-        $this->alert_on_answer = $alert_on_answer;
-
-        return $this;
-    }
-
-    public function isAlertBeforeVacation(): ?bool
-    {
-        return $this->alert_before_vacation;
-    }
-
-    public function setAlertBeforeVacation(bool $alert_before_vacation): static
-    {
-        $this->alert_before_vacation = $alert_before_vacation;
-
+        $this->alertBeforeVacation = $alertBeforeVacation;
         return $this;
     }
 }
