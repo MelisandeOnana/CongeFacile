@@ -1,5 +1,44 @@
 <nav class="shadow-lg w-[280px] text-white h-full">
-    <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">
-        <a class="px-4 text-[#004C6C] text-base block w-full" href="#section1">Connexion</a>
-    </div>
+    {% if app.user %}
+        <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">
+            <a class="px-4 text-[#004C6C] text-base block w-full" href="#home">Accueil</a>
+        </div>
+        {% if is_granted('ROLE_COLLABORATEUR') %}
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#collab">Nouvelle demande</a>
+            </div>
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#collab">Historique des demandes</a>
+            </div>
+        {% elseif is_granted('ROLE_MANAGER') %}
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#admin"> Demandes en attentes</a>
+            </div>
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Historique des demandes</a>
+            </div>
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Mon équipes</a>
+            </div>
+            <div class="h-[44px] mt-[10px] w-full flex items-center">
+                <a class="px-4 text-[#637381] text-base block w-full" href="#admin">Statistiques</a>
+            </div>
+        {% endif %}
+
+
+
+        <div class="h-[44px] mt-[30px] w-full flex items-center">
+            <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Mes informations</a>
+        </div>
+        <div class="h-[44px] mt-[10px] w-full flex items-center">
+            <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Mes préférences</a>
+        </div>
+        <div class="h-[44px] mt-[10px] w-full flex items-center">
+            <a class="px-4 text-[#637381] text-base block w-full" href="#logout">Déconnexion</a>
+        </div>
+    {% else %}
+        <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">
+            <a class="px-4 text-[#004C6C] text-base block w-full" href="#login">Connexion</a>
+        </div>
+    {% endif %}
 </nav>
