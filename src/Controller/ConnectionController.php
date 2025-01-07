@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UserRepository;
 use App\Entity\User;
+use Exception;
 
 class ConnectionController extends AbstractController
 {
@@ -23,7 +24,7 @@ class ConnectionController extends AbstractController
 
             $email = htmlspecialchars($_GET['email']);
             $user = $repository->findByEmail($email);
-            
+
             if($user != null){
 
                 $to = "dauguet.mathis@gmail.com";
@@ -32,10 +33,11 @@ class ConnectionController extends AbstractController
                 Adresse email de la personne : “".$email."”.<br>
                 Après changement, merci de notier l’utilisateur de son nouveau mot de passe.";
                 
-                if(mail($to, $subject, $message)){
+                try{
+                    mail($to, $subject, $message);
                     $reussi = "Demande envoyée";
                     return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
-                }else{
+                }catch(Exception $e){
                     $reussi = "Demande non envoyée";
                     return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
                 }
