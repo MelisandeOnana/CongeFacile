@@ -11,14 +11,7 @@ use App\Repository\UserRepository;
 use Exception;
 class ConnectionController extends AbstractController
 {
-    #[Route('/', name: 'home_connection', methods: ['GET', 'POST'])]
-    public function connection(AuthenticationUtils $authenticationUtils): Response
-    {
-
-        return $this->render('default/index.html.twig');
-    }
-
-    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
      
@@ -31,6 +24,22 @@ class ConnectionController extends AbstractController
             'error' => $error,
         ]);
     }
+
+    #[Route('/home', name: 'home_index', methods: ['GET', 'POST'])]
+    public function index(AuthenticationUtils $authenticationUtils): Response
+    {
+
+        return $this->render('default/index.html.twig');
+    }
+
+
+    #[Route('/logout', name: 'logout')]
+    public function logout(): void
+    {
+        // Ce contrôleur peut être vide : il ne sera jamais exécuté !
+throw new Exception('N\'oubliez pas d\'activer la déconnexion dans security.yaml');
+    }
+
 
     #[Route('/MotDePasseOublie', name: 'motdepasseoublie', methods: ['GET'])]
     public function motdepasseoublie(UserRepository $repository, User $user = null): Response
@@ -61,5 +70,7 @@ class ConnectionController extends AbstractController
 
         return $this->render('default/motdepasseoublie.html.twig', ["reussi" => ""]);
     }
+
+    
 
 }
