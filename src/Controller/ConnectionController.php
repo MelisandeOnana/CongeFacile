@@ -32,12 +32,11 @@ class ConnectionController extends AbstractController
         return $this->render('default/accueil.html.twig');
     }
 
-
     #[Route('/logout', name: 'logout')]
     public function logout(): void
     {
         // Ce contrôleur peut être vide : il ne sera jamais exécuté !
-throw new Exception('N\'oubliez pas d\'activer la déconnexion dans security.yaml');
+        throw new Exception('N\'oubliez pas d\'activer la déconnexion dans security.yaml');
     }
 
 
