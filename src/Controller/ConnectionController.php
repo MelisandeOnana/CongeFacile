@@ -19,7 +19,7 @@ class ConnectionController extends AbstractController
 
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('default/connexion.html.twig', [
+        return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
@@ -31,6 +31,7 @@ class ConnectionController extends AbstractController
 
         return $this->render('default/index.html.twig');
     }
+
 
     #[Route('/logout', name: 'logout')]
     public function logout(): void
