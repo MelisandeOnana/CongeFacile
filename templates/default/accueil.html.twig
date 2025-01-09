@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+<div class="max-w-4xl mx-auto py-8 px-4">
+    <!-- Header -->
+    <div>
+        <h1 class="text-3xl font-bold text-gray-800">CongéFacile</h1>
+        <p class="mt-2 text-gray-600">
+            CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise. Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer vos absences en toute transparence et simplicité.
+        </p>
+    </div>
+
+    <!-- Etapes -->
+    <div class="mt-10">
+        <h2 class="text-xl font-semibold text-gray-700">Etapes</h2>
+
+        <div class="flex items-center justify-between mt-6 relative space-x-8">
+            <!-- Etape 1 -->
+            <div class="flex flex-col items-center relative">
+                <div class="w-12 h-12 bg-[#004C6C] text-white flex items-center justify-center rounded-full text-lg font-bold z-10">1</div>
+                <p class="mt-2 text-sm font-medium text-gray-700">Etape 1</p>
+                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
+                    J'effectue ma demande de congés
+                </div>
+                <!-- Trait -->
+                <div class="absolute top-[13%] right-[-7%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+            </div>
+
+            <!-- Etape 2 -->
+            <div class="flex flex-col items-center relative">
+                <div class="w-12 h-12 border-[#004C6C] text-[#004C6C] border-2 flex items-center justify-center rounded-full text-lg font-bold z-10">2</div>
+                <p class="mt-2 text-sm font-medium text-[#004C6C]">Etape 2</p>
+                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
+                    Mon manager valide ou refuse la demande
+                </div>
+                <!-- Traits -->
+                <div class="absolute top-[13%]  left-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+                <div class="absolute top-[13%] right-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+            </div>
+
+            <!-- Etape 3 -->
+            <div class="flex flex-col items-center relative">
+                <div class="w-12 h-12 border-[#004C6C] text-[#004C6C] border-2 flex items-center justify-center rounded-full text-lg font-bold z-10">3</div>
+                <p class="mt-2 text-sm font-medium text-[#004C6C]">Etape 3</p>
+                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
+                    Je consulte l'historique de mes demandes
+                </div>
+                <!-- Trait -->
+                <div class="absolute top-[13%] left-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-12">
+        <p class="text-sm text-gray-600">
+            En cas de difficulté avec l'application, veuillez envoyer un email à <a href="mailto:contact@mentalworks.fr" class="text-blue-600 underline">contact@mentalworks.fr</a>.
+        </p>
+    </div>
+</div>
+
+{% endblock %}
