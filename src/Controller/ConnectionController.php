@@ -29,7 +29,7 @@ class ConnectionController extends AbstractController
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
 
-        return $this->render('default/accueil.html.twig');
+        return $this->render('default/home.html.twig');
     }
 
 
