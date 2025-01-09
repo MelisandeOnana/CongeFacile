@@ -65,6 +65,9 @@ class ConnectionController extends AbstractController
                     $reussi = "Demande non envoyée";
                     return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
                 }
+            }else{
+                $reussi = "Email incorrect";
+                return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
             }
         }
 
