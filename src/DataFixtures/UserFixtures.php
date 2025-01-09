@@ -1,13 +1,15 @@
 <?php
-// filepath: /c:/Users/melis/CongeFacile/src/DataFixtures/UserFixtures.php
+
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Person;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private UserPasswordHasherInterface $passwordHasher;
 
@@ -18,14 +20,37 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $user = new User();
-        $user->setEmail('user@example.com');
-        $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
-        $user->setRole('ROLE_MANAGER');
-        // Assurez-vous de définir la propriété `person` si nécessaire
-        // $user->setPerson($person);
+        // Create a manager user
+        $managerPerson = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jane', 'lastName' => 'Smith']);
 
-        $manager->persist($user);
+        $managerUser = new User();
+        $managerUser->setEmail('jane.smith@example.com');
+        $managerUser->setPassword($this->passwordHasher->hashPassword($managerUser, 'password'));
+        $managerUser->setEnabled(true);
+        $managerUser->setCreatedAt(new \DateTimeImmutable());
+        $managerUser->setRole('ROLE_MANAGER');
+        $managerUser->setPerson($managerPerson);
+        $manager->persist($managerUser);
+
+        // Create a collaborator user
+        $collaboratorPerson = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'John', 'lastName' => 'Doe']);
+
+        $collaboratorUser = new User();
+        $collaboratorUser->setEmail('john.doe@example.com');
+        $collaboratorUser->setPassword($this->passwordHasher->hashPassword($collaboratorUser, 'password'));
+        $collaboratorUser->setEnabled(true);
+        $collaboratorUser->setCreatedAt(new \DateTimeImmutable());
+        $collaboratorUser->setRole('ROLE_COLLABORATOR');
+        $collaboratorUser->setPerson($collaboratorPerson);
+        $manager->persist($collaboratorUser);
+
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            PersonFixtures::class,
+        ];
     }
 }
