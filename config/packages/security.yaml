@@ -37,7 +37,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Accessible par tout le monde
+        - { path: ^/home, roles: IS_AUTHENTICATED_FULLY } # Accessible par tout le monde
         - { path: ^/collabo, roles: ROLE_COLLABORATOR } # Accessible uniquement aux administrateurs
 
 when@test:

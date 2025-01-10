@@ -1,0 +1,7 @@
+/* public/css/styles.css */
+
+/* Masquer l'icône de l'œil par défaut dans les champs de mot de passe */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
