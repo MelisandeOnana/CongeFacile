@@ -33,8 +33,10 @@
         </div>
         {% if is_granted('ROLE_MANAGER') %}
             <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer" onclick="toggleLinks('admin-links')">
-                <p class="px-4 text-[#637381] text-base block w-full">Administration</p>
-                <p class="px-6 text-[#004C6C] ml-[44px]">⋁</p>
+                <p class="px-4 text-[#637381] text-base block w-[80%]">Administration</p>
+                <svg class="w-4 h-4 ml-2 text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
             </div>
             <div id="admin-links" class="admin-links hidden">
                 <div class=" h-[44px] mt-[10px] w-full flex items-center">
