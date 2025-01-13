@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des demandes{% endblock %}
+
+{% block body %}
+    <h1 class="text-5xl font-bold-700 text-blue-900 mb-10">Historique de mes demandes</h1>
+    <table class="min-w-full bg-white border border-gray-300">
+      <!-- En-tête des colonnes -->
+      <thead class="bg-[#F9FAFB]">    
+       <!-- Ligne des noms des colonnes -->
+        <tr class="text-left">
+          <th class="px-4 py-4 text-sm font-medium">Type de demande</th>
+          <th class="px-4 py-2 text-sm font-medium">Demandée le</th>
+          <th class="px-4 py-2 text-sm font-medium">Date de début</th>
+          <th class="px-4 py-2 text-sm font-medium">Date de fin</th>
+          <th class="px-4 py-2 text-sm font-medium">Nb jours</th>
+          <th class="px-4 py-2 text-sm font-medium">Statut</th>
+          <th class="px-4 py-2"></th>
+        </tr>
+        <!-- Ligne des champs de recherche -->
+        <tr>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="text" 
+              placeholder="" 
+              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1"></th>
+        </tr>
+      </thead>
+      <!-- Corps du tableau -->
+    <tbody>
+      <tr class="border-b">
+        <td class="px-4 py-4 text-sm text-gray-700">Congé sans solde</td>
+        <td class="px-4 py-4 text-sm text-gray-700">03/01/2025 13h30</td>
+        <td class="px-4 py-4 text-sm text-gray-700">08/01/2025 13h30</td>
+        <td class="px-4 py-4 text-sm text-gray-700">08/01/2025 18h00</td>
+        <td class="px-4 py-4 text-sm text-gray-700">0,5 jours</td>
+        <td class="px-4 py-4 text-sm text-gray-700">Accepté</td>
+        <td class="px-4 py-4">
+        <button class="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</button>
+
+        </td>
+      </tr>
+      <tr class="border-b">
+        <td class="px-4 py-4 text-sm text-gray-700">Congé sans solde</td>
+        <td class="px-4 py-4 text-sm text-gray-700">05/08/2024 13h30</td>
+        <td class="px-4 py-4 text-sm text-gray-700">09/08/2024 13h30</td>
+        <td class="px-4 py-4 text-sm text-gray-700">09/08/2024 18h00</td>
+        <td class="px-4 py-4 text-sm text-gray-700">0,5 jours</td>
+        <td class="px-4 py-4 text-sm text-gray-700">Accepté</td>
+        <td class="px-4 py-4">
+        <button class="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</button>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+    </table>
+{% endblock %}
