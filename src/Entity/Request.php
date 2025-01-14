@@ -37,7 +37,8 @@ class Request
     private ?string $answerComment = null;
 
     #[ORM\Column]
-    private ?bool $answer = null;
+    private ?int $answer = null;
+    // La réponse peut etre Acceptée(1), Refusée(2) ou En Cours(0)
 
     #[ORM\Column]
     private ?\DateTimeImmutable $answerAt = null;
@@ -134,12 +135,12 @@ class Request
         return $this;
     }
 
-    public function getAnswer(): ?bool
+    public function getAnswer(): ?int
     {
         return $this->answer;
     }
 
-    public function setAnswer(bool $answer): static
+    public function setAnswer(int $answer): static
     {
         $this->answer = $answer;
 
@@ -169,4 +170,39 @@ class Request
 
         return $this;
     }
+    public function getWorkingDays(): float
+    {
+        $start = $this->getStartAt();
+        $end = $this->getEndAt();
+
+        if (!$start || !$end) {
+            return 0;
+        }
+
+        $interval = $start->diff($end);
+        $days = $interval->days + 1;
+
+        // Calculer les jours ouvrés en excluant les samedis et dimanches
+        $workingDays = 0;
+        for ($i = 0; $i < $days; $i++) {
+            $currentDay = (clone $start)->modify("+$i days");
+            $dayOfWeek = $currentDay->format('N'); // 1 (lundi) à 7 (dimanche)
+
+            if ($dayOfWeek < 6) { // Exclure samedi (6) et dimanche (7)
+                $workingDays++;
+            }
+        }
+
+        // Calculer les demi-journées
+        $halfDays = 0;
+        if ($start->format('H:i') >= '12:00' && $start->format('N') < 6) {
+            $halfDays += 0.5;
+        }
+        if ($end->format('H:i') <= '12:00' && $end->format('N') < 6) {
+            $halfDays += 0.5;
+        }
+
+        return $workingDays - $halfDays;
+    }
+
 }
