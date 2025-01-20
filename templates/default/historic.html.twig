@@ -8,7 +8,7 @@
       <!-- En-tête des colonnes -->
       <thead class="bg-[#F9FAFB]">    
        <!-- Ligne des noms des colonnes -->
-        <tr class="text-left">
+        <tr class="text-left text-gray-700">
           <th class="px-4 py-4 text-sm font-medium">Type de demande</th>
           <th class="px-4 py-2 text-sm font-medium">Demandée le</th>
           <th class="px-4 py-2 text-sm font-medium">Date de début</th>
@@ -18,59 +18,52 @@
           <th class="px-4 py-2"></th>
         </tr>
         <!-- Ligne des champs de recherche -->
-        <tr>
+        <tr class="text-gray-700">
+            <th class="px-4 py-1">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              <option value=""></option>
+              {% for type in requestTypes %}
+              <option value="{{ type.id }}">{{ type.name }}</option>
+              {% endfor %}
+            </select>
+            </th>
+            <th class="px-4 py-1">
+            <input 
+              type="date" 
+              placeholder="" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+            </th>
           <th class="px-4 py-1">
             <input 
-              type="text" 
+              type="date" 
               placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="date" 
+              placeholder="" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
           </th>
           <th class="px-4 py-1">
             <input 
               type="text" 
-              placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              placeholder=""
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
           </th>
           <th class="px-4 py-1">
-            <input 
-              type="text" 
-              placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1">
-            <input 
-              type="text" 
-              placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1">
-            <input 
-              type="text" 
-              placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1">
-            <input 
-              type="text" 
-              placeholder="" 
-              class="text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              <option value=""></option>
+              <option value="0">En cours</option>
+              <option value="1">Accepté</option>
+              <option value="2">Refusé</option>
+            </select>
           </th>
           <th class="px-4 py-1"></th>
         </tr>
       </thead>
       <!-- Corps du tableau -->
     <tbody>
-      <tr class="border-b">
-        <td class="px-4 py-4 text-sm text-gray-700">Congé sans solde</td>
-        <td class="px-4 py-4 text-sm text-gray-700">03/01/2025 13h30</td>
-        <td class="px-4 py-4 text-sm text-gray-700">08/01/2025 13h30</td>
-        <td class="px-4 py-4 text-sm text-gray-700">08/01/2025 18h00</td>
-        <td class="px-4 py-4 text-sm text-gray-700">0,5 jours</td>
-        <td class="px-4 py-4 text-sm text-gray-700">Accepté</td>
-        <td class="px-4 py-4">
-          <button class="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</button>
-        </td>
-      </tr>
       {% for request in requests %}
         <tr class="border-b">
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
