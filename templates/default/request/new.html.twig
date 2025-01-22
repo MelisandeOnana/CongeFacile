@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle demande{% endblock %}
+
+{% block body %}
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Effectuer une nouvelle demande</h1>
+    {{ form_start(form) }}
+
+        {{ form_row(form.requestType)}}
+            <div class="flex space-x-4">
+                <div class="flex">
+                    {{ form_row(form.startAt) }}
+                </div>
+                <div class="flex ml-[30px]">
+                    {{ form_row(form.endAt) }}
+                </div>
+            </div>
+        {{ form_row(form.fichier)}}
+        {{ form_row(form.comment)}}
+
+        <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter]">
+            Soumettre ma demande*
+        </button>
+        <p class="text-[#000000] text-sm mt-2">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
+    {{ form_end(form) }}
+{% endblock %}

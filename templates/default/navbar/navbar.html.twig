@@ -4,8 +4,8 @@
             <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'home_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('home_index') }}">Accueil</a>
         </div>
         {% if is_granted('ROLE_COLLABORATOR') %}
-            <div class="hoverable-div h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'collab' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'collab' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_new') }}">Nouvelle demande</a>
+            <div class="hoverable-div h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'request_new' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
+                <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'request_new' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_new') }}">Nouvelle demande</a>
             </div>
             <div class="hoverable-div h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'historic' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
                 <a class="px-4 text-[#637381] text-base block w-full {% if app.request.attributes.get('_route') == 'historic' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('historic') }}">Historique des demandes</a>

@@ -46,7 +46,7 @@ class RequestController extends AbstractController
             return $this->redirectToRoute('historic', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('request/new.html.twig', [
+        return $this->render('default/request/new.html.twig', [
             'requete' => $theRequest,
             'form' => $form,
         ]);
