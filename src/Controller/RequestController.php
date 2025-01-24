@@ -27,11 +27,16 @@ class RequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user = $this->getUser()->getPerson();
+            $user = $this->getUser();
+
+            if (!$user instanceof User) {
+                throw new Exception('L\'utilisateur n\'est pas de type User.');
+            }
+            $person = $user->getPerson();
             $currentDateTime = new \DateTimeImmutable();
             $answerAt = new \DateTimeImmutable("00-00-0000");
 
-            $theRequest->setCollaborator($user);
+            $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
             $theRequest->setAnswerComment("");
             $theRequest->setAnswer(0);
