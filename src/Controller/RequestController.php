@@ -58,6 +58,14 @@ class RequestController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/request/{id}/detail', name: 'request_details', methods: ['POST','GET'])]
+    public function detail(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('default/request/details.html.twig', [
+            'request' => $requete,
+        ]);
+    }
  
     #[Route('/historic', name: 'historic', methods: ['GET'])]
     public function historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
