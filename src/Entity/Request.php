@@ -38,7 +38,7 @@ class Request
 
     #[ORM\Column]
     private ?int $answer = null;
-    // La réponse peut etre Acceptée(1), Refusée(2) ou En Cours(0)
+    // La réponse peut etre Acceptée(1), Refusée(2) ou En Cours(3)
 
     #[ORM\Column]
     private ?\DateTimeImmutable $answerAt = null;

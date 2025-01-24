@@ -19,47 +19,57 @@
         </tr>
         <!-- Ligne des champs de recherche -->
         <tr class="text-gray-700">
-            <th class="px-4 py-1 w-1/6">
-            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+          <th class="px-4 py-1 w-1/6">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('type', this.value)">
               <option value=""></option>
               {% for type in requestTypes %}
-              <option value="{{ type.id }}">{{ type.name }}</option>
+              <option value="{{ type.id }}" {% if app.request.query.get('type') == type.id %}selected{% endif %}>{{ type.name }}</option>
               {% endfor %}
             </select>
             </th>
             <th class="px-4 py-1">
             <input 
               type="date" 
-              placeholder="" 
-              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('requested') }}" 
+              onchange="updateUrl('requested', this.value)">
             </th>
-          <th class="px-4 py-1">
+            <th class="px-4 py-1">
             <input 
               type="date" 
-              placeholder="" 
-              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1">
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('start') }}" 
+              onchange="updateUrl('start', this.value)">
+            </th>
+            <th class="px-4 py-1">
             <input 
               type="date" 
-              placeholder="" 
-              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1 w-1/6">
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('end') }}" 
+              onchange="updateUrl('end', this.value)">
+            </th>
+            <th class="px-4 py-1 w-1/6">
             <input 
               type="text" 
-              placeholder=""
-              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
-          </th>
-          <th class="px-4 py-1 w-1/6">
-            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2">
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('days') }}" 
+              onchange="updateUrl('days', this.value)">
+            </th>
+            <th class="px-4 py-1 w-1/6">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('status', this.value)">
               <option value=""></option>
-              <option value="0">En cours</option>
-              <option value="1">Accepté</option>
-              <option value="2">Refusé</option>
+              <option value="3" {% if app.request.query.get('status') == '3' %}selected{% endif %}>En cours</option>
+              <option value="1" {% if app.request.query.get('status') == '1' %}selected{% endif %}>Accepté</option>
+              <option value="2" {% if app.request.query.get('status') == '2' %}selected{% endif %}>Refusé</option>
             </select>
           </th>
-          <th class="px-4 py-1"></th>
+          <th class="px-4 py-1 ">
+            {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty %}
+              <div class="mb-5">
+                <a href="{{ path('historic') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+              </div>
+            {% endif %}
+          </th>
         </tr>
       </thead>
       <!-- Corps du tableau -->
@@ -87,5 +97,12 @@
         {% endfor %}
     </tbody>
     </table>
-    </table>
+    <script>
+      function updateUrl(param, value) {
+          const url = new URL(window.location.href);
+          url.searchParams.set(param, value);
+          window.history.pushState({}, '', url);
+          window.location.reload(); 
+      }
+</script>
 {% endblock %}

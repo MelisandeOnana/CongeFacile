@@ -14,6 +14,7 @@ use App\Repository\RequestTypeRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Doctrine\Common\Collections\Criteria;
 
 class RequestController extends AbstractController
 {
@@ -56,8 +57,9 @@ class RequestController extends AbstractController
             'form' => $form,
         ]);
     }
+ 
     #[Route('/historic', name: 'historic', methods: ['GET'])]
-    public function historic(RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository): Response
+    public function historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository): Response
     {
         $user = $this->getUser();
 
@@ -65,15 +67,60 @@ class RequestController extends AbstractController
             throw new Exception('L\'utilisateur n\'est pas de type User.');
         }
         $person = $user->getPerson();
-        $requests = $requestRepository->findBy(['collaborator' => $person]);
 
-        //Filtres
-        $requestType = $requestTypeRepository->findAll();
+        // Récupérer les valeurs des filtres depuis la requête
+        $filterType = $request->query->get('type');
+        $filterDate = $request->query->get('requested');
+        $filterStart = $request->query->get('start');
+        $filterEnd = $request->query->get('end');
+        $filterNumber = $request->query->get('number');
+        $filterAnswer = $request->query->get('status');
 
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
+        
+        if ($filterType) {
+            $criteria->andWhere(Criteria::expr()->eq('requestType', $filterType));
+        }
+        if ($filterDate) {
+            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+        }
+        if ($filterStart) {
+            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
+        }
+        if ($filterEnd) {
+            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
+        }
+        if ($filterNumber) {
+            $criteria->andWhere(Criteria::expr()->eq('requestNumber', $filterNumber));
+        }
+        if ($filterAnswer) {
+            $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
+        }
+    
+        // Rechercher les requêtes en fonction des critères
+        $requests = $requestRepository->matching($criteria);
+
+        $requestTypes = $requestTypeRepository->findAll();
 
         return $this->render('default/historic.html.twig', [
             'requests' => $requests,
-            'requestTypes' => $requestType,
+            'requestTypes' => $requestTypes,
+            'filterType' => $filterType,
+            'filterDate' => $filterDate,
+            'filterStart' => $filterStart,
+            'filterEnd' => $filterEnd,
+            'filterNumber' => $filterNumber,
+            'filterAnswer' => $filterAnswer,
         ]);
     }
 }
