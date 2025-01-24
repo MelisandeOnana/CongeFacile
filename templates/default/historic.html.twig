@@ -91,16 +91,39 @@
             {% endif %}
           </td>
           <td class="px-4 py-4">
-            <button class="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</button>
+            <a class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
           </td>
         </tr>
         {% endfor %}
     </tbody>
     </table>
+     <div class="pagination flex justify-center mt-8">
+        {% set paginationData = requests.getPaginationData() %}
+        {% if paginationData.pageCount > 1 %}
+            <ul class="flex list-none">
+                {% if paginationData.current > 1 %}
+                    <li class="mx-1">
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': paginationData.current - 1})) }}" class="bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Précédent</a>
+                    </li>
+                {% endif %}
+                {% for page in 1..paginationData.pageCount %}
+                    <li class="mx-1">
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': page})) }}" class="px-3 py-1 {{ page == paginationData.current ? 'bg-blue-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }} rounded font-medium py-2 px-4">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                {% if paginationData.current < paginationData.pageCount %}
+                    <li class="mx-1">
+                        <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': paginationData.current + 1})) }}" class="bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
     <script>
       function updateUrl(param, value) {
           const url = new URL(window.location.href);
           url.searchParams.set(param, value);
+          url.searchParams.delete('page'); // Supprime le paramètre 'page'
           window.history.pushState({}, '', url);
           window.location.reload(); 
       }

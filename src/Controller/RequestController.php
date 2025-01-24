@@ -15,6 +15,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Doctrine\Common\Collections\Criteria;
+use Knp\Component\Pager\PaginatorInterface;
 
 class RequestController extends AbstractController
 {
@@ -59,7 +60,7 @@ class RequestController extends AbstractController
     }
  
     #[Route('/historic', name: 'historic', methods: ['GET'])]
-    public function historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository): Response
+    public function historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
@@ -73,15 +74,19 @@ class RequestController extends AbstractController
         $filterDate = $request->query->get('requested');
         $filterStart = $request->query->get('start');
         $filterEnd = $request->query->get('end');
-        $filterNumber = $request->query->get('number');
+        $filterNumber = $request->query->get('days');
         $filterAnswer = $request->query->get('status');
 
         $criteria = Criteria::create();
         $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
         
         if ($filterType) {
-            $criteria->andWhere(Criteria::expr()->eq('requestType', $filterType));
+            $filterTypeObject = $requestTypeRepository->find($filterType);
+            if ($filterTypeObject) {
+                $criteria->andWhere(Criteria::expr()->eq('requestType', $filterTypeObject));
+            }
         }
+        
         if ($filterDate) {
             $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
             $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
@@ -101,19 +106,37 @@ class RequestController extends AbstractController
                      ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
         }
         if ($filterNumber) {
-            $criteria->andWhere(Criteria::expr()->eq('requestNumber', $filterNumber));
+            $requests = $requestRepository->findAll();
+            $matchingRequests = [];
+
+            foreach ($requests as $req) {
+                if ($req->getWorkingdays() == $filterNumber) {
+                    $matchingRequests[] = $req;
+                }
+            }
+
+            $criteria->andWhere(Criteria::expr()->in('id', array_map(function($req) {
+                return $req->getId();
+            }, $matchingRequests)));
         }
         if ($filterAnswer) {
             $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
         }
     
         // Rechercher les requêtes en fonction des critères
+        $criteria->orderBy(['createdAt' => 'DESC']);
         $requests = $requestRepository->matching($criteria);
 
         $requestTypes = $requestTypeRepository->findAll();
 
+        $pagination = $paginator->paginate(
+            $requests, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
+
         return $this->render('default/historic.html.twig', [
-            'requests' => $requests,
+            'requests' => $pagination,
             'requestTypes' => $requestTypes,
             'filterType' => $filterType,
             'filterDate' => $filterDate,
