@@ -30,3 +30,13 @@ function calculateBusinessDays() {
     // Afficher le résultat dans la zone de texte
     document.getElementById("days").value = Days;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const fileInput = document.getElementById('request_form_fichier');
+    if (fileInput) {
+        fileInput.addEventListener('change', function() {
+            const fileName = this.files.length > 0 ? this.files[0].name : 'Aucun fichier sélectionné';
+            document.getElementById('file-name').textContent = fileName;
+        });
+    }
+});

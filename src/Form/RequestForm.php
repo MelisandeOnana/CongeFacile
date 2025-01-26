@@ -46,7 +46,7 @@ class RequestForm extends AbstractType
         ->add('fichier', FileType::class, [
             'label' => 'Justificatif si applicable',
             'attr' => [
-                'class' => 'w-[350px] h-[46px] border rounded-[6px] bg-[url({{ asset("images/file.png") }})]',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px])]',
             ],
             'mapped' => false,
             'required' => false,
