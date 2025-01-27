@@ -2,23 +2,54 @@
 
 {% block title %}Nouvelle demande{% endblock %}
 
+{% block javascripts %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/DaysCalc.js') }}"></script>
+{% endblock %}
+
 {% block body %}
     <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Effectuer une nouvelle demande</h1>
     {{ form_start(form) }}
 
-        {{ form_row(form.requestType)}}
-            <div class="flex space-x-4">
-                <div class="flex">
-                    {{ form_row(form.startAt) }}
-                </div>
-                <div class="flex ml-[30px]">
-                    {{ form_row(form.endAt) }}
-                </div>
+        <div class="flex mt-8">
+            {{ form_row(form.requestType)}}
+        </div>
+        <div class="mt-8 flex space-x-4">
+            <div class="flex">
+                {{ form_row(form.startAt) }}
             </div>
-        {{ form_row(form.fichier)}}
-        {{ form_row(form.comment)}}
+            <div class="flex ml-[30px]">
+                {{ form_row(form.endAt) }}
+            </div>
+        </div>
+        <div class="flex mt-8 flex-column">
+            <div>
+                <label class="block mb-2 text-[#212B36] font-[Inter]"for="result">Nombre de jours ouvrés :</label>
+                <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
+            </div>
+        </div>
+        <div class="flex mt-8 flex-row">
+            <div>
+                <label class="block mb-2 text-[#212B36] font-[Inter]"for="result">Justificatif si applicable :</label>
+            <div>
+            <div class="flex w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6">
+                <!-- Champ input caché -->
+                {{ form_widget(form.fichier, {'attr': {'class': 'hidden', 'id': 'request_form_fichier'}}) }}
 
-        <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter]">
+                <!-- Bouton personnalisé avec une image -->
+                <label for="request_form_fichier" class="cursor-pointer">
+                    <img src="{{ asset('images/file.png') }}" alt="Télécharger" class="w-5 h-5 mt-3 mb-4 mx-auto">
+                </label>
+
+                <!-- Zone pour afficher le nom du fichier -->
+                <div id="file-name" class="mx-auto mt-2 mb-2 text-gray-700">Aucun fichier sélectionné</div>
+            </div>
+        </div>
+        <div class="flex mt-8">
+            {{ form_row(form.comment)}}
+        </div>
+
+        <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
             Soumettre ma demande*
         </button>
         <p class="text-[#000000] text-sm mt-2">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>

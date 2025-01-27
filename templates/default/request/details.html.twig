@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails demande{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/DaysCalc.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Ma demande de congé</h1>
+    <h1 class="text-[#38738C] text-[18px] font-[Epilogue] mt-6 mb-6">Demande du {{request.createdAt.format('d/m/Y')}}</h1>
+
+    <h2 class="text-[18px]">Type de demande : {{request.requestType.name}}</h2>
+    <h2 class="text-[18px]">Periode du {{request.startAt.format('d/m/Y')}} au {{request.endAt.format('d/m/Y')}}</h2>
+    <h2 class="text-[18px]">Nombre de jours : {{request.getWorkingDays}}</h2>
+
+    {% if request.answer == 1 %}
+        <h2 class="mt-6">Statut de la demande : <span class=" w-[85px] rounded-full bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245]">Accepté</span></h2>
+    {% elseif request.answer == 2 %}
+        <h2 class="mt-6">Statut de la demande : <span class=" w-[85px] rounded-full bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245]">Refusé</span></h2>
+    {% else %}
+        <h2 class="mt-6">Statut de la demande : <span class=" w-[85px] rounded-full bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245]">En cours<span></h2>
+    {% endif %}
+
+    <h2 class="mt-6">Commentaire du manager :</h2>
+    <textarea class="border mt-2 w-[600px] h-[180px]"></textarea>
+    <div class="mt-6 flex border bg-[#004C6C14] w-[280px] h-[35px]">
+        <a href="{{ path('historic') }}" class=" m-auto text-center text-[#475467]">Retourner à la liste des demandes</a>
+    </div>
+    
+{% endblock %}

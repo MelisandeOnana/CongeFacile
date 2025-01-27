@@ -23,11 +23,22 @@ class RequestController extends AbstractController
     public function request_new(HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
         $theRequest = new Request();
-        $form = $this->createForm(RequestForm::class, $theRequest, [
-        ]);
+        $form = $this->createForm(RequestForm::class, $theRequest, []);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
+            $destination = $this->getParameter('kernel.project_dir') . '/public/files';
+
+            // Générer un nom unique pour le fichier
+            $fileName = $file->getClientOriginalName();
+            try {
+                $file->move($destination, $fileName);
+                $this->addFlash('success', 'Fichier téléchargé avec succès !');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
+            }
 
             $user = $this->getUser();
 
@@ -38,12 +49,12 @@ class RequestController extends AbstractController
             $currentDateTime = new \DateTimeImmutable();
             $answerAt = new \DateTimeImmutable("00-00-0000");
 
+            $theRequest->setReceiptFile($fileName);
             $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
             $theRequest->setAnswerComment("");
             $theRequest->setAnswer(0);
             $theRequest->setAnswerAt($answerAt);
-            $theRequest->setReceiptFile("");
 
             $entityManager->persist($theRequest);
             $entityManager->flush();
@@ -56,6 +67,14 @@ class RequestController extends AbstractController
         return $this->render('default/request/new.html.twig', [
             'requete' => $theRequest,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/request/{id}/detail', name: 'request_details', methods: ['POST','GET'])]
+    public function detail(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('default/request/details.html.twig', [
+            'request' => $requete,
         ]);
     }
  

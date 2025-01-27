@@ -22,26 +22,31 @@ class RequestForm extends AbstractType
             'placeholder' => 'Sélectionner un type',     // Texte de placeholder (optionnel)
             'label' => 'Type de demande - champ obligatoire',                       // Libellé du champ
             'required' => true,                        // Rendre le champ obligatoire
-            'attr' => ['class' => 'w-[350px] h-[46px] border rounded-[6px]'],
+            'attr' => ['class' => 'w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']  // Ajout de la classe CSS pour le label
         ])
         ->add('startAt', DateTimeType::class, [
             'label' => 'Date début - champ obligatoire',
             'widget' => 'single_text',
-            'attr' => ['class' => 'w-[350px] h-[46px] border rounded-[6px]'],
+            'attr' => [
+                'id' => 'startDate',
+                'onchange' => 'calculateBusinessDays()',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ])
         ->add('endAt', DateTimeType::class, [
             'label' => 'Date de fin - champ obligatoire',
             'widget' => 'single_text',
-            'attr' => ['class' => 'w-[350px] h-[46px] border rounded-[6px]'],
+            'attr' => [
+                'id' => 'endDate',
+                'onchange' => 'calculateBusinessDays()',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ])
         ->add('fichier', FileType::class, [
             'label' => 'Justificatif si applicable',
             'attr' => [
-                'class' => 'w-[350px] h-[46px] border rounded-[6px]',
-                'placeholder' => 'Sélectionner un fichier'
+                'class' => 'w-[350px] h-[46px] border rounded-[6px])]',
             ],
             'mapped' => false,
             'required' => false,
@@ -49,7 +54,7 @@ class RequestForm extends AbstractType
         ])
         ->add('comment', null, [
             'label' => 'Commentaire supplémentaire',
-            'attr' => ['class' => 'w-[730px] h-[186px] border rounded-[6px]',
+            'attr' => ['class' => 'w-[730px] h-[186px] border rounded-[6px] p-4',
                     'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ]);
