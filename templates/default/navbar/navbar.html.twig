@@ -1,4 +1,4 @@
-<nav class="shadow-lg w-[280px] text-white h-full font-[Epilogue] font-medium">
+<nav class="shadow-lg w-[280px] text-white h-full font-[Epilogue] font-medium flex flex-col">
     {% if app.user %}
         <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[30px] w-full flex items-center {% if app.request.attributes.get('_route') == 'home_index' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
             <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'home_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('home_index') }}">Accueil</a>
@@ -61,4 +61,20 @@
             <a class="px-4 text-[#004C6C] text-base block w-full" href="#login">Connexion</a>
         </div>
     {% endif %}
+    <!-- User Information -->
+    <div class="mt-auto flex items-center">
+        <p class="px-4 text-base block w-full">
+            {% if app.user %}
+                <span class="text-black">{{ app.user.person.firstname }} {{ app.user.person.lastname }}</span>
+                <br>
+                <span class="text-gray-500">
+                    {% if is_granted('ROLE_MANAGER') %}
+                        Manager
+                    {% elseif is_granted('ROLE_COLLABORATOR') %}
+                        Collaborateur
+                    {% endif %}
+                </span>
+            {% endif %}
+        </p>
+    </div>
 </nav>

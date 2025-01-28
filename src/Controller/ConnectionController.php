@@ -32,7 +32,12 @@ class ConnectionController extends AbstractController
     #[Route('/home', name: 'home_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render('default/home.html.twig');
+        $user = $this->getUser();
+        $person = $user->getPerson(); // Assuming there is a relation between User and Person
+
+        return $this->render('default/home.html.twig', [
+            'person' => $person,
+        ]);
     }
 
 
