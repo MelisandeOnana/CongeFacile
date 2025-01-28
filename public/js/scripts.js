@@ -19,3 +19,11 @@ function toggleLinks(id) {
         element.classList.add('hidden');
     }
 }
+
+function updateUrl(param, value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(param, value);
+    url.searchParams.delete('page'); // Supprime le paramètre 'page'
+    window.history.pushState({}, '', url);
+    window.location.reload(); 
+}
