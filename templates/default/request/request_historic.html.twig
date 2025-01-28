@@ -91,7 +91,7 @@
             {% endif %}
           </td>
           <td class="px-4 py-4">
-            <a href="{{ path('request_details', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+            <a href="{{ path('request_show', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
           </td>
         </tr>
       {% endfor %}

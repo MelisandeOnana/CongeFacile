@@ -20,8 +20,8 @@ use Knp\Component\Pager\PaginatorInterface;
 class RequestController extends AbstractController
 {
 
-    #[Route('/historic', name: 'historic', methods: ['GET'])]
-    public function historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
+    #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
+    public function hrequest_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
@@ -96,7 +96,7 @@ class RequestController extends AbstractController
             6 /*limit per page*/
         );
 
-        return $this->render('default/historic.html.twig', [
+        return $this->render('default/request/request_historic.html.twig', [
             'requests' => $pagination,
             'requestTypes' => $requestTypes,
             'filterType' => $filterType,
@@ -150,19 +150,19 @@ class RequestController extends AbstractController
 
             $this->addFlash('success', 'Requete créé avec succès.');
 
-            return $this->redirectToRoute('historic', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('default/request/new.html.twig', [
+        return $this->render('default/request/request_new.html.twig', [
             'requete' => $theRequest,
             'form' => $form,
         ]);
     }
 
-    #[Route('/request/{id}/detail', name: 'request_details', methods: ['POST','GET'])]
-    public function detail(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
+    #[Route('/request/show/{id}', name: 'request_show', methods: ['POST','GET'])]
+    public function show(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('default/request/details.html.twig', [
+        return $this->render('default/request/request_show.html.twig', [
             'request' => $requete,
         ]);
     }

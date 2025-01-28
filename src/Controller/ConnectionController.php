@@ -44,8 +44,8 @@ class ConnectionController extends AbstractController
     }
 
 
-    #[Route('/MotDePasseOublie', name: 'motdepasseoublie', methods: ['GET'])]
-    public function motdepasseoublie(UserRepository $repository, User $user = null): Response
+    #[Route('/forgotpassword', name: 'forgot_password', methods: ['GET'])]
+    public function forgot_password(UserRepository $repository, User $user = null): Response
     {
         if(isset($_GET['email']) && !empty($_GET['email'])){
 
@@ -63,17 +63,17 @@ class ConnectionController extends AbstractController
                 try{
                     mail($to, $subject, $message);
                     $reussi = "Demande envoyée";
-                    return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
+                    return $this->render('security/forgot_password.html.twig', ["reussi" => $reussi]);
                 }catch(Exception $e){
                     $reussi = "Demande non envoyée";
-                    return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
+                    return $this->render('security/forgot_password.html.twig', ["reussi" => $reussi]);
                 }
             }else{
                 $reussi = "Email incorrect";
-                return $this->render('default/motdepasseoublie.html.twig', ["reussi" => $reussi]);
+                return $this->render('security/forgot_password.html.twig', ["reussi" => $reussi]);
             }
         }
 
-        return $this->render('default/motdepasseoublie.html.twig', ["reussi" => ""]);
+        return $this->render('security/forgot_password.html.twig', ["reussi" => ""]);
     }
 }
