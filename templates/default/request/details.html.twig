@@ -7,8 +7,8 @@
     <h2 class="text-[#004C6CC7] font-semibold text-[18px] font-[Epilogue] mt-6 mb-6">Demande du {{request.createdAt.format('d/m/Y')}}</h2>
 
     <p class="text-[18px] font-[Epilogue]">Type de demande : {{request.requestType.name}}</p>
-    <p class="text-[18px] font-[Epilogue]">Periode du {{request.startAt.format('d/m/Y')}} au {{request.endAt.format('d/m/Y')}}</p>
-    <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}}</p>
+    <p class="text-[18px] font-[Epilogue]">Période du {{request.startAt.format('d/m/Y')}} au {{request.endAt.format('d/m/Y')}}</p>
+    <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}} jours</p>
 
     {% if request.answer == 1 %}
         <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></h2>

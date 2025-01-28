@@ -76,7 +76,4 @@ class ConnectionController extends AbstractController
 
         return $this->render('default/motdepasseoublie.html.twig', ["reussi" => ""]);
     }
-
-    
-
 }
