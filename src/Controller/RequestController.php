@@ -21,7 +21,7 @@ class RequestController extends AbstractController
 {
 
     #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
-    public function hrequest_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
+    public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
