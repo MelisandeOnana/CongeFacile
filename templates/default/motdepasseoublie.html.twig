@@ -3,13 +3,15 @@
 {% block title %}Mot De Passe Oublie{% endblock %}
 
 {% block body %}
-    <h1 class="text-[#1B3168] text-[28.85px] font-bold mb-4">Mot de passe oublié</h1>
-    <p>Renseignez votre adresse email dans le champ ci-dessous.<br>
-    Vous recevrez par la suite un email avec un lien vous permettant de réinitialiser votre mot de passe.</p>
+    <h1 class="font-[Epilogue] text-[#1B3168] text-[28.85px] font-semibold mb-4">Mot de passe oublié</h1>
+    <p class="font-[Epilogue] font-normal text-[16px]">
+        Renseignez votre adresse email dans le champ ci-dessous.<br>
+        Vous recevrez par la suite un email avec un lien vous permettant de réinitialiser votre mot de passe.
+    </p>
 
     <form class="space-y-4 font-[sans-serif] text-[#333] max-w-md mt-10" method='GET'>
         <div class="relative flex flex-col">
-            <label for="email" class="block text-sm font-bold text-[#212B36] mb-2">Adresse Mail</label>
+            <label for="email" class="font-[Inter] block text-[16px] font-medium text-[#212B36] mb-2">Adresse Mail</label>
             <input type="email" id="email" placeholder="****@mentalworks.fr" name="email" class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-[350px] h-[45px] text-sm border outline-[#007bff] rounded transition-all" required />
             <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute left-4 top-10" viewBox="0 0 682.667 682.667">
                 <defs>
@@ -24,8 +26,13 @@
             </svg>
         </div>
 
-        <button type="submit" class="px-6 py-2.5 w-[340px] h-[45px] !mt-5 text-sm bg-[#004C6C] text-white rounded">Demander à réinitialiser mon mot de passe</button>
+        <button type="submit" class="font-[Inter] font-medium text-[16px] px-6 py-2.5 w-[379px] h-[50px] !mt-5 text-sm bg-[#004C6C] text-white rounded">Demander à réinitialiser mon mot de passe</button>
         <p>{{reussi}}</p>
     </form>
-    <p class="mt-[15px] text-[16px]"><a href="/" class="text-[#004C6C] font-bold">Cliquez ici</a> pour retourner à la page de connexion.</p>
+    <a href="{{ path('login') }}" class="font-[Epilogue] text-[#004C6C] font-bold text-[16px]">
+        Cliquez ici
+    </a> 
+    <span class="font-[Epilogue] font-normal mt-[15px] text-[16px]"></span>
+        pour retourner à la page de connexion.
+    </span>
 {% endblock %}
