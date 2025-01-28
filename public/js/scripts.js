@@ -9,3 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
         passwordField.setAttribute('type', type);
     });
 });
+
+//  Cette fonction permet de basculer la visibilité d'un élément HTML en fonction de son identifiant (id).
+function toggleLinks(id) {
+    var element = document.getElementById(id);
+    if (element.classList.contains('hidden')) {
+        element.classList.remove('hidden');
+    } else {
+        element.classList.add('hidden');
+    }
+}
+
+function updateUrl(param, value) {
+    const url = new URL(window.location.href);
+    url.searchParams.set(param, value);
+    url.searchParams.delete('page'); // Supprime le paramètre 'page'
+    window.history.pushState({}, '', url);
+    window.location.reload(); 
+}
