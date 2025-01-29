@@ -11,15 +11,26 @@
     <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Effectuer une nouvelle demande</h1>
     {{ form_start(form) }}
 
-        <div class="flex mt-8">
-            {{ form_row(form.requestType)}}
+        {% if form_errors(form.startAt) or form_errors(form.endAt) or form_errors(form.requestType) %}
+        <div class="mt-8 text-red-700 border border-red-700 rounded-[6px] p-4 bg-red-100 inline-block">
+            {{ form_errors(form.startAt) }}
+            {{ form_errors(form.endAt) }}
+            {{ form_errors(form.requestType) }}
+        </div>
+        {% endif %}
+
+        <div class="mt-8">
+            {{ form_label(form.requestType) }}
+            {{ form_widget(form.requestType) }}
         </div>
         <div class="mt-8 flex space-x-4">
-            <div class="flex">
-                {{ form_row(form.startAt) }}
+            <div>
+                {{ form_label(form.startAt) }}
+                {{ form_widget(form.startAt) }}
             </div>
-            <div class="flex ml-[30px]">
-                {{ form_row(form.endAt) }}
+            <div class="ml-[30px]">
+                {{ form_label(form.endAt) }}
+                {{ form_widget(form.endAt) }}
             </div>
         </div>
         <div class="flex mt-8 flex-column">
@@ -48,7 +59,6 @@
         <div class="flex mt-8">
             {{ form_row(form.comment)}}
         </div>
-
         <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
             Soumettre ma demande*
         </button>
