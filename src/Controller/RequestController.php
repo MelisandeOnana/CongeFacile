@@ -142,7 +142,7 @@ class RequestController extends AbstractController
             $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
             $theRequest->setAnswerComment("");
-            $theRequest->setAnswer(0);
+            $theRequest->setAnswer(3); // 3 = En cours 
             $theRequest->setAnswerAt($answerAt);
 
             $entityManager->persist($theRequest);

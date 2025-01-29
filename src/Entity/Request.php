@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RequestRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\VarDumper\VarDumper;
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -180,13 +181,21 @@ class Request
             return 0;
         }
 
-        $interval = $start->diff($end);
+        // Copier les dates pour éviter de modifier l'original avec les horaires
+        $tempStart = clone $start;
+        $tempEnd = clone $end;
+
+        // Réinitialiser l'heure à 00:00:00 pour le calcul des jours
+        $tempStart->setTime(0, 0, 0);
+        $tempEnd->setTime(0, 0, 0);
+
+        $interval = $tempStart->diff($tempEnd);
         $days = $interval->days + 1;
 
         // Calculer les jours ouvrés en excluant les samedis et dimanches
         $workingDays = 0;
         for ($i = 0; $i < $days; $i++) {
-            $currentDay = (clone $start)->modify("+$i days");
+            $currentDay = (clone $tempStart)->modify("+$i days");
             $dayOfWeek = $currentDay->format('N'); // 1 (lundi) à 7 (dimanche)
 
             if ($dayOfWeek < 6) { // Exclure samedi (6) et dimanche (7)

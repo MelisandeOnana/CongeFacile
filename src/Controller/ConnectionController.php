@@ -33,7 +33,10 @@ class ConnectionController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $person = $user->getPerson(); // Assuming there is a relation between User and Person
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas de type User.');
+        }
+        $person = $user->getPerson();
 
         return $this->render('default/home.html.twig', [
             'person' => $person,
