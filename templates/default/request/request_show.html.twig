@@ -8,7 +8,7 @@
 
     <p class="text-[18px] font-[Epilogue]">Type de demande : {{request.requestType.name}}</p>
     <p class="text-[18px] font-[Epilogue]">Période : {{request.startAt.format('d/m/Y H\\\hi')}} au {{request.endAt.format('d/m/Y H\\\hi')}}</p>
-    <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}} jours</p>
+    <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
 
     {% if request.answer == 1 %}
         <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 py-1 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></h2>

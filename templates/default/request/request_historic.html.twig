@@ -80,7 +80,7 @@
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jours</td>
+          <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
           <td class="px-4 py-4 text-sm text-gray-700">
             {% if request.answer == 1 %}
               Accepté
