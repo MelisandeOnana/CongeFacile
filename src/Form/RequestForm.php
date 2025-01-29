@@ -26,7 +26,7 @@ class RequestForm extends AbstractType
             'placeholder' => 'Sélectionner un type',     // Texte de placeholder (optionnel)
             'label' => 'Type de demande - champ obligatoire',                       // Libellé du champ
             'required' => true,                        // Rendre le champ obligatoire
-            'attr' => ['class' => 'w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4 text-[#9CA3AF]'],
+            'attr' => ['class' => 'appearance-none w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4 text-[#9CA3AF]'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']  // Ajout de la classe CSS pour le label
         ])
         ->add('startAt', DateTimeType::class, [

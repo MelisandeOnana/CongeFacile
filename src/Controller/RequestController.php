@@ -176,6 +176,18 @@ class RequestController extends AbstractController
     #[Route('/request/show/{id}', name: 'request_show', methods: ['POST','GET'])]
     public function show(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas de type User.');
+        }
+
+        $person = $user->getPerson();
+
+        if ($requete->getCollaborator()->getId() !== $person->getId()) {
+            return $this->redirectToRoute('request_historic');
+        }
+        
         return $this->render('default/request/request_show.html.twig', [
             'request' => $requete,
         ]);

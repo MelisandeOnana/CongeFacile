@@ -17,6 +17,9 @@ class ConnectionController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername() ?? '';
 
+        if ($this->getUser()) {
+            return $this->redirectToRoute('home_index');
+        }
         // Personnaliser le message d'erreur
         $errorMessage = null;
         if ($error) {
