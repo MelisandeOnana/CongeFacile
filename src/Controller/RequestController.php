@@ -149,7 +149,7 @@ class RequestController extends AbstractController
                 $fileName = "";
             }
 
-            $currentDateTime = new \DateTimeImmutable();
+            $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
             $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
 
             $theRequest->setReceiptFile($fileName);
