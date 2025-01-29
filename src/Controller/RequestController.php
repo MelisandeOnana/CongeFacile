@@ -26,7 +26,7 @@ class RequestController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas de type User.');
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
 
@@ -120,7 +120,7 @@ class RequestController extends AbstractController
             $user = $this->getUser();
 
             if (!$user instanceof User) {
-                throw new Exception('L\'utilisateur n\'est pas de type User.');
+                throw new Exception('L\'utilisateur n\'est pas connecté.');
             }
 
             $person = $user->getPerson();
@@ -179,7 +179,7 @@ class RequestController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas de type User.');
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
         }
 
         $person = $user->getPerson();
@@ -187,7 +187,7 @@ class RequestController extends AbstractController
         if ($requete->getCollaborator()->getId() !== $person->getId()) {
             return $this->redirectToRoute('request_historic');
         }
-        
+
         return $this->render('default/request/request_show.html.twig', [
             'request' => $requete,
         ]);

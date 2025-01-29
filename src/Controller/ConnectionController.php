@@ -37,7 +37,7 @@ class ConnectionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas de type User.');
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
 
