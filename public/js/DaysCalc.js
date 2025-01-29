@@ -9,27 +9,51 @@ function calculateBusinessDays() {
         return;
     }
 
-    // Si la date de fin est avant la date de début, on échange les valeurs
+    // Si la date de fin est avant la date de début, on affiche un message d'erreur
     if (endDate < startDate) {
-        var temp = startDate;
-        startDate = endDate;
-        endDate = temp;
+        document.getElementById("result").value = "La date de début doit être avant la date de fin";
+        return;
     }
 
+        // Créer une copie de startDate pour éviter de modifier l'original
+    var tempStartDate = new Date(startDate);
+    tempStartDate.setHours(0, 0, 0, 0);
+
+    var tempEndDate = new Date(endDate);
+    tempEndDate.setHours(0, 0, 0, 0);
+
+    var Days = 0;
+
     // Boucle sur chaque jour entre les deux dates
-    while (startDate <= endDate) {
-        var day = startDate.getDay();
+    while (tempStartDate <= tempEndDate) {
+        var day = tempStartDate.getDay();
         // 1 à 5 : jours ouvrés (du lundi au vendredi)
         if (day !== 0 && day !== 6) {
             Days++;
         }
         // Passer au jour suivant
-        startDate.setDate(startDate.getDate() + 1);
+        tempStartDate.setDate(tempStartDate.getDate() + 1);
+    }
+    
+    var halfDays = 0;
+
+    // Vérifie si le premier jour est une après-midi ouvrable
+    if (startDate.getHours() >= 12 && startDate.getDay() > 0 && startDate.getDay() < 6) {
+        halfDays += 0.5;
     }
 
-    // Afficher le résultat dans la zone de texte
-    document.getElementById("days").value = Days;
-}
+    // Vérifie si le dernier jour est une matinée ouvrable
+    if (endDate.getHours() <= 12 && endDate.getDay() > 0 && endDate.getDay() < 6) {
+        halfDays += 0.5;
+    }
+    
+
+    // Ajuste le nombre total de jours
+    Days -= halfDays;
+
+        // Afficher le résultat dans la zone de texte
+        document.getElementById("days").value = Days;
+    }
 
 document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('request_form_fichier');

@@ -26,7 +26,7 @@ class RequestController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas de type User.');
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
 
@@ -117,32 +117,46 @@ class RequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
-            $destination = $this->getParameter('kernel.project_dir') . '/public/files';
-
-            // Générer un nom unique pour le fichier
-            $fileName = $file->getClientOriginalName();
-            try {
-                $file->move($destination, $fileName);
-                $this->addFlash('success', 'Fichier téléchargé avec succès !');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
-            }
-
             $user = $this->getUser();
 
             if (!$user instanceof User) {
-                throw new Exception('L\'utilisateur n\'est pas de type User.');
+                throw new Exception('L\'utilisateur n\'est pas connecté.');
             }
+
             $person = $user->getPerson();
-            $currentDateTime = new \DateTimeImmutable();
-            $answerAt = new \DateTimeImmutable("00-00-0000");
+
+            if ($form['fichier']->getData() != null) {
+
+                $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
+                $destination = $this->getParameter('kernel.project_dir') . '/public/files';
+
+                $personId = $person->getId();
+
+                // Compter le nombre de demandes déjà crée par la personne pour créer un id unique pour le fichier
+                $requestCount = $entityManager->getRepository(Request::class)->count(['collaborator' => $person]);
+                $idfile = $requestCount + 1;
+
+
+                // Générer un nom unique pour le fichier
+                $fileName = $personId . '-' . $idfile . ' ' . $file->getClientOriginalName();
+                try {
+                    $file->move($destination, $fileName);
+                    $this->addFlash('success', 'Fichier téléchargé avec succès !');
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
+                }
+            } else {
+                $fileName = "";
+            }
+
+            $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+            $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
 
             $theRequest->setReceiptFile($fileName);
             $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
             $theRequest->setAnswerComment("");
-            $theRequest->setAnswer(0);
+            $theRequest->setAnswer(3); // 3 = En cours 
             $theRequest->setAnswerAt($answerAt);
 
             $entityManager->persist($theRequest);
@@ -162,6 +176,18 @@ class RequestController extends AbstractController
     #[Route('/request/show/{id}', name: 'request_show', methods: ['POST','GET'])]
     public function show(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        }
+
+        $person = $user->getPerson();
+
+        if ($requete->getCollaborator()->getId() !== $person->getId()) {
+            return $this->redirectToRoute('request_historic');
+        }
+
         return $this->render('default/request/request_show.html.twig', [
             'request' => $requete,
         ]);

@@ -17,6 +17,9 @@ class ConnectionController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername() ?? '';
 
+        if ($this->getUser()) {
+            return $this->redirectToRoute('home_index');
+        }
         // Personnaliser le message d'erreur
         $errorMessage = null;
         if ($error) {
@@ -33,7 +36,10 @@ class ConnectionController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $person = $user->getPerson(); // Assuming there is a relation between User and Person
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        }
+        $person = $user->getPerson();
 
         return $this->render('default/home.html.twig', [
             'person' => $person,

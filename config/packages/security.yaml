@@ -38,8 +38,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/home, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/historic, roles: IS_AUTHENTICATED_FULLY } # Accessible par tout le monde
-        - { path: ^/collabo, roles: ROLE_COLLABORATOR } # Accessible uniquement aux administrateurs
+        - { path: ^/request/new, roles: ROLE_COLLABORATOR } 
+        - { path: ^/request/historic, roles: ROLE_COLLABORATOR }
+        - { path: ^/request/show, roles: ROLE_COLLABORATOR }
 
 when@test:
     security:
