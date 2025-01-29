@@ -11,17 +11,18 @@
     <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}} jours</p>
 
     {% if request.answer == 1 %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></h2>
+        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 py-1 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></h2>
     {% elseif request.answer == 2 %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Refusé</span></h2>
+        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FAD4D4] pl-3 pr-3 py-1 ml-2 text-[#82451A] font-[Inter] text-[16px] font-medium">Refusé</span></h2>
     {% else %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">En cours<span></h2>
+        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FFF3E0] pl-3 pr-3 py-1 ml-2 text-[#FF9800] font-[Inter] text-[16px] font-medium">En cours</span></p>
     {% endif %}
 
-    <h2 class="mt-6 font-[Inter] text-[16px]">Commentaire du manager :</h2>
-    <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[186px] border-2 rounded-[6px]" placeholder="Profite bien de tes vacances à Mayorque et surtout, n’oublie pas la carte postale !!!"></textarea>
+    {% if request.answerComment %}
+        <h2 class="mt-6 font-[Inter] text-[16px]">Commentaire du manager :</h2>
+        <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[186px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.answerComment}}"></textarea>
+    {% endif %}
     <div class="mt-6 flex bg-[#004C6C14] w-[343px] h-[40px] rounded-[6px]">
         <a href="{{ path('request_historic') }}" class=" m-auto text-center text-[#475467] font-medium font-[Inter]">Retourner à la liste des demandes</a>
     </div>
-    
 {% endblock %}
