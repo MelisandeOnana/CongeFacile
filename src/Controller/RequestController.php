@@ -117,26 +117,40 @@ class RequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
-            $destination = $this->getParameter('kernel.project_dir') . '/public/files';
-
-            // Générer un nom unique pour le fichier
-            $fileName = $file->getClientOriginalName();
-            try {
-                $file->move($destination, $fileName);
-                $this->addFlash('success', 'Fichier téléchargé avec succès !');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
-            }
-
             $user = $this->getUser();
 
             if (!$user instanceof User) {
                 throw new Exception('L\'utilisateur n\'est pas de type User.');
             }
+
             $person = $user->getPerson();
+
+            if ($form['fichier']->getData() != null) {
+
+                $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
+                $destination = $this->getParameter('kernel.project_dir') . '/public/files';
+
+                $personId = $person->getId();
+
+                // Compter le nombre de demandes déjà crée par la personne pour créer un id unique pour le fichier
+                $requestCount = $entityManager->getRepository(Request::class)->count(['collaborator' => $person]);
+                $idfile = $requestCount + 1;
+
+
+                // Générer un nom unique pour le fichier
+                $fileName = $personId . '-' . $idfile . ' ' . $file->getClientOriginalName();
+                try {
+                    $file->move($destination, $fileName);
+                    $this->addFlash('success', 'Fichier téléchargé avec succès !');
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
+                }
+            } else {
+                $fileName = "";
+            }
+
             $currentDateTime = new \DateTimeImmutable();
-            $answerAt = new \DateTimeImmutable("00-00-0000");
+            $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
 
             $theRequest->setReceiptFile($fileName);
             $theRequest->setCollaborator($person);

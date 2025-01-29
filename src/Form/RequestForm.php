@@ -26,7 +26,7 @@ class RequestForm extends AbstractType
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']  // Ajout de la classe CSS pour le label
         ])
         ->add('startAt', DateTimeType::class, [
-            'label' => 'Date début - champ obligatoire',
+            'label' => 'Date de début - champ obligatoire',
             'widget' => 'single_text',
             'attr' => [
                 'id' => 'startDate',
@@ -57,7 +57,8 @@ class RequestForm extends AbstractType
             'attr' => ['class' => 'w-[730px] h-[186px] border rounded-[6px] p-4',
                     'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.'],
             'required' => false,
-            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
+            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
+            'empty_data' => ''
         ]);
         
     }
