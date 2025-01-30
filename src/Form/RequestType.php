@@ -13,9 +13,8 @@ use DateTime;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use App\Entity\RequestType;
 
-class RequestForm extends AbstractType
+class RequestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

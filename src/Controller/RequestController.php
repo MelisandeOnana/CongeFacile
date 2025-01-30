@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use App\Entity\User;
-use App\Form\RequestForm;
+use App\Form\RequestType;
 use App\Entity\Request;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
@@ -112,7 +112,7 @@ class RequestController extends AbstractController
     public function request_new(HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
         $theRequest = new Request();
-        $form = $this->createForm(RequestForm::class, $theRequest, []);
+        $form = $this->createForm(RequestType::class, $theRequest, []);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

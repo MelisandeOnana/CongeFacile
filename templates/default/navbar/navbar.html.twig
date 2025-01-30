@@ -1,60 +1,60 @@
 <nav class="shadow-lg w-[280px] text-white h-full font-[Epilogue] font-medium flex flex-col">
     {% if app.user %}
         <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[30px] w-full flex items-center {% if app.request.attributes.get('_route') == 'home_index' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-            <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'home_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('home_index') }}">Accueil</a>
+            <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'home_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('home_index') }}">Accueil</a>
         </div>
         {% if is_granted('ROLE_COLLABORATOR') %}
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'request_new' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'request_new' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_new') }}">Nouvelle demande</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'request_new' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_new') }}">Nouvelle demande</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
             </div>
         {% elseif is_granted('ROLE_MANAGER') %}
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Demandes en attentes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Demandes en attentes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin_teams' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin_teams' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Mon équipe</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin_teams' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Mon équipe</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin_stats' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin_stats' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Statistiques</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin_stats' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Statistiques</a>
             </div>
     {% endif %}
-    <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[1px] mt-[25px] w-[210px] bg-gray-300 mx-auto"></div>
-    <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[30px] w-full flex items-center {% if app.request.attributes.get('_route') == 'logout_info' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-        <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout_info' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Mes informations</a>
+    <hr class="w-[210px] border-[#DFE4EA] border-t-1 mx-auto mt-[15px]">
+    <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[30px] w-full flex items-center {% if app.request.attributes.get('_route') == 'profile_index' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
+        <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'profile_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('profile_index')}}">Mes informations</a>
     </div>
     <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'logout_preferences' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-        <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Mes préférences</a>
+        <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Mes préférences</a>
     </div>
     {% if is_granted('ROLE_MANAGER') %}
         <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer" onclick="toggleLinks('admin-links')">
-            <p class="px-4 text-base block w-[80%] {% if app.request.attributes.get('_route') == 'admin_links' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}">Administration</p>
+            <p class="pl-[2rem] pr-4 text-base block w-[80%] {% if app.request.attributes.get('_route') == 'admin_links' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}">Administration</p>
             <svg class="w-4 h-4 ml-2 text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
         </div>
         <div id="admin-links" class="admin-links hidden">
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Types de demandes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Types de demandes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Managers</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Managers</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Postes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Postes</a>
             </div>
         </div>
     {% endif %}
     <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'logout' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-        <a class="hover:text-[#004C6C] px-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('logout') }}">Déconnexion</a>
+        <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('logout') }}">Déconnexion</a>
     </div>
     {% else %}
         <div class="bg-[#004C6C0D] h-[44px] mt-[30px] w-full flex items-center border-r-4 border-[#004C6C]">

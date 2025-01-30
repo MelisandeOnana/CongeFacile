@@ -41,7 +41,7 @@ class ConnectionController extends AbstractController
         }
         $person = $user->getPerson();
 
-        return $this->render('default/home.html.twig', [
+        return $this->render('default/index.html.twig', [
             'person' => $person,
         ]);
     }
