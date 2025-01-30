@@ -1,12 +1,16 @@
 // public/js/scripts.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    const togglePassword = document.getElementById('toggle-password');
-    const passwordField = document.getElementById('password');
+    const togglePasswordIcons = document.querySelectorAll('[id^="toggle-password"]');
+    
+    togglePasswordIcons.forEach(function(togglePassword) {
+        const passwordFieldId = togglePassword.getAttribute('data-target');
+        const passwordField = document.getElementById(passwordFieldId);
 
-    togglePassword.addEventListener('click', function() {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
+        togglePassword.addEventListener('click', function() {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+        });
     });
 });
 
@@ -27,3 +31,9 @@ function updateUrl(param, value) {
     window.history.pushState({}, '', url);
     window.location.reload(); 
 }
+
+document.querySelector('form').addEventListener('submit', function() {
+    document.querySelectorAll('select[disabled]').forEach(function(select) {
+        select.disabled = false;
+    });
+});
