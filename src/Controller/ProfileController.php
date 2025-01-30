@@ -67,7 +67,7 @@ class ProfileController extends AbstractController
              }
          }
 
-        return $this->render('profile/index.html.twig', [
+        return $this->render('default/profile/index.html.twig', [
             'form' => $form->createView(),
             'resetPasswordForm' => $resetPasswordForm->createView(),
         ]);
