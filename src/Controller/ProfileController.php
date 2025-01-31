@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Person;
 use App\Form\ProfileType;
+use App\Form\PreferencesType;
 use App\Form\ResetPasswordType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,6 +71,15 @@ class ProfileController extends AbstractController
         return $this->render('default/profile/index.html.twig', [
             'form' => $form->createView(),
             'resetPasswordForm' => $resetPasswordForm->createView(),
+        ]);
+    }
+    #[Route('/preferences', name: 'preferences')]
+    public function preferences(): Response
+    {
+        $form = $this->createForm(PreferencesType::class);
+
+        return $this->render('default/profile/preferences.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

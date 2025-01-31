@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes préférences{% endblock %}
+
+{% block body %}
+    <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Mes préférences</h1>
+    {{ form_start(form) }}
+    {{ form_label(form.alertOnAnswer) }}
+    {{ form_widget(form.alertOnAnswer) }}
+    <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
+            Enregister mes préférences    
+    </button>
+    {{ form_end(form) }}
+{% endblock %}
