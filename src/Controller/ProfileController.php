@@ -25,9 +25,13 @@ class ProfileController extends AbstractController
         // Forcer le chargement de l'entité
         $person = $entityManager->getRepository(Person::class)->find($person->getId());
 
+        // Déterminer si l'utilisateur est un manager
+        $isManager = $this->isGranted('ROLE_MANAGER');
+
         // Créer le formulaire et passer les données de la personne
         $form = $this->createForm(ProfileType::class, $person, [
             'department' => $person->getDepartment(),
+            'is_manager' => $isManager,
         ]);
 
         // Définir la valeur du champ email
@@ -35,44 +39,53 @@ class ProfileController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Enregistrer les modifications
+            // Enregistrement des modifications
             $entityManager->persist($person);
             $entityManager->flush();
 
-            // Ajouter un message flash ou rediriger l'utilisateur
+            // Ajoute un message flash et redirection de l'utilisateur
             $this->addFlash('success', 'Vos informations ont été mises à jour.');
             return $this->redirectToRoute('profile_index');
         }
 
-        // Créer le formulaire de réinitialisation du mot de passe
+        // Création du formulaire de réinitialisation du mot de passe
         $resetPasswordForm = $this->createForm(ResetPasswordType::class);
 
         $resetPasswordForm->handleRequest($request);
         if ($resetPasswordForm->isSubmitted() && $resetPasswordForm->isValid()) {
-            // Vérifier le mot de passe actuel
+            // Vérifie le mot de passe actuel
             $currentPassword = $resetPasswordForm->get('currentPassword')->getData();
             if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
             } else {
-                // Réinitialiser le mot de passe
-                $newPassword = $resetPasswordForm->get('plainPassword')->getData();
+                // Réinitialise le mot de passe
+                $newPassword = $resetPasswordForm->get('newPassword')->getData();
                 $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
                 $user->setPassword($hashedPassword);
 
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Ajouter un message flash ou rediriger l'utilisateur
+                // Ajoute un message flash et redirection
                 $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
                 return $this->redirectToRoute('profile_index');
             }
         }
 
-        return $this->render('default/profile/index.html.twig', [
-            'form' => $form->createView(),
-            'resetPasswordForm' => $resetPasswordForm->createView(),
-        ]);
+        // Redirection vers la vue appropriée en fonction du rôle
+        if ($isManager) {
+            return $this->render('default/profile/manager.html.twig', [
+                'form' => $form->createView(),
+                'resetPasswordForm' => $resetPasswordForm->createView(),
+            ]);
+        } else {
+            return $this->render('default/profile/collaborator.html.twig', [
+                'form' => $form->createView(),
+                'resetPasswordForm' => $resetPasswordForm->createView(),
+            ]);
+        }
     }
+
     #[Route('/preferences', name: 'preferences')]
     public function preferences(): Response
     {
