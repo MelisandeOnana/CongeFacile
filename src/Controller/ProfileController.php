@@ -39,26 +39,26 @@ class ProfileController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Enregistrement des modifications
+            // Enregistrer les modifications
             $entityManager->persist($person);
             $entityManager->flush();
 
-            // Ajoute un message flash et redirection de l'utilisateur
+            // Ajouter un message flash ou rediriger l'utilisateur
             $this->addFlash('success', 'Vos informations ont été mises à jour.');
             return $this->redirectToRoute('profile_index');
         }
 
-        // Création du formulaire de réinitialisation du mot de passe
+        // Créer le formulaire de réinitialisation du mot de passe
         $resetPasswordForm = $this->createForm(ResetPasswordType::class);
 
         $resetPasswordForm->handleRequest($request);
         if ($resetPasswordForm->isSubmitted() && $resetPasswordForm->isValid()) {
-            // Vérifie le mot de passe actuel
+            // Vérifier le mot de passe actuel
             $currentPassword = $resetPasswordForm->get('currentPassword')->getData();
             if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
             } else {
-                // Réinitialise le mot de passe
+                // Réinitialiser le mot de passe
                 $newPassword = $resetPasswordForm->get('newPassword')->getData();
                 $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
                 $user->setPassword($hashedPassword);
@@ -66,13 +66,13 @@ class ProfileController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                // Ajoute un message flash et redirection
+                // Ajouter un message flash et rediriger
                 $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
                 return $this->redirectToRoute('profile_index');
             }
         }
 
-        // Redirection vers la vue appropriée en fonction du rôle
+        // Rediriger vers la vue appropriée en fonction du rôle
         if ($isManager) {
             return $this->render('default/profile/manager.html.twig', [
                 'form' => $form->createView(),

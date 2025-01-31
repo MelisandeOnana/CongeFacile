@@ -46,7 +46,7 @@ class ResetPasswordType extends AbstractType
                 ],
             ])
             ->add('confirmPassword', PasswordType::class, [
-                'label' => 'Confirmer le nouveau mot de passe',
+                'label' => 'Confirmation de mot de passe',
                 'label_attr' => ['class' => 'block text-sm font-medium text-gray-700'],
                 'attr' => [
                     'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#1B3168] focus:border-[#1B3168] sm:text-sm',
