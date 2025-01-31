@@ -48,7 +48,7 @@ class ProfileType extends AbstractType
             ->add('department', EntityType::class, [
                 'class' => Department::class,
                 'choice_label' => 'name',
-                'label' => 'Département',
+                'label' => 'Direction/Service',
                 'label_attr' => ['class' => 'block text-sm font-medium text-gray-700'],
                 'attr' => [
                     'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
