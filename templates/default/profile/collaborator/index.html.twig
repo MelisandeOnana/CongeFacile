@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes informations{% endblock %}
+
+{% block body %}
+    <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Mes informations</h1>
+    
+    {{ form_start(form) }}
+    {% if is_granted('ROLE_MANAGER') %}
+        <div class="mt-4">
+            {{ form_row(form.email) }}
+        </div>
+    {% endif %}
+    <div class="flex space-x-4">
+        <div>
+            {{ form_row(form.firstName) }}
+        </div>
+        <div>
+            {{ form_row(form.lastName) }}
+        </div>
+    </div>
+    {% if not is_granted('ROLE_MANAGER') %}
+        <div class="mt-4">
+            {{ form_row(form.email) }}
+        </div>
+    {% endif %}
+    <div class="flex space-x-4">
+        <div class="mt-4">
+            {{ form_row(form.department) }}
+        </div>
+        <div class="mt-4">
+            {{ form_row(form.position) }}
+        </div>
+    </div>
+    {% if is_granted('ROLE_MANAGER') %}
+        <div class="mt-4">
+            {{ form_row(form.team) }} <!-- Champ supplémentaire pour les managers -->
+        </div>
+        <div class="mt-4">
+            {{ form_row(form.role) }} <!-- Champ supplémentaire pour les managers -->
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_COLLABORATOR') %}
+        <div class="mt-4">
+            {{ form_row(form.manager) }} <!-- Champ spécifique pour les collaborateurs -->
+        </div>
+    {% endif %}
+    {{ form_end(form) }}
+
+    <h2 class="text-[24px] font-semibold text-[#1B3168] font-[Epilogue] mt-8">Réinitialiser le mot de passe</h2>
+    
+    {{ form_start(resetPasswordForm) }}
+    <div class="relative">
+        {{ form_label(resetPasswordForm.currentPassword) }}
+        <div class="relative mt-1">
+            {{ form_widget(resetPasswordForm.currentPassword) }}
+            <span class="absolute inset-y-0 ml-[26%] pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility()">
+                <i class="fas fa-eye" id="togglePasswordIcon"></i>
+            </span>
+        </div>
+    </div>
+    <div class="flex mt-4 space-x-4">
+        <div>
+            {{ form_label(resetPasswordForm.newPassword) }}
+            <div class="relative">
+                {{ form_widget(resetPasswordForm.newPassword)}}
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('resetPasswordForm_newPassword')">
+                    <i class="fas fa-eye" id="togglePasswordIcon_newPassword"></i>
+                </span>
+            </div>
+        </div>
+        <div>
+            {{ form_label(resetPasswordForm.confirmPassword) }}
+            <div class="relative">
+                {{ form_widget(resetPasswordForm.confirmPassword) }}
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('resetPasswordForm_confirmPassword')">
+                    <i class="fas fa-eye" id="togglePasswordIcon_confirmPassword"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#1B3168] hover:bg-[#1B3168] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1B3168]">
+            Réinitialiser le mot de passe
+        </button>
+    </div>
+    {{ form_end(resetPasswordForm) }}
+    <script>
+        function togglePasswordVisibility() {
+            const passwordField = document.querySelector('input[name="resetPasswordForm[currentPassword]"]');
+            const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                togglePasswordIcon.classList.remove('fa-eye');
+                togglePasswordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                togglePasswordIcon.classList.remove('fa-eye-slash');
+                togglePasswordIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+{% endblock %}
