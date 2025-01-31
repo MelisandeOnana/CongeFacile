@@ -1,7 +1,6 @@
-// public/js/scripts.js
-
+// Ce script permet de basculer la visibilité du mot de passe lorsque l'utilisateur clique sur l'icône de l'œil.
 document.addEventListener('DOMContentLoaded', function() {
-    const togglePasswordIcons = document.querySelectorAll('[id^="toggle-password"]');
+    const togglePasswordIcons = document.querySelectorAll('.toggle-password');
     
     togglePasswordIcons.forEach(function(togglePassword) {
         const passwordFieldId = togglePassword.getAttribute('data-target');
@@ -10,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
         togglePassword.addEventListener('click', function() {
             const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordField.setAttribute('type', type);
+            this.classList.toggle('bi-eye');
+            this.classList.toggle('bi-eye-slash');
         });
     });
 });
