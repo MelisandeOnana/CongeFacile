@@ -43,29 +43,29 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('profile_index');
         }
 
-         // Créer le formulaire de réinitialisation du mot de passe
-         $resetPasswordForm = $this->createForm(ResetPasswordType::class);
+        // Créer le formulaire de réinitialisation du mot de passe
+        $resetPasswordForm = $this->createForm(ResetPasswordType::class);
 
-         $resetPasswordForm->handleRequest($request);
-         if ($resetPasswordForm->isSubmitted() && $resetPasswordForm->isValid()) {
-             // Vérifier le mot de passe actuel
-             $currentPassword = $resetPasswordForm->get('currentPassword')->getData();
-             if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
-                 $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
-             } else {
-                 // Réinitialiser le mot de passe
-                 $newPassword = $resetPasswordForm->get('plainPassword')->getData();
-                 $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                 $user->setPassword($hashedPassword);
- 
-                 $entityManager->persist($user);
-                 $entityManager->flush();
- 
-                 // Ajouter un message flash ou rediriger l'utilisateur
-                 $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
-                 return $this->redirectToRoute('profile_index');
-             }
-         }
+        $resetPasswordForm->handleRequest($request);
+        if ($resetPasswordForm->isSubmitted() && $resetPasswordForm->isValid()) {
+            // Vérifier le mot de passe actuel
+            $currentPassword = $resetPasswordForm->get('currentPassword')->getData();
+            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+                $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            } else {
+                // Réinitialiser le mot de passe
+                $newPassword = $resetPasswordForm->get('plainPassword')->getData();
+                $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                $user->setPassword($hashedPassword);
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // Ajouter un message flash ou rediriger l'utilisateur
+                $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
+                return $this->redirectToRoute('profile_index');
+            }
+        }
 
         return $this->render('default/profile/index.html.twig', [
             'form' => $form->createView(),
