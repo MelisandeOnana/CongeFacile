@@ -16,6 +16,15 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
+    public function getPersonByManager($manager){
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.manager = :manger_id')
+            ->setParameter('manger_id', $manager->getId())
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     //    /**
     //     * @return Person[] Returns an array of Person objects
     //     */

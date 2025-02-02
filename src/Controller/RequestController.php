@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\PaginatorInterface;
+use App\Repository\PersonRepository;
 
 class RequestController extends AbstractController
 {
@@ -193,5 +194,98 @@ class RequestController extends AbstractController
         ]);
     }
  
+    #[Route('/request_pending', name: 'request_pending', methods: ['POST','GET'])]
+    public function request_pending(HttpRequest $request,PersonRepository $personRepository, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        }
+        $manager = $user->getPerson();
+        $collaborators = $personRepository->getPersonByManager($manager);
+
+        // Récupérer les valeurs des filtres depuis la requête
+        $filterType = $request->query->get('type');
+        $filterDate = $request->query->get('requested');
+        $filterStart = $request->query->get('start');
+        $filterEnd = $request->query->get('end');
+        $filterNumber = $request->query->get('days');
+        $filterCollaborator = $request->query->get('collaborator');
+
+        $criteria = Criteria::create();
+        $criteria->andWhere(Criteria::expr()->in('collaborator',$collaborators));
+        $criteria->andWhere(Criteria::expr()->eq('answer', "3"));
+
+        
+        if ($filterType) {
+            $filterTypeObject = $requestTypeRepository->find($filterType);
+            if ($filterTypeObject) {
+                $criteria->andWhere(Criteria::expr()->eq('requestType', $filterTypeObject));
+            }
+        }
+        if($filterCollaborator){
+            $filterCollaboratorObject = $personRepository->find($filterCollaborator);
+            if ($filterCollaboratorObject) {
+                $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
+            }
+        }
+        
+        if ($filterDate) {
+            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+        }
+        if ($filterStart) {
+            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
+        }
+        if ($filterEnd) {
+            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
+        }
+        if ($filterNumber) {
+            $requests = $requestRepository->findAll();
+            $matchingRequests = [];
+
+            foreach ($requests as $req) {
+                if ($req->getWorkingdays() == $filterNumber) {
+                    $matchingRequests[] = $req;
+                }
+            }
+
+            $criteria->andWhere(Criteria::expr()->in('id', array_map(function($req) {
+                return $req->getId();
+            }, $matchingRequests)));
+        }
+
     
+        // Rechercher les requêtes en fonction des critères
+        $criteria->orderBy(['createdAt' => 'DESC']);
+        $requests = $requestRepository->matching($criteria);
+
+        $requestTypes = $requestTypeRepository->findAll();
+
+        $pagination = $paginator->paginate(
+            $requests, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            6 /*limit per page*/
+        );
+
+        return $this->render('default/request/request_pending.html.twig', [
+            'requests' => $pagination,
+            'requestTypes' => $requestTypes,
+            'collaborators' => $collaborators,
+            'filterType' => $filterType,
+            'filterDate' => $filterDate,
+            'filterStart' => $filterStart,
+            'filterEnd' => $filterEnd,
+            'filterNumber' => $filterNumber,
+        ]);
+    }
 }

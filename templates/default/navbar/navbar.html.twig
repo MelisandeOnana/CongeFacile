@@ -12,7 +12,7 @@
             </div>
         {% elseif is_granted('ROLE_MANAGER') %}
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Demandes en attentes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="request_pending">Demandes en attentes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
                 <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
