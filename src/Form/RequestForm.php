@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class NewRequestType extends AbstractType
+class RequestForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
