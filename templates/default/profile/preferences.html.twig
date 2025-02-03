@@ -33,6 +33,13 @@
     <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-10">
             Enregister mes préférences    
     </button>
+    {% for label, messages in app.flashes %}
+        <div class=" mt-6 alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
     {{ form_end(form) }}
 <style>
    /* Conteneur */

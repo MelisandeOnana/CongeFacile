@@ -96,7 +96,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/preferences', name: 'preferences')]
-    public function preferences(): Response
+    public function preferences(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PreferencesType::class);
         $user = $this->getUser();
@@ -104,9 +104,26 @@ class ProfileController extends AbstractController
             throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
+        $roles = $user->getRoles();
         $alertNewRequest = $person->getAlertNewRequest();
         $alertOnAnswer = $person->getAlertOnAnswer();
         $alertBeforeVacation = $person->getAlertBeforeVacation();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (in_array("ROLE_MANAGER", $roles)) {
+                $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
+            } else {
+                $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
+                $person->setAlertBeforeVacation($form->get('alertBeforeVacation')->getData());
+            }
+            
+            $entityManager->persist($person);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vos préférences ont été mises à jour.');
+            return $this->redirectToRoute('preferences');
+        }
 
         return $this->render('default/profile/preferences.html.twig', [
             'form' => $form->createView(),
