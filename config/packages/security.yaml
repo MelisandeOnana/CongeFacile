@@ -39,7 +39,6 @@ security:
     access_control:
         - { path: ^/home, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/request/new, roles: ROLE_COLLABORATOR } 
-        - { path: ^/request/historic, roles: ROLE_COLLABORATOR }
         - { path: ^/request/show, roles: ROLE_COLLABORATOR }
 
 when@test:
