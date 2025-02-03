@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Request;
+use App\Entity\RequestType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,7 +15,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-class RequestType extends AbstractType
+class NewRequestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -49,7 +50,7 @@ class RequestType extends AbstractType
         ->add('fichier', FileType::class, [
             'label' => 'Justificatif si applicable',
             'attr' => [
-                'class' => 'w-[350px] h-[46px] border rounded-[6px])]',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px]',
             ],
             'mapped' => false,
             'required' => false,
