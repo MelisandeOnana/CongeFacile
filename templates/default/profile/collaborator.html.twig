@@ -84,7 +84,7 @@
         </div>
          <!-- Affichage des messages flash -->
         {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }}">
+            <div class="mt-5 alert alert-{{ label }}">
                 {% for message in messages %}
                     <p>{{ message }}</p>
                 {% endfor %}

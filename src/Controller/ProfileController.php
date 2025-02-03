@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Entity\User;
 use App\Form\ProfileType;
 use App\Form\PreferencesType;
 use App\Form\ResetPasswordType;
@@ -20,6 +21,9 @@ class ProfileController extends AbstractController
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
+        }
         $person = $user->getPerson();
 
         // Forcer le chargement de l'entité
@@ -60,15 +64,20 @@ class ProfileController extends AbstractController
             } else {
                 // Réinitialiser le mot de passe
                 $newPassword = $resetPasswordForm->get('newPassword')->getData();
-                $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                $user->setPassword($hashedPassword);
+                $confirmPassword = $resetPasswordForm->get('confirmPassword')->getData();
+                if ($newPassword !== $confirmPassword) {
+                    $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                } else {
+                    $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                    $user->setPassword($hashedPassword);
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
 
-                // Ajouter un message flash et rediriger
-                $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
-                return $this->redirectToRoute('profile_index');
+                    // Ajouter un message flash et rediriger
+                    $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
+                    return $this->redirectToRoute('profile_index');
+                }
             }
         }
 
