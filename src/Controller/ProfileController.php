@@ -99,9 +99,20 @@ class ProfileController extends AbstractController
     public function preferences(): Response
     {
         $form = $this->createForm(PreferencesType::class);
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
+        }
+        $person = $user->getPerson();
+        $alertNewRequest = $person->getAlertNewRequest();
+        $alertOnAnswer = $person->getAlertOnAnswer();
+        $alertBeforeVacation = $person->getAlertBeforeVacation();
 
         return $this->render('default/profile/preferences.html.twig', [
             'form' => $form->createView(),
+            'alertNewRequest' => $alertNewRequest,
+            'alertOnAnswer' => $alertOnAnswer,
+            'alertBeforeVacation' => $alertBeforeVacation,
         ]);
     }
 }
