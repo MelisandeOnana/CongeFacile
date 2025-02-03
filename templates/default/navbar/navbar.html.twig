@@ -28,8 +28,8 @@
     <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[30px] w-full flex items-center {% if app.request.attributes.get('_route') == 'profile_index' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
         <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'profile_index' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('profile_index')}}">Mes informations</a>
     </div>
-    <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'logout_preferences' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-        <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'logout_preferences' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('preferences')}}">Mes préférences</a>
+    <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'preferences' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
+        <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'preferences' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('preferences')}}">Mes préférences</a>
     </div>
     {% if is_granted('ROLE_MANAGER') %}
         <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer" onclick="toggleLinks('admin-links')">

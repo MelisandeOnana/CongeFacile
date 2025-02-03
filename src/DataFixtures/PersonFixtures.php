@@ -23,9 +23,9 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $managerPerson->setLastName('Smith');
         $managerPerson->setDepartment($department);
         $managerPerson->setPosition($managerPosition); // Assign the Manager position to Jane
-        $managerPerson->setAlertOnAnswer(true);
-        $managerPerson->setAlertNewRequest(true);
-        $managerPerson->setAlertBeforeVacation(true);
+        $managerPerson->setAlertOnAnswer(false);
+        $managerPerson->setAlertNewRequest(false);
+        $managerPerson->setAlertBeforeVacation(false);
         $manager->persist($managerPerson);
 
         // Create an employee and assign the manager
@@ -35,9 +35,9 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $employee->setDepartment($department);
         $employee->setPosition($developerPosition); // Assign the Developer position to John
         $employee->setManager($managerPerson); // Assign Jane as the manager
-        $employee->setAlertOnAnswer(true);
-        $employee->setAlertNewRequest(true);
-        $employee->setAlertBeforeVacation(true);
+        $employee->setAlertOnAnswer(false);
+        $employee->setAlertNewRequest(false);
+        $employee->setAlertBeforeVacation(false);
         $manager->persist($employee);
 
         $manager->flush();
