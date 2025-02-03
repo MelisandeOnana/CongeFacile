@@ -194,7 +194,7 @@ class RequestController extends AbstractController
         ]);
     }
  
-    #[Route('/request_pending', name: 'request_pending', methods: ['POST','GET'])]
+    #[Route('/request/pending', name: 'request_pending', methods: ['POST','GET'])]
     public function request_pending(HttpRequest $request,PersonRepository $personRepository, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
