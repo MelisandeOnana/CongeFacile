@@ -17,9 +17,16 @@ use Exception;
 use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\PersonRepository;
+use App\Service\MailerService;
 
 class RequestController extends AbstractController
 {
+    private MailerService $mailerService;
+
+    public function __construct(MailerService $mailerService)
+    {
+        $this->mailerService = $mailerService;
+    }
 
     #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
     public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
@@ -143,7 +150,7 @@ class RequestController extends AbstractController
                 try {
                     $file->move($destination, $fileName);
                     $this->addFlash('success', 'Fichier téléchargé avec succès !');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
                 }
             } else {
@@ -165,6 +172,21 @@ class RequestController extends AbstractController
 
             $this->addFlash('success', 'Requete créé avec succès.');
 
+            $manager = $person->getManager(); 
+            $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
+            $emailManager = $managerUser->getEmail();
+            $alert = $manager->getAlertNewRequest();
+
+            if ($alert == true) {
+                $to = $emailManager;
+                $subject = "CongéFacile : Nouvelle demande de congé déposée";
+                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." à déposé une demande de congé.<br>
+                Merci de vous connecter à votre espace pour valider ou refuser la demande.";
+
+                $this->mailerService->sendEmail($to, $subject, $message);
+            }
+            
+                
             return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
         }
 
