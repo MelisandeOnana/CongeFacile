@@ -8,9 +8,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\MailerService;
 use Exception;
 class ConnectionController extends AbstractController
 {
+    private MailerService $mailerService;
+
+    public function __construct(MailerService $mailerService)
+    {
+        $this->mailerService = $mailerService;
+    }
+
     #[Route('/', name: 'login', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -65,14 +73,19 @@ class ConnectionController extends AbstractController
 
             if($user != null){
 
-                $to = "dauguet.mathis@gmail.com";
-                $subject = "CongéFacile :".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." demande un changement de mot de passe.";
-                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." demande un changement de mot de passe.
+                $to = "contact@mworks.fr";
+                $subject = "CongéFacile : ".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." demande un changement de mot de passe.";
+                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." demande un changement de mot de passe.<br>
                 Adresse email de la personne : “".$email."”.<br>
-                Après changement, merci de notier l’utilisateur de son nouveau mot de passe.";
+                <br>
+                Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.";
                 
                 try{
-                    mail($to, $subject, $message);
+                    $this->mailerService->sendEmail(
+                        $to,
+                        $subject,
+                        $message
+                    );
                     $reussi = "Demande envoyée";
                     return $this->render('security/forgot_password.html.twig', ["reussi" => $reussi]);
                 }catch(Exception $e){

@@ -52,7 +52,7 @@ class ProfileType extends AbstractType
                 'label' => 'Direction/Service',
                 'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                 'attr' => [
-                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                    'class' => 'appearance-none mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
                     'disabled' => true,
                 ],
             ]);
@@ -65,7 +65,7 @@ class ProfileType extends AbstractType
                     'label' => 'Poste',
                     'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                     'attr' => [
-                        'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                        'class' => 'appearance-none mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
                         'disabled' => true,
                     ],
                 ])
@@ -84,7 +84,7 @@ class ProfileType extends AbstractType
                     'label' => 'Manager',
                     'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                     'attr' => [
-                        'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                        'class' => 'appearance-none mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
                         'disabled' => true,
                     ],
                 ]);

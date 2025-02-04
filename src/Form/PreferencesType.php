@@ -9,10 +9,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 
 
-class PreferencesType extends AbstractType
+class PreferencesType extends AbstractType 
 {
     private $tokenStorage;
 
@@ -26,20 +27,42 @@ class PreferencesType extends AbstractType
         $user = $this->tokenStorage->getToken()->getUser();
         $roles = $user->getRoles();
 
-        if ($roles == "ROLE_MANAGER") {
+        if (in_array("ROLE_MANAGER", $roles)) {
             $builder
-            ->add('alert_on_answer', EntityType::class, [
-                'class' => 'App\Entity\Person',
-                'choice_label' => 'alertOnAnswer',
-                'label' => 'Être alerté par email lorsqu’une demande de arrive',
-                'label_attr' => ['class' => 'block text-sm font-medium text-gray-700'],
+            ->add('alertNewRequest', CheckboxType::class, [
+                'label' => 'Être alerté par email lorsqu’une demande arrive',
+                'required' => false,
+                'label_attr' => ['class' => 'mt-3 ml-4 block font-medium text-gray-700'],
                 'attr' => [
-                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                    'class' => 'hidden peer', // Cache la case à cocher
                 ],
             ]);
-        }
-        
+        } else {
+            $builder
+            ->add('alertOnAnswer', CheckboxType::class, [
+                'label' => 'Être alerté par email lorsqu’une demande de congé est acceptée ou refusée',
+                'required' => false,
+                'label_attr' => ['class' => 'mt-3 ml-4 block font-medium text-gray-700'],
+                'attr' => [
+                    'class' => 'hidden peer', // Cache la case à cocher
+                ],
+            ])
+            ->add('alertBeforeVacation', CheckboxType::class, [
+                'label' => 'Recevoir un rappel par email lorsqu’un congé arrive la semaine prochaine',
+                'required' => false,
+                'label_attr' => ['class' => 'mt-3 ml-4 block font-medium text-gray-700'],
+                'attr' => [
+                    'class' => 'hidden peer', // Cache la case à cocher
+                ],
+            ]);
 
+        }
+    }
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => 'App\Entity\Person',
+        ]);
     }
 
 }
