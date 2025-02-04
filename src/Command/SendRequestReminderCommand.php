@@ -43,7 +43,7 @@ class SendRequestReminderCommand extends Command
                 $user = $this->entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
                 $to = $user->getEmail();
                 $subject = 'Votre congé commence dans une semaine !';
-                $message = 'Votre '.strtolower($request->getRequestType()->getName()).' débutant le '.$request->getStartAt()->format('d/m/Y').' et dune durée de '.$request->getWorkingdays().' jours arrive très bientôt.';
+                $message = 'Votre '.strtolower($request->getRequestType()->getName()).' débutant le '.$request->getStartAt()->format('d/m/Y').' et d\'une durée de '.$request->getWorkingdays().' jours arrive très bientôt.';
                 $this->mailerService->sendEmail($to, $subject, $message);
                 $mails++;
             }
