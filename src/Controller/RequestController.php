@@ -8,10 +8,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use App\Entity\User;
 use App\Form\RequestForm;
+use App\Form\AnswerType;
 use App\Entity\Request;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
-use DateTime;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Doctrine\Common\Collections\Criteria;
@@ -205,14 +206,45 @@ class RequestController extends AbstractController
             throw new Exception('L\'utilisateur n\'est pas connecté.');
         }
 
+        $form = $this->createForm(AnswerType::class, $requete, []);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment = $form['answerComment']->getData();
+            $answerAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+            $answer = 3;
+
+            if ($form->get('approve')->isClicked()) {
+                $answer = 1;
+            }
+            elseif ($form->get('reject')->isClicked()) {
+                $answer = 2;
+            }
+            
+            $requete->setAnswer($answer);
+            $requete->setAnswerComment($comment);
+            $requete->setAnswerAt($answerAt);
+
+            $entityManager->persist($requete);
+            $entityManager->flush();
+        }
+
         $person = $user->getPerson();
 
-        if ($requete->getCollaborator()->getId() !== $person->getId()) {
-            return $this->redirectToRoute('request_historic');
+        if ($user->getRole() == "ROLE_COLLABORATOR") {
+            if ($requete->getCollaborator()->getId() !== $person->getId()) {
+                return $this->redirectToRoute('request_historic');
+            }
+        } else {
+            if ($requete->getCollaborator()->getManager()->getId() !== $person->getId()) {
+                return $this->redirectToRoute('request_historic');
+            }
         }
 
         return $this->render('default/request/request_show.html.twig', [
             'request' => $requete,
+            'form' => $form,
         ]);
     }
  
