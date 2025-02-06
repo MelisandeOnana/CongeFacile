@@ -18,8 +18,8 @@ class PersonRepository extends ServiceEntityRepository
 
     public function getPersonByManager($manager){
         return $this->createQueryBuilder('p')
-            ->andWhere('p.manager = :manger_id')
-            ->setParameter('manger_id', $manager->getId())
+            ->andWhere('p.manager = :manager_id')
+            ->setParameter('manager_id', $manager->getId())
             ->getQuery()
             ->getResult()
             ;

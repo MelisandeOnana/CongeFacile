@@ -5,15 +5,19 @@ namespace App\Repository;
 use App\Entity\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\PersonRepository;
 
 /**
  * @extends ServiceEntityRepository<Request>
  */
 class RequestRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $personRepository;
+
+    public function __construct(ManagerRegistry $registry, PersonRepository $personRepository)
     {
         parent::__construct($registry, Request::class);
+        $this->personRepository = $personRepository;
     }
     public function findRequestsWithDate(\DateTime $date)
     {
@@ -27,6 +31,20 @@ class RequestRepository extends ServiceEntityRepository
             ->setParameter('endOfDay', $endOfDay)
             ->getQuery()
             ->getResult();
+    }
+
+    public function countPendingRequestsByManager($manager)
+    {
+        $persons = $this->personRepository->getPersonByManager($manager);
+
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->where('r.collaborator = :persons')
+            ->andWhere('r.answer = :status')
+            ->setParameter('persons', $persons)
+            ->setParameter('status', 3)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     //    /**
