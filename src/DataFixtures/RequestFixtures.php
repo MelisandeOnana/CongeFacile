@@ -22,7 +22,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request->setStartAt(new \DateTimeImmutable('2025-01-02 08:00:00'));
         $request->setEndAt(new \DateTimeImmutable('2025-01-10 18:00:00'));
         $request->setCreatedAt(new \DateTimeImmutable('2024-12-15 14:57:10'));
-        $request->setReceiptFile('receipt.pdf');
+        $request->setReceiptFile('');
         $request->setComment('Ceci est un commentaire.');
         $request->setAnswerComment('Ceci est un commentaire de réponse.');
         $request->setAnswer(1);

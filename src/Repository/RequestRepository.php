@@ -15,6 +15,19 @@ class RequestRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Request::class);
     }
+    public function findRequestsWithDate(\DateTime $date)
+    {
+        $startOfDay = (clone $date)->setTime(0, 0, 0);
+        $endOfDay = (clone $date)->setTime(23, 59, 59);
+
+        return $this->createQueryBuilder('r')
+            ->where('r.startAt >= :startOfDay')
+            ->andWhere('r.startAt < :endOfDay')
+            ->setParameter('startOfDay', $startOfDay)
+            ->setParameter('endOfDay', $endOfDay)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Request[] Returns an array of Request objects

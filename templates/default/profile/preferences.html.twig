@@ -5,10 +5,84 @@
 {% block body %}
     <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Mes préférences</h1>
     {{ form_start(form) }}
-    {{ form_label(form.alertOnAnswer) }}
-    {{ form_widget(form.alertOnAnswer) }}
-    <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
+    {% if is_granted('ROLE_MANAGER') %}
+        <div class="flex items-center space-x-3">
+            <div class="toggle-switch">
+            {{ form_widget(form.alertNewRequest, {'attr': {'class': 'hidden', 'checked': alertNewRequest == 1}}) }}
+            <span class="slider" onclick="document.getElementById('{{ form.alertNewRequest.vars.id }}').click()"></span>
+            </div>
+            {{ form_label(form.alertNewRequest, null, {'label_attr': {'class': 'pointer-events-none'}}) }}
+        </div>
+    {% endif %}
+    {% if is_granted('ROLE_COLLABORATOR') %}
+        <div class="flex items-center space-x-3">
+            <div class="toggle-switch">
+            {{ form_widget(form.alertOnAnswer, {'attr': {'class': 'hidden', 'checked': alertOnAnswer == 1}}) }}
+            <span class="slider" onclick="document.getElementById('{{ form.alertOnAnswer.vars.id }}').click()"></span>
+            </div>
+            {{ form_label(form.alertOnAnswer, null, {'label_attr': {'class': 'pointer-events-none'}}) }}
+        </div>
+        <div class="mt-6 flex items-center space-x-3">
+            <div class="toggle-switch">
+            {{ form_widget(form.alertBeforeVacation, {'attr': {'class': 'hidden', 'checked': alertBeforeVacation == 1}}) }}
+            <span class="slider" onclick="document.getElementById('{{ form.alertBeforeVacation.vars.id }}').click()"></span>
+            </div>
+            {{ form_label(form.alertBeforeVacation, null, {'label_attr': {'class': 'pointer-events-none'}}) }}
+        </div>
+    {% endif %}
+    <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-10">
             Enregister mes préférences    
     </button>
+    {% for label, messages in app.flashes %}
+        <div class=" mt-6 alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
     {{ form_end(form) }}
+<style>
+   /* Conteneur */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+/* Fond du toggle */
+.toggle-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:rgb(162, 162, 162);
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+/* Bouton circulaire */
+.toggle-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* Quand coché */
+input:checked + .slider {
+    background-color: #065A82;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+</style>
 {% endblock %}

@@ -11,7 +11,7 @@
     <tr class="text-left text-[#344054]">
       <th class="px-4 py-4 font-medium text-[14px]">Type de demande</th>
       <th class="px-4 py-2 font-medium text-[14px]">Demandée le</th>
-            <th class="px-4 py-2 font-medium text-[14px]">Collaborateur</th>
+      <th class="px-4 py-2 font-medium text-[14px]">Collaborateur</th>
       <th class="px-4 py-2 font-medium text-[14px]">Date de début</th>
       <th class="px-4 py-2 font-medium text-[14px]">Date de fin</th>
       <th class="px-4 py-2 font-medium text-[14px]">Nb jours</th>
@@ -64,9 +64,9 @@
             onchange="updateUrl('days', this.value)">
         </th>
         <th class="px-4 py-1 ">
-          {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty %}
+          {% if app.request.query.get('collaborator') is not empty or app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty %}
             <div class="mb-5">
-              <a href="{{ path('request_historic') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+              <a href="{{ path('request_pending') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
             </div>
           {% endif %}
         </th>
