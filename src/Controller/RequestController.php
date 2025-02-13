@@ -8,10 +8,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use App\Entity\User;
 use App\Form\RequestForm;
+use App\Form\AnswerType;
 use App\Entity\Request;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Doctrine\Common\Collections\Criteria;
@@ -172,6 +172,8 @@ class RequestController extends AbstractController
 
             $this->addFlash('success', 'Requete créé avec succès.');
 
+            //Envoi d'un email au manager
+
             $manager = $person->getManager(); 
             $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
             $emailManager = $managerUser->getEmail();
@@ -197,7 +199,7 @@ class RequestController extends AbstractController
     }
 
     #[Route('/request/show/{id}', name: 'request_show', methods: ['POST','GET'])]
-    public function show(HttpRequest $request, Request $requete, EntityManagerInterface $entityManager): Response
+    public function show(HttpRequest $httpRequest, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
@@ -207,12 +209,66 @@ class RequestController extends AbstractController
 
         $person = $user->getPerson();
 
-        if ($requete->getCollaborator()->getId() !== $person->getId()) {
-            return $this->redirectToRoute('request_historic');
+        $form = $this->createForm(AnswerType::class, $request, []);
+        $form->handleRequest($httpRequest);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $comment = $form['answerComment']->getData();
+            $answerAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+            $answer = 3;
+            $result = "";
+
+            /** @var \Symfony\Component\Form\SubmitButton $approveButton */
+            $approveButton = $form->get('approve');
+            if ($approveButton->isClicked()) {
+                $answer = 1;
+                $result = "validé";
+            }
+
+            /** @var \Symfony\Component\Form\SubmitButton $rejectButton */
+            $rejectButton = $form->get('reject');
+            if ($rejectButton->isClicked()) {
+                $answer = 2;
+                $result = "refusé";
+            }
+            
+            $request->setAnswer($answer);
+            $request->setAnswerComment($comment);
+            $request->setAnswerAt($answerAt);
+
+            $entityManager->persist($request);
+            $entityManager->flush();
+
+            //Envoi d'un email au collaborateur
+
+            $collaborator = $request->getCollaborator(); 
+            $collaboratorUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
+            $email = $collaboratorUser->getEmail();
+            $alert = $collaborator->getAlertOnAnswer();
+
+            if ($alert == true) {
+                $to = $email;
+                $subject = "CongéFacile : Votre demande de congé à été ".$result."e.";
+                $message = "".$person->getFirstName()." ".$person->getLastName()." à ".$result." votre demande de congé du ".date_format($request->getCreatedAt(), 'd/m/Y').".";
+
+                $this->mailerService->sendEmail($to, $subject, $message);
+            }
+        }
+
+        if ($user->getRole() == "ROLE_COLLABORATOR") {
+            if ($request->getCollaborator()->getId() !== $person->getId()) {
+                return $this->redirectToRoute('request_historic');
+            }
+        } else {
+            if ($request->getCollaborator()->getManager()->getId() !== $person->getId()) {
+                return $this->redirectToRoute('request_historic');
+            }
         }
 
         return $this->render('default/request/request_show.html.twig', [
-            'request' => $requete,
+            'request' => $request,
+            'form' => $form,
         ]);
     }
  

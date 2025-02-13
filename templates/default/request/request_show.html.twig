@@ -3,30 +3,68 @@
 {% block title %}Détails demande{% endblock %}
 
 {% block body %}
-    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Ma demande de congé</h1>
+    {% if is_granted('ROLE_COLLABORATOR') %}
+        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Ma demande de congé</h1>
+    {% elseif is_granted('ROLE_MANAGER') %}
+        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Demande de {{request.collaborator.firstname}} {{request.collaborator.lastname}}</h1>
+    {% endif %}
     <h2 class="text-[#004C6CC7] font-semibold text-[18px] font-[Epilogue] mt-6 mb-6">Demande du {{request.createdAt.format('d/m/Y')}}</h2>
 
     <p class="text-[18px] font-[Epilogue]">Type de demande : {{request.requestType.name}}</p>
     <p class="text-[18px] font-[Epilogue]">Période : {{request.startAt.format('d/m/Y H\\\hi')}} au {{request.endAt.format('d/m/Y H\\\hi')}}</p>
     <p class="text-[18px] font-[Epilogue]">Nombre de jours : {{request.getWorkingDays}} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
 
-    {% if request.answer == 1 %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 py-1 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></h2>
-    {% elseif request.answer == 2 %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FAD4D4] pl-3 pr-3 py-1 ml-2 text-[#82451A] font-[Inter] text-[16px] font-medium">Refusé</span></h2>
-    {% else %}
-        <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FFF3E0] pl-3 pr-3 py-1 ml-2 text-[#FF9800] font-[Inter] text-[16px] font-medium">En cours</span></p>
-    {% endif %}
-    {% if request.receiptFile%}
-        <div class="mt-6 flex bg-[#004C6C14] w-[250px] h-[40px] rounded-[6px]">
-            <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto text-center text-[#475467] font-medium font-[Inter]">Télécharger le justificatif</a>
+    {% if is_granted('ROLE_COLLABORATOR') %}
+        {% if request.answer == 1 %}
+            <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#DAF8E6] pl-3 pr-3 py-1 ml-2 text-[#1A8245] font-[Inter] text-[16px] font-medium">Validé</span></p>
+        {% elseif request.answer == 2 %}
+            <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FAD4D4] pl-3 pr-3 py-1 ml-2 text-[#82451A] font-[Inter] text-[16px] font-medium">Refusé</span></p>
+        {% else %}
+            <p class="mt-6 font-[Epilogue] text-[16px]">Statut de la demande : <span class="w-[67px] h-[26px] rounded-[30px] bg-[#FFF3E0] pl-3 pr-3 py-1 ml-2 text-[#FF9800] font-[Inter] text-[16px] font-medium">En cours</span></p>
+        {% endif %}
+        {% if request.receiptFile%}
+            <div class="mt-6 flex bg-[#004C6C14] w-[250px] h-[40px] rounded-[6px]">
+                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto text-center text-[#475467] font-medium font-[Inter]">Télécharger le justificatif</a>
+            </div>
+        {% endif %}
+        {% if request.answerComment %}
+            <h2 class="mt-6 font-[Inter] text-[16px]">Commentaire du manager :</h2>
+            <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[186px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.answerComment}}"></textarea>
+        {% endif %}
+        <div class="mt-6 flex bg-[#004C6C14] w-[343px] h-[40px] rounded-[6px]">
+            <a href="{{ path('request_historic') }}" class=" m-auto text-center text-[#475467] font-medium font-[Inter]">Retourner à la liste des demandes</a>
         </div>
+    {% elseif is_granted('ROLE_MANAGER') %}
+         {% if request.comment %}
+            <h2 class="mt-6 font-[Inter] text-[16px]">Commentaire du supplémentaire :</h2>
+            <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[186px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.comment}}"></textarea>
+        {% endif %}
+        {% if request.receiptFile%}
+            <div class="mt-6 flex bg-[#004C6C14] w-[250px] h-[40px] rounded-[6px]">
+                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto text-center text-[#475467] font-medium font-[Inter]">Télécharger le justificatif</a>
+            </div>
+        {% endif %}
+        {% if request.answer == 3 %}
+            <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[26px] mt-16">Répondre à la demande</h1>
+            {{ form_start(form) }}
+            <div class="flex flex-col"> 
+                {{ form_label(form.answerComment) }}
+                {{ form_widget(form.answerComment) }}
+            </div>
+            <div class="flex mt-8">    
+                {{ form_end(form) }}
+            </div>
+        {% else %}
+            <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[26px] mt-16">Réponse à la demande</h1>
+            {% if request.answerComment %}
+                <p class="text-[16px] mt-5 font-[Epilogue]">Votre commentaire :</p>
+                <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.answerComment}}"></textarea>
+            {% endif %}
+            {% if request.answer == 1 %}
+                <p class="mt-5 font-[Epilogue] text-[16px]">Vous avez validé cette demande le {{request.answerAt.format('d/m/Y')}} à {{request.answerAt.format('H\\\hi')}}</p>
+            {% elseif request.answer == 2 %}
+                <p class="mt-5 font-[Epilogue] text-[16px]">Vous avez refusé cette demande le {{request.answerAt.format('d/m/Y')}} à {{request.answerAt.format('H\\\hi')}}</p>
+            {% endif %}
+        {% endif %}
     {% endif %}
-    {% if request.answerComment %}
-        <h2 class="mt-6 font-[Inter] text-[16px]">Commentaire du manager :</h2>
-        <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[186px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.answerComment}}"></textarea>
-    {% endif %}
-    <div class="mt-6 flex bg-[#004C6C14] w-[343px] h-[40px] rounded-[6px]">
-        <a href="{{ path('request_historic') }}" class=" m-auto text-center text-[#475467] font-medium font-[Inter]">Retourner à la liste des demandes</a>
-    </div>
 {% endblock %}
