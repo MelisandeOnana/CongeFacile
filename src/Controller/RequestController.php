@@ -18,6 +18,7 @@ use Doctrine\Common\Collections\Criteria;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\PersonRepository;
 use App\Service\MailerService;
+use DateTime;
 
 class RequestController extends AbstractController
 {
@@ -352,7 +353,7 @@ class RequestController extends AbstractController
         $pagination = $paginator->paginate(
             $requests, /* query NOT result */
             $request->query->getInt('page', 1), /*page number*/
-            6 /*limit per page*/
+            6 /*limit par page*/
         );
 
         return $this->render('default/request/request_pending.html.twig', [
@@ -364,6 +365,53 @@ class RequestController extends AbstractController
             'filterStart' => $filterStart,
             'filterEnd' => $filterEnd,
             'filterNumber' => $filterNumber,
+        ]);
+    }
+    #[Route('/statistics', name: 'statistics', methods: ['GET'])]
+    public function statistic(RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository): Response
+    {
+        // 1er graphique : Nombre de demandes par type de demande
+        $requestTypes = $requestTypeRepository->findAll();
+        $countRequest = [];
+
+        foreach ($requestTypes as $type) {
+            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type);
+        }
+
+        // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
+
+        $acceptancePercentage = [];
+        
+        for ($number = 1; $number <= 12; $number++) {
+            $month = new DateTime();
+            $month->setDate((int)date('Y'), $number, 1);
+            
+            $requests = $requestRepository->findRequestsByMonthOfAnswer($month);
+
+            $acceptance = 0;
+            $refusal = 0;
+
+            foreach ($requests as $request) {
+                if ($request->getAnswer() == 1) {
+                    $acceptance++;
+                } elseif ($request->getAnswer() == 2) {
+                    $refusal++;
+                }
+            }
+
+            if ($acceptance == 0 && $refusal == 0) {
+                $acceptancePercentage[$number] = null;
+            } else {
+                $percent = $acceptance*100/($acceptance+$refusal);
+                $acceptancePercentage[$number] = $percent;
+            }
+        }
+
+
+        return $this->render('default/request/request_statistics.html.twig', [
+            'requestTypes' => $requestTypes,
+            'countRequest' => $countRequest,
+            'acceptancePercentage' => $acceptancePercentage,
         ]);
     }
 }
