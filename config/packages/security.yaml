@@ -42,6 +42,7 @@ security:
         - { path: ^/preferences, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/request/new, roles: ROLE_COLLABORATOR } 
         - { path: ^/request/pending, roles: ROLE_MANAGER }
+        - { path: ^/statistics, roles: ROLE_MANAGER }
 
 when@test:
     security:
