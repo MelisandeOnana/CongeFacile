@@ -37,15 +37,18 @@ class SendRequestReminderCommand extends Command
         $mails = 0;
 
         foreach ($requests as $request) {
-            $collaborator = $request->getCollaborator();
-            $alert = $collaborator->getAlertBeforeVacation();
-            if ($alert == true) {
-                $user = $this->entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
-                $to = $user->getEmail();
-                $subject = 'Votre congé commence dans une semaine !';
-                $message = 'Votre '.strtolower($request->getRequestType()->getName()).' débutant le '.$request->getStartAt()->format('d/m/Y').' et d\'une durée de '.$request->getWorkingdays().' jours arrive très bientôt.';
-                $this->mailerService->sendEmail($to, $subject, $message);
-                $mails++;
+            $answer = $request->getAnswer();
+            if ($answer == 1) {
+                $collaborator = $request->getCollaborator();
+                $alert = $collaborator->getAlertBeforeVacation();
+                if ($alert == true) {
+                    $user = $this->entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
+                    $to = $user->getEmail();
+                    $subject = 'Votre congé commence dans une semaine !';
+                    $message = 'Votre '.strtolower($request->getRequestType()->getName()).' débutant le '.$request->getStartAt()->format('d/m/Y').' et d\'une durée de '.$request->getWorkingdays().' jours arrive très bientôt.';
+                    $this->mailerService->sendEmail($to, $subject, $message);
+                    $mails++;
+                }
             }
         }
 
