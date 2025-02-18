@@ -32,13 +32,6 @@ class RequestController extends AbstractController
     #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
     public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
-        $user = $this->getUser();
-
-        if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
-        }
-        $person = $user->getPerson();
-
         // Récupérer les valeurs des filtres depuis la requête
         $filterType = $request->query->get('type');
         $filterDate = $request->query->get('requested');
@@ -48,7 +41,6 @@ class RequestController extends AbstractController
         $filterAnswer = $request->query->get('status');
 
         $criteria = Criteria::create();
-        $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
         
         if ($filterType) {
             $filterTypeObject = $requestTypeRepository->find($filterType);
@@ -92,7 +84,7 @@ class RequestController extends AbstractController
         if ($filterAnswer) {
             $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
         }
-    
+
         // Rechercher les requêtes en fonction des critères
         $criteria->orderBy(['createdAt' => 'DESC']);
         $requests = $requestRepository->matching($criteria);
