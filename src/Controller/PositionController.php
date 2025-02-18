@@ -17,7 +17,7 @@ use App\Form\DeleteType;
 
 class PositionController extends AbstractController
 {
-    #[Route('/admin/positions', name: 'positions')]
+    #[Route('/admin/position', name: 'positions')]
     public function index(PositionRepository $positionRepository, PersonRepository $personRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $positionCounts = [];
@@ -55,7 +55,7 @@ class PositionController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/administration/position/positions.html.twig', [
+        return $this->render('default/administration/position/position.html.twig', [
             'positions' => $PostionsPagination,
             'positionCounts' => $positionCounts,
         ]);

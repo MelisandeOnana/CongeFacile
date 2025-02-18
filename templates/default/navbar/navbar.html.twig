@@ -40,17 +40,17 @@
             </svg>
         </div>
         <div id="admin-links" class="admin-links hidden">
-            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Types de demandes</a>
-            </div>
-            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
-            </div>
-            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'admin' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Managers</a>
+            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/request-type' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('request_types')}}">Types de demandes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'positions' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('positions')}}">Postes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/department' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
+            </div>
+              <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/manager' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Managers</a>
+            </div>
+            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/position' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('positions')}}">Postes</a>
             </div>
         </div>
     {% endif %}
