@@ -2,21 +2,116 @@
 
 {% block title %}Historique des demandes{% endblock %}
 
+
 {% block body %}
   <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Historique de mes demandes</h1>
-  <table class="min-w-full bg-white border border-gray-300">
-  <!-- En-tête des colonnes -->
-  <thead class="bg-[#F9FAFB] font-[Inter]">    
-    <!-- Ligne des noms des colonnes -->
-    <tr class="text-left text-[#344054]">
-      <th class="px-4 py-4 font-medium text-[14px]">Type de demande</th>
-      <th class="px-4 py-2 font-medium text-[14px]">Demandée le</th>
-      <th class="px-4 py-2 font-medium text-[14px]">Date de début</th>
-      <th class="px-4 py-2 font-medium text-[14px]">Date de fin</th>
-      <th class="px-4 py-2 font-medium text-[14px]">Nb jours</th>
-      <th class="px-4 py-2 font-medium text-[14px]">Statut</th>
-      <th class="px-4 py-2"></th>
-    </tr>
+  <table class="w-full border-collapse">
+    <thead> 
+      <!-- Ligne des noms des colonnes -->
+      <tr class="text-left text-[#344054]">
+        <th class="px-4 py-4 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Type de demande</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+        <th class="px-4 py-2 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Demandée le</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+        <th class="px-4 py-2 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Date de début</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+        <th class="px-4 py-2 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Date de fin</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+        <th class="px-4 py-2 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Nb jours</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+        <th class="px-4 py-2 font-medium text-[14px]">
+          <div class="flex items-center">
+            <span>Statut</span>
+            <div class="flex flex-col ml-[15px]">
+              <span class="chevron-up">
+                <svg class="chevron-up"width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+              </span>
+              <span class="chevron-down">
+                <svg class="chevron-down" width="15" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </th>
+      </tr>
       <!-- Ligne des champs de recherche -->
       <tr class="text-gray-700">
         <th class="px-4 py-1 w-1/6">
