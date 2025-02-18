@@ -1,0 +1,11 @@
+<div class="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+        <h2 class="text-xl font-bold mb-4">Êtes-vous sûr de vouloir supprimer cet élément ?</h2>
+        <div class="flex justify-center">
+            {{ form_start(formDelete) }}
+                {{ form_row(formDelete.delete) }}
+            {{ form_end(formDelete) }}
+            <a href="{{ app.request.uri|split('?')[0] }}" class="bg-[#1B3168] text-white py-2 px-4 w-[124px] h-[40px] rounded-[6px] text-[16px] ml-10">Annuler</a>
+        </div>
+    </div>
+</div>

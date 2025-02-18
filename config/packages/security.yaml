@@ -38,10 +38,13 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/home, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/request/historic, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/profile, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/preferences, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/request/new, roles: ROLE_COLLABORATOR } 
         - { path: ^/request/pending, roles: ROLE_MANAGER }
+        - { path: ^/statistics, roles: ROLE_MANAGER }
+        - { path: ^/admin, roles: ROLE_MANAGER }
 
 when@test:
     security:

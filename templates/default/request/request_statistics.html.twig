@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Statistiques</h1>
+    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-5 font-semibold">Types de demandes sur l'année</h2>
+    <canvas id="doughnutChart" class="mt-10 max-h-500"></canvas>
+    <script>
+        var ctx = document.getElementById('doughnutChart').getContext('2d');
+        var doughnutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    {% for type in requestTypes %}
+                        '{{ type.name }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Nombre de demandes',
+                    data: [
+                        {% for number in countRequest %}
+                            {{ number }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 64, 201, 0.5)',
+                    ],
+                    borderColor: [
+                        'rgb(255, 255, 255)',
+                        
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 3.5,
+                plugins: {
+                    legend: {
+                        position: 'left',
+                        labels: {
+                            padding: 40
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-10 font-semibold">Pourcentage d’acceptation des demandes sur l’année</h2>
+    <canvas id="LineChart" class="mt-8"></canvas>
+    <script>
+        var ctx = document.getElementById('LineChart').getContext('2d');
+        var lineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                datasets: [{
+                    label: 'Pourcentage d’acceptation',
+                    data: [
+                        {% for percentage in acceptancePercentage %}
+                            {{ percentage }},
+                        {% endfor %}
+                    ],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 3,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return index % 2 === 0 ? value + '%' : '';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}
