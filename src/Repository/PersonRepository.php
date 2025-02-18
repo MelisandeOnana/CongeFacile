@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Person;
+use App\Entity\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,6 +24,15 @@ class PersonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
+    }
+    public function countByPosition(Position $position): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->where('p.position = :position')
+            ->setParameter('position', $position)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     //    /**
