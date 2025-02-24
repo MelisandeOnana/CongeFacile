@@ -7,7 +7,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
@@ -44,15 +43,23 @@ class SendRequestReminderCommand extends Command
                 if ($alert == true) {
                     $user = $this->entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
                     $to = $user->getEmail();
+                    
                     $subject = 'Votre congé commence dans une semaine !';
-                    $message = 'Votre '.strtolower($request->getRequestType()->getName()).' débutant le '.$request->getStartAt()->format('d/m/Y').' et d\'une durée de '.$request->getWorkingdays().' jours arrive très bientôt.';
+
+                    $requestType = strtolower($request->getRequestType()->getName());
+                    $startAt = $request->getStartAt()->format('d/m/Y');
+                    $workingDays = $request->getWorkingdays();
+                    $dayLabel = $workingDays > 1 ? ' jours' : ' jour';
+
+                    $message = "Votre $requestType débutant le $startAt et d'une durée de $workingDays$dayLabel arrive très bientôt.";
+
                     $this->mailerService->sendEmail($to, $subject, $message);
                     $mails++;
                 }
             }
         }
 
-        $output->writeln($mails.' emails de rappel envoyés avec succès.');
+        $output->writeln($mails.' email(s) de rappel envoyé(s).');
         return Command::SUCCESS;
     }
 }

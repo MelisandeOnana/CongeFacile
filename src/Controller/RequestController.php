@@ -32,13 +32,23 @@ class RequestController extends AbstractController
     #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
     public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
+
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        }
+
+        $person = $user->getPerson();
+
         // Récupérer les valeurs des filtres depuis la requête
         $filterType = $request->query->get('type');
-        $filterDate = $request->query->get('requested');
         $filterStart = $request->query->get('start');
         $filterEnd = $request->query->get('end');
         $filterNumber = $request->query->get('days');
         $filterAnswer = $request->query->get('status');
+
+        $requestTypes = $requestTypeRepository->findAll();
 
         $criteria = Criteria::create();
         
@@ -47,13 +57,6 @@ class RequestController extends AbstractController
             if ($filterTypeObject) {
                 $criteria->andWhere(Criteria::expr()->eq('requestType', $filterTypeObject));
             }
-        }
-        
-        if ($filterDate) {
-            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
-            $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
         }
         if ($filterStart) {
             $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
@@ -85,28 +88,79 @@ class RequestController extends AbstractController
             $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
         }
 
-        // Rechercher les requêtes en fonction des critères
         $criteria->orderBy(['createdAt' => 'DESC']);
-        $requests = $requestRepository->matching($criteria);
 
-        $requestTypes = $requestTypeRepository->findAll();
+        
+        if ($user->getRole() == "ROLE_COLLABORATOR") {
+            // PAGE COLLABORATEUR
 
-        $pagination = $paginator->paginate(
-            $requests, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit per page*/
-        );
+            $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
 
-        return $this->render('default/request/request_historic.html.twig', [
-            'requests' => $pagination,
-            'requestTypes' => $requestTypes,
-            'filterType' => $filterType,
-            'filterDate' => $filterDate,
-            'filterStart' => $filterStart,
-            'filterEnd' => $filterEnd,
-            'filterNumber' => $filterNumber,
-            'filterAnswer' => $filterAnswer,
-        ]);
+            $filterDate = $request->query->get('requested');
+            
+            if ($filterDate) {
+                $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+                $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+                $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
+                         ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+            }
+
+            $requests = $requestRepository->matching($criteria);
+
+            $pagination = $paginator->paginate(
+                $requests, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                6 /*limit per page*/
+            );
+
+            return $this->render('default/request/request_historic.html.twig', [
+                'requests' => $pagination,
+                'requestTypes' => $requestTypes,
+                'filterType' => $filterType,
+                'filterDate' => $filterDate,
+                'filterStart' => $filterStart,
+                'filterEnd' => $filterEnd,
+                'filterNumber' => $filterNumber,
+                'filterAnswer' => $filterAnswer,
+            ]);
+
+
+        } else {
+            // PAGE MANAGER
+            
+
+
+
+
+            
+            $requests = $requestRepository->matching($criteria);
+
+            $pagination = $paginator->paginate(
+                $requests, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                6 /*limit per page*/
+            );
+
+            return $this->render('default/request/request_historic.html.twig', [
+                'requests' => $pagination,
+                'requestTypes' => $requestTypes,
+                'filterType' => $filterType,
+        
+                'filterStart' => $filterStart,
+                'filterEnd' => $filterEnd,
+                'filterNumber' => $filterNumber,
+                'filterAnswer' => $filterAnswer,
+            ]);
+
+
+
+
+
+
+
+
+
+        }
     }
     
     #[Route('/request/new', name: 'request_new', methods: ['POST','GET'])]

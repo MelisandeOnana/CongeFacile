@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\RequestRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\VarDumper\VarDumper;
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request

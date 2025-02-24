@@ -29,7 +29,11 @@
         </th>
         <th class="px-4 pt-5 font-medium text-[14px]">
           <div class="flex items-center">
-            <span>Demandée le</span>
+            {% if is_granted('ROLE_MANAGER') %}
+              <span>Collaborateur</span>
+            {% else %}
+              <span>Demandée le</span>
+            {% endif %}
             <div class="flex flex-col ml-[5px]">
               <span class="chevron-up">
               <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -97,6 +101,7 @@
         </th>
         <th class="px-4 pt-5 font-medium text-[14px]">
           <div class="flex items-center">
+
             <span>Statut</span>
             <div class="flex flex-col ml-[5px]">
               <span class="chevron-up">
@@ -125,11 +130,18 @@
           </select>
         </th>
         <th class="px-4 py-1">
+          {% if is_granted('ROLE_MANAGER') %}
+            
+
+
+
+          {% else %}
           <input 
             type="date" 
             class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
             value="{{ app.request.query.get('requested') }}" 
             onchange="updateUrl('requested', this.value)">
+          {% endif %}
         </th>
         <th class="px-4 py-1">
           <input 
@@ -174,7 +186,11 @@
       {% for request in requests %}
         <tr class="border-b">
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
+          {% if is_granted('ROLE_MANAGER') %}
+            <td class="px-4 py-4 text-sm text-gray-700">                        </td>
+          {% else %}
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
+          {% endif %}
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
           <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
