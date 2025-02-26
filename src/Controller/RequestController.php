@@ -30,9 +30,8 @@ class RequestController extends AbstractController
     }
 
     #[Route('/request/historic', name: 'request_historic', methods: ['GET'])]
-    public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
+    public function request_historic(HttpRequest $request, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator, PersonRepository $personRepository): Response
     {
-
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -62,13 +61,13 @@ class RequestController extends AbstractController
             $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
             $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
+                    ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
         }
         if ($filterEnd) {
             $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
             $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
+                    ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
         }
         if ($filterNumber) {
             $requests = $requestRepository->findAll();
@@ -90,7 +89,6 @@ class RequestController extends AbstractController
 
         $criteria->orderBy(['createdAt' => 'DESC']);
 
-        
         if ($user->getRole() == "ROLE_COLLABORATOR") {
             // PAGE COLLABORATEUR
 
@@ -102,7 +100,7 @@ class RequestController extends AbstractController
                 $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
                 $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
                 $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
-                         ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+                        ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
             }
 
             $requests = $requestRepository->matching($criteria);
@@ -124,15 +122,19 @@ class RequestController extends AbstractController
                 'filterAnswer' => $filterAnswer,
             ]);
 
-
         } else {
             // PAGE MANAGER
-            
-
-
-
-
-            
+      
+            $collaborators = $personRepository->createQueryBuilder('p')
+            ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.person = p')
+            ->where('p.department = :department')
+            ->andWhere('u.role = :role')
+            ->andWhere('u.id != :userId') // Exclure le manager
+            ->setParameter('department', $user->getPerson()->getDepartment())
+            ->setParameter('role', 'ROLE_COLLABORATOR')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
             $requests = $requestRepository->matching($criteria);
 
             $pagination = $paginator->paginate(
@@ -144,22 +146,13 @@ class RequestController extends AbstractController
             return $this->render('default/request/request_historic.html.twig', [
                 'requests' => $pagination,
                 'requestTypes' => $requestTypes,
+                'collaborators' => $collaborators, // Passer les collaborateurs au template
                 'filterType' => $filterType,
-        
                 'filterStart' => $filterStart,
                 'filterEnd' => $filterEnd,
                 'filterNumber' => $filterNumber,
                 'filterAnswer' => $filterAnswer,
             ]);
-
-
-
-
-
-
-
-
-
         }
     }
     
