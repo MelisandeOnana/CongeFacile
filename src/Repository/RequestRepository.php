@@ -39,13 +39,14 @@ class RequestRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('r')
             ->select('count(r.id)')
-            ->where('r.collaborator = :persons')
+            ->where('r.collaborator IN (:persons)')
             ->andWhere('r.answer = :status')
             ->setParameter('persons', $persons)
             ->setParameter('status', 3)
             ->getQuery()
             ->getSingleScalarResult();
     }
+    
     public function countRequestsByRequestType($requestType)
     {
         $startOfYear = (new \DateTime())->setDate((int)date('Y'), 1, 1)->setTime(0, 0, 0);
