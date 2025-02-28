@@ -5,8 +5,15 @@
 {% block body %}
 <div class="flex items-center">
     <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Mon équipe</h1>
-    <button href="" class="w-[228px] h-[41px] rounded-[6px] bg-[#004C6C] text-[white] ml-[25px]">Ajouter un collaborateur</button>
+    <button class="w-[228px] h-[41px] rounded-[6px] bg-[#004C6C] text-[white] ml-[25px]"><a href="{{ path('team_new') }}">Ajouter un collaborateur</a></button>
 </div>
+{% for label, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="alert alert-{{ label }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
 
 <table class="w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md h-[469px] mt-[65px]">
     <!-- En-tête des colonnes -->
@@ -120,6 +127,7 @@
                     <a href="" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
                 </td>
             </tr>
+            <tr class="h-[1px] bg-gray-200"><td colspan="6"></td></tr>
         {% endfor %}
     </tbody>
 </table>

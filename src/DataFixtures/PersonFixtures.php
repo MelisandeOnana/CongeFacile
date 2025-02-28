@@ -19,8 +19,9 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $managerPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'Manager']);
         $hrPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'HR']);
         $designerPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'Designer']);
+        $anotherDepartment = $manager->getRepository(Department::class)->findOneBy(['name' => 'Finance']);
 
-        // Create a manager
+        // Create a manager 1 
         $managerPerson = new Person();
         $managerPerson->setFirstName('Jane');
         $managerPerson->setLastName('Smith');
@@ -78,6 +79,42 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $designer->setAlertNewRequest(false);
         $designer->setAlertBeforeVacation(false);
         $manager->persist($designer);
+
+        // Create a manager 2
+        $managerPerson2 = new Person();
+        $managerPerson2->setFirstName('Robert');
+        $managerPerson2->setLastName('Johnson');
+        $managerPerson2->setDepartment($anotherDepartment);
+        $managerPerson2->setPosition($managerPosition); // Assign the Manager position to Robert
+        $managerPerson2->setAlertOnAnswer(false);
+        $managerPerson2->setAlertNewRequest(false);
+        $managerPerson2->setAlertBeforeVacation(false);
+        $manager->persist($managerPerson2);
+
+        
+       // Create an employee and assign the manager
+        $employee3 = new Person();
+        $employee3->setFirstName('Michael');
+        $employee3->setLastName('Brown');
+        $employee3->setDepartment($anotherDepartment);
+        $employee3->setPosition($developerPosition); // Assign the Developer position to Michael
+        $employee3->setManager($managerPerson2); // Assign Robert as the manager
+        $employee3->setAlertOnAnswer(false);
+        $employee3->setAlertNewRequest(false);
+        $employee3->setAlertBeforeVacation(false);
+        $manager->persist($employee3);
+
+        // Create another employee and assign the manager
+        $employee4 = new Person();
+        $employee4->setFirstName('Emily');
+        $employee4->setLastName('Clark');
+        $employee4->setDepartment($anotherDepartment);
+        $employee4->setPosition($developerPosition); // Assign the Developer position to Emily
+        $employee4->setManager($managerPerson2); // Assign Robert as the manager
+        $employee4->setAlertOnAnswer(false);
+        $employee4->setAlertNewRequest(false);
+        $employee4->setAlertBeforeVacation(false);
+        $manager->persist($employee4);
 
         // Flush all the entities to the database
         $manager->flush();

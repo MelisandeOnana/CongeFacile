@@ -14,6 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    const passwordFields = document.querySelectorAll('input[type="password"]');
+    passwordFields.forEach(field => {
+        field.addEventListener('input', function () {
+            const target = document.querySelector(`.toggle-password[data-target="${field.id}"]`);
+            if (field.value) {
+                target.classList.remove('hidden');
+            } else {
+                target.classList.add('hidden');
+            }
+        });
+    });
+
     // filtrage équipes 
     const filters = ['filter_lastName', 'filter_firstName', 'filter_email', 'filter_position', 'filter_vacationDays'];
 

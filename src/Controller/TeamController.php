@@ -2,12 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Person;
+use App\Entity\Department;
+use App\Entity\Position;
+use App\Form\UserType;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TeamController extends AbstractController
 {
@@ -15,7 +22,14 @@ class TeamController extends AbstractController
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $manager = $this->getUser()->getPerson();
-        $queryBuilder = $userRepository->findByManager($manager);
+        $department = $manager->getDepartment(); // Récupérer le département du manager
+
+        $queryBuilder = $userRepository->createQueryBuilder('user')
+            ->join('user.person', 'person')
+            ->where('person.manager = :manager')
+            ->andWhere('person.department = :department') // Filtrer par département
+            ->setParameter('manager', $manager)
+            ->setParameter('department', $department);
 
         // Ajout des filtres
         $filters = [
@@ -28,7 +42,7 @@ class TeamController extends AbstractController
 
         foreach ($filters as $key => $value) {
             if ($value) {
-                $queryBuilder->andWhere("user.person.$key LIKE :$key")
+                $queryBuilder->andWhere("person.$key LIKE :$key")
                              ->setParameter($key, '%' . $value . '%');
             }
         }
@@ -55,6 +69,88 @@ class TeamController extends AbstractController
         return $this->render('team/index.html.twig', [
             'pagination' => $pagination,
             'vacationDays' => $vacationDays,
+        ]);
+    }
+
+    #[Route('/team/new', name: 'team_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $person = new Person();
+        $user = new User();
+        $user->setPerson($person); // Associer la personne à l'utilisateur
+
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $manager = $this->getUser()->getPerson();
+            $person->setManager($manager);
+        
+            // Définir des valeurs par défaut pour les champs requis
+            $person->setAlertOnAnswer(false);
+            $person->setAlertNewRequest(false);
+            $person->setAlertBeforeVacation(false);
+        
+            // Définir une valeur par défaut pour le champ position_id
+            $position = $userForm->get('position')->getData();
+            if ($position) {
+                $person->setPosition($position);
+            } else {
+                // Définir une valeur par défaut si nécessaire
+                $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
+                $person->setPosition($defaultPosition);
+            }
+        
+            // Définir le département de la personne
+            $department = $userForm->get('department')->getData();
+            if ($department) {
+                $person->setDepartment($department);
+            } else {
+                // Ajouter un message de débogage si le département n'est pas trouvé
+                $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
+            }
+        
+            // Définir le rôle et le manager en fonction de la position
+            if ($position && $position->getName() === 'Manager') {
+                $user->setRole('ROLE_MANAGER');
+                $person->setManager(null); // Définir manager_id à null si la position est Manager
+            } else {
+                $user->setRole('ROLE_COLLABORATOR');
+                // Trouver le manager du département et l'affilier
+                $departmentManager = $entityManager->getRepository(Person::class)->findOneBy([
+                    'department' => $person->getDepartment()
+                ]);
+                $person->setManager($departmentManager);
+            }
+        
+            // Définir une valeur par défaut pour le champ enabled
+            $user->setEnabled(true);
+        
+            // Définir une valeur par défaut pour le champ created_at
+            $user->setCreatedAt(new \DateTimeImmutable());
+        
+            // Hash the password
+            $newPassword = $userForm->get('newPassword')->getData();
+            if ($newPassword) {
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $newPassword
+                );
+                $user->setPassword($hashedPassword);
+            }
+        
+            $entityManager->persist($person); // Persister d'abord la personne
+            $entityManager->persist($user);   // Puis persister l'utilisateur
+        
+            $entityManager->flush();
+            // Ajouter un message flash
+            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+        
+            return $this->redirectToRoute('team_index');
+        }
+
+        return $this->render('team/new_collaborator.html.twig', [
+            'userForm' => $userForm->createView(),
         ]);
     }
 }
