@@ -17,8 +17,8 @@ class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $department = $options['department'];
-        $isManager = $options['is_manager'];
+        $department = $options['department'] ?? null;
+        $isManager = $options['is_manager'] ?? false;
 
         $builder
             ->add('lastName', TextType::class, [

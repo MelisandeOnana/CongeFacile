@@ -124,17 +124,21 @@ class RequestController extends AbstractController
 
         } else {
             // PAGE MANAGER
-      
+
+            // Récupérer les collaborateurs du manager
             $collaborators = $personRepository->createQueryBuilder('p')
-            ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.person = p')
-            ->where('p.department = :department')
-            ->andWhere('u.role = :role')
-            ->andWhere('u.id != :userId') // Exclure le manager
-            ->setParameter('department', $user->getPerson()->getDepartment())
-            ->setParameter('role', 'ROLE_COLLABORATOR')
-            ->setParameter('userId', $user->getId())
-            ->getQuery()
-            ->getResult();
+                ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.person = p')
+                ->where('p.department = :department')
+                ->andWhere('u.role = :role')
+                ->andWhere('u.id != :userId') // Exclure le manager
+                ->setParameter('department', $user->getPerson()->getDepartment())
+                ->setParameter('role', 'ROLE_COLLABORATOR')
+                ->setParameter('userId', $user->getId())
+                ->getQuery()
+                ->getResult();
+
+            $criteria->andWhere(Criteria::expr()->in('collaborator', $collaborators));
+
             $requests = $requestRepository->matching($criteria);
 
             $pagination = $paginator->paginate(
@@ -146,7 +150,7 @@ class RequestController extends AbstractController
             return $this->render('default/request/request_historic.html.twig', [
                 'requests' => $pagination,
                 'requestTypes' => $requestTypes,
-                'collaborators' => $collaborators, // Passer les collaborateurs au template
+                'collaborators' => $collaborators,
                 'filterType' => $filterType,
                 'filterStart' => $filterStart,
                 'filterEnd' => $filterEnd,

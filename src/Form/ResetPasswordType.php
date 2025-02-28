@@ -12,8 +12,8 @@ class ResetPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('currentPassword', PasswordType::class, [
+        if ($options['include_current_password']) {
+            $builder->add('currentPassword', PasswordType::class, [
                 'label' => 'Mot de passe actuel',
                 'label_attr' => ['class' => 'block text-sm font-medium text-gray-700'],
                 'attr' => [
@@ -28,7 +28,10 @@ class ResetPasswordType extends AbstractType
                         'message' => 'Veuillez entrer votre mot de passe actuel',
                     ]),
                 ],
-            ])
+            ]);
+        }
+
+        $builder
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'label_attr' => ['class' => 'block text-sm font-medium text-gray-700'],
@@ -65,6 +68,8 @@ class ResetPasswordType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'include_current_password' => true,
+        ]);
     }
 }
