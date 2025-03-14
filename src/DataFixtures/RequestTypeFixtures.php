@@ -9,7 +9,7 @@ class RequestTypeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $requestTypes = ['Congé', 'Congé maladie', 'Congé maternité', 'Congé paternité', 'Congé sans solde'];
+        $requestTypes = ['Congé payé', 'Congé maladie', 'Congé maternité', 'Congé paternité', 'Congé sans solde'];
 
         foreach ($requestTypes as $typeName) {
             $requestType = new RequestType();

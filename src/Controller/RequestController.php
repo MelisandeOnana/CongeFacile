@@ -126,18 +126,18 @@ class RequestController extends AbstractController
             // PAGE MANAGER
 
             // Récupérer les collaborateurs du manager
-            $collaborators = $personRepository->createQueryBuilder('p')
-                ->innerJoin('App\Entity\User', 'u', 'WITH', 'u.person = p')
-                ->where('p.department = :department')
-                ->andWhere('u.role = :role')
-                ->andWhere('u.id != :userId') // Exclure le manager
-                ->setParameter('department', $user->getPerson()->getDepartment())
-                ->setParameter('role', 'ROLE_COLLABORATOR')
-                ->setParameter('userId', $user->getId())
-                ->getQuery()
-                ->getResult();
+            $collaborators = $personRepository->getPersonByManager($person);
 
             $criteria->andWhere(Criteria::expr()->in('collaborator', $collaborators));
+
+            $filterCollaborator = $request->query->get('collaborator');
+
+            if($filterCollaborator){
+                $filterCollaboratorObject = $personRepository->find($filterCollaborator);
+                if ($filterCollaboratorObject) {
+                    $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
+                }
+            }
 
             $requests = $requestRepository->matching($criteria);
 
