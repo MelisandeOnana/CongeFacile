@@ -43,7 +43,7 @@ class UserType extends AbstractType
                 'placeholder' => 'Choisir un département', 
                 'attr' => [
                     'id' => 'department',
-                    'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
+                    'class' => 'appearance-none mb-[15px] text-[#9CA3AF] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
             ->add('position', EntityType::class, [
@@ -55,7 +55,7 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'placeholder' => 'Choisir un poste', 
                 'attr' => [
-                    'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
+                    'class' => 'appearance-none text-[#9CA3AF] mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
             ->add('newPassword', PasswordType::class, [

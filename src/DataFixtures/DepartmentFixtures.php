@@ -10,7 +10,7 @@ class DepartmentFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $departments = ['IT', 'HR', 'Finance', 'Marketing', 'Sales'];
+        $departments = ['Symfony', 'CMS', 'Pôle UX', 'Marketing'];
 
         foreach ($departments as $deptName) {
             $department = new Department();

@@ -20,109 +20,116 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
 {
-    // Create a manager 1
-    $managerPerson = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jane', 'lastName' => 'Smith']);
-    if ($managerPerson) {
-        $managerUser = new User();
-        $managerUser->setEmail('jane.smith@example.com');
-        $managerUser->setPassword($this->passwordHasher->hashPassword($managerUser, 'password'));
-        $managerUser->setEnabled(true);
-        $managerUser->setCreatedAt(new \DateTimeImmutable());
-        $managerUser->setRole('ROLE_MANAGER');
-        $managerUser->setPerson($managerPerson);
-        $manager->persist($managerUser);
-    }
+    // Create a user
+    $managerUser = new User();
+    $managerUser->setEmail('jane.smith@example.com');
+    $managerUser->setPassword($this->passwordHasher->hashPassword($managerUser, 'password'));
+    $managerUser->setEnabled(true);
+    $managerUser->setCreatedAt(new \DateTimeImmutable());
+    $managerUser->setRole('ROLE_MANAGER');
+    $managerUser->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jane', 'lastName' => 'Smith']));
+    $manager->persist($managerUser);
+    
 
-    // create a manager 2
-    $managerPerson2 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Robert', 'lastName' => 'Johnson']);
-    if ($managerPerson2) {
-        $managerUser2 = new User();
-        $managerUser2->setEmail('johnson.robert@example.com');
-        $managerUser2->setPassword($this->passwordHasher->hashPassword($managerUser2, 'password'));
-        $managerUser2->setEnabled(true);
-        $managerUser2->setCreatedAt(new \DateTimeImmutable());
-        $managerUser2->setRole('ROLE_MANAGER');
-        $managerUser2->setPerson($managerPerson2);
-        $manager->persist($managerUser2);
-    }
+    // Create a user for John Doe
+    $user = new User();
+    $user->setEmail('john.doe@example.com');
+    $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
+    $user->setEnabled(true);
+    $user->setCreatedAt(new \DateTimeImmutable());
+    $user->setRole('ROLE_COLLABORATOR');
+    $user->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'John', 'lastName' => 'Doe']));
+    $manager->persist($user);
 
-    // Create a collaborator user 1
-    $collaboratorPerson1 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'John', 'lastName' => 'Doe']);
-    if ($collaboratorPerson1) {
-        $collaboratorUser1 = new User();
-        $collaboratorUser1->setEmail('john.doe@example.com');
-        $collaboratorUser1->setPassword($this->passwordHasher->hashPassword($collaboratorUser1, 'password'));
-        $collaboratorUser1->setEnabled(true);
-        $collaboratorUser1->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser1->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser1->setPerson($collaboratorPerson1);
-        $manager->persist($collaboratorUser1);
-    }
+    // Create a user for Paul West
+    $user1 = new User();
+    $user1->setEmail('paul.west@example.com');
+    $user1->setPassword($this->passwordHasher->hashPassword($user1, 'password'));
+    $user1->setEnabled(true);
+    $user1->setCreatedAt(new \DateTimeImmutable());
+    $user1->setRole('ROLE_COLLABORATOR');
+    $user1->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Paul', 'lastName' => 'West']));
+    $manager->persist($user1);
 
-    // Create a collaborator user 2
-    $collaboratorPerson2 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Alice', 'lastName' => 'Johnson']);
-    if ($collaboratorPerson2) {
-        $collaboratorUser2 = new User();
-        $collaboratorUser2->setEmail('alice.johnson@example.com');
-        $collaboratorUser2->setPassword($this->passwordHasher->hashPassword($collaboratorUser2, 'password'));
-        $collaboratorUser2->setEnabled(true);
-        $collaboratorUser2->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser2->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser2->setPerson($collaboratorPerson2);
-        $manager->persist($collaboratorUser2);
-    }
+    // Create a user for Bob Dylan
+    $user2 = new User();
+    $user2->setEmail('bob.dylan@example.com');
+    $user2->setPassword($this->passwordHasher->hashPassword($user2, 'password'));
+    $user2->setEnabled(true);
+    $user2->setCreatedAt(new \DateTimeImmutable());
+    $user2->setRole('ROLE_MANAGER');
+    $user2->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Bob', 'lastName' => 'Dylan']));
+    $manager->persist($user2);
 
-    // Create a collaborator user 3
-    $collaboratorPerson3 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Bob', 'lastName' => 'Martin']);
-    if ($collaboratorPerson3) {
-        $collaboratorUser3 = new User();
-        $collaboratorUser3->setEmail('bob.martin@example.com');
-        $collaboratorUser3->setPassword($this->passwordHasher->hashPassword($collaboratorUser3, 'password'));
-        $collaboratorUser3->setEnabled(true);
-        $collaboratorUser3->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser3->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser3->setPerson($collaboratorPerson3);
-        $manager->persist($collaboratorUser3);
-    }
+    // Create a user for Alice Johnson
+    $user3 = new User();
+    $user3->setEmail('alice.johnson@example.com');
+    $user3->setPassword($this->passwordHasher->hashPassword($user3, 'password'));
+    $user3->setEnabled(true);
+    $user3->setCreatedAt(new \DateTimeImmutable());
+    $user3->setRole('ROLE_COLLABORATOR');
+    $user3->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Alice', 'lastName' => 'Johnson']));
+    $manager->persist($user3);
 
-    // Create a collaborator user 4
-    $collaboratorPerson4 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Sarah', 'lastName' => 'Williams']);
-    if ($collaboratorPerson4) {
-        $collaboratorUser4 = new User();
-        $collaboratorUser4->setEmail('Sarah.williams@example.com');
-        $collaboratorUser4->setPassword($this->passwordHasher->hashPassword($collaboratorUser4, 'password'));
-        $collaboratorUser4->setEnabled(true);
-        $collaboratorUser4->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser4->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser4->setPerson($collaboratorPerson4);
-        $manager->persist($collaboratorUser4);
-    }
+    // Create a user for Eva Green
+    $user4 = new User();
+    $user4->setEmail('eva.green@example.com');
+    $user4->setPassword($this->passwordHasher->hashPassword($user4, 'password'));
+    $user4->setEnabled(true);
+    $user4->setCreatedAt(new \DateTimeImmutable());
+    $user4->setRole('ROLE_COLLABORATOR');
+    $user4->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Eva', 'lastName' => 'Green']));
+    $manager->persist($user4);
 
-    // Create a collaborator user 5
-    $collaboratorPerson5 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Emily', 'lastName' => 'Clark']);
-    if ($collaboratorPerson5) {
-        $collaboratorUser5 = new User();
-        $collaboratorUser5->setEmail('emily.clark@example.com');
-        $collaboratorUser5->setPassword($this->passwordHasher->hashPassword($collaboratorUser5, 'password'));
-        $collaboratorUser5->setEnabled(true);
-        $collaboratorUser5->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser5->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser5->setPerson($collaboratorPerson5);
-        $manager->persist($collaboratorUser5);
-    }
+    // Create a user for Jack Black
+    $user5 = new User();
+    $user5->setEmail('jack.black@example.com');
+    $user5->setPassword($this->passwordHasher->hashPassword($user5, 'password'));
+    $user5->setEnabled(true);
+    $user5->setCreatedAt(new \DateTimeImmutable());
+    $user5->setRole('ROLE_MANAGER');
+    $user5->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jack', 'lastName' => 'Black']));
+    $manager->persist($user5);
 
-    // Create a collaborator user 6
-    $collaboratorPerson6 = $manager->getRepository(Person::class)->findOneBy(['firstName' => 'Michael', 'lastName' => 'Brown']);
-    if ($collaboratorPerson6) {
-        $collaboratorUser6 = new User();
-        $collaboratorUser6->setEmail('michael.brown@example.com');
-        $collaboratorUser6->setPassword($this->passwordHasher->hashPassword($collaboratorUser6, 'password'));
-        $collaboratorUser6->setEnabled(true);
-        $collaboratorUser6->setCreatedAt(new \DateTimeImmutable());
-        $collaboratorUser6->setRole('ROLE_COLLABORATOR');
-        $collaboratorUser6->setPerson($collaboratorPerson6);
-        $manager->persist($collaboratorUser6);
-    }
+    // Create a user for Tom Phillips
+    $user6 = new User();
+    $user6->setEmail('tom.phillips@example.com');
+    $user6->setPassword($this->passwordHasher->hashPassword($user6, 'password'));
+    $user6->setEnabled(true);
+    $user6->setCreatedAt(new \DateTimeImmutable());
+    $user6->setRole('ROLE_COLLABORATOR');
+    $user6->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Tom', 'lastName' => 'Phillips']));
+    $manager->persist($user6);
+
+    // Create a user for George Hanks
+    $user7 = new User();
+    $user7->setEmail('george.hanks@example.com');
+    $user7->setPassword($this->passwordHasher->hashPassword($user7, 'password'));
+    $user7->setEnabled(true);
+    $user7->setCreatedAt(new \DateTimeImmutable());
+    $user7->setRole('ROLE_MANAGER');
+    $user7->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'George', 'lastName' => 'Hanks']));
+    $manager->persist($user7);
+
+    // Create a user for Sam Harris
+    $user8 = new User();
+    $user8->setEmail('sam.harris@example.com');
+    $user8->setPassword($this->passwordHasher->hashPassword($user8, 'password'));
+    $user8->setEnabled(true);
+    $user8->setCreatedAt(new \DateTimeImmutable());
+    $user8->setRole('ROLE_COLLABORATOR');
+    $user8->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Sam', 'lastName' => 'Harris']));
+    $manager->persist($user8);
+
+    // Create a user for Liam Cooper
+    $user9 = new User();
+    $user9->setEmail('liam.cooper@example.com');
+    $user9->setPassword($this->passwordHasher->hashPassword($user9, 'password'));
+    $user9->setEnabled(true);
+    $user9->setCreatedAt(new \DateTimeImmutable());
+    $user9->setRole('ROLE_COLLABORATOR');
+    $user9->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Liam', 'lastName' => 'Cooper']));
+    $manager->persist($user9);
 
     $manager->flush();
 }

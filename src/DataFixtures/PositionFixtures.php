@@ -10,7 +10,7 @@ class PositionFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $positions = ['Developer', 'Manager', 'Analyst', 'Designer', 'Tester'];
+        $positions = ['Developpeur', 'Manager', 'Commercial', 'Designeur', 'DevOps'];
 
         foreach ($positions as $positionName) {
             $position = new Position();

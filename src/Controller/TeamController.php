@@ -15,13 +15,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Exception;
 
 class TeamController extends AbstractController
 {
     #[Route('/team', name: 'team_index')]
     public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
     {
-        $manager = $this->getUser()->getPerson();
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        }
+
+        $manager = $user->getPerson();
         $department = $manager->getDepartment(); // Récupérer le département du manager
 
         $queryBuilder = $userRepository->createQueryBuilder('user')
@@ -60,13 +67,13 @@ class TeamController extends AbstractController
         }
 
         if ($request->isXmlHttpRequest()) {
-            return $this->render('team/_table.html.twig', [
+            return $this->render('default/team/_table.html.twig', [
                 'pagination' => $pagination,
                 'vacationDays' => $vacationDays,
             ]);
         }
 
-        return $this->render('team/index.html.twig', [
+        return $this->render('default/team/index.html.twig', [
             'pagination' => $pagination,
             'vacationDays' => $vacationDays,
         ]);
@@ -83,8 +90,6 @@ class TeamController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $manager = $this->getUser()->getPerson();
-            $person->setManager($manager);
         
             // Définir des valeurs par défaut pour les champs requis
             $person->setAlertOnAnswer(false);
@@ -111,17 +116,15 @@ class TeamController extends AbstractController
             }
         
             // Définir le rôle et le manager en fonction de la position
-            if ($position && $position->getName() === 'Manager') {
-                $user->setRole('ROLE_MANAGER');
-                $person->setManager(null); // Définir manager_id à null si la position est Manager
-            } else {
+            
                 $user->setRole('ROLE_COLLABORATOR');
                 // Trouver le manager du département et l'affilier
                 $departmentManager = $entityManager->getRepository(Person::class)->findOneBy([
                     'department' => $person->getDepartment()
+                    , 'manager' => null
                 ]);
                 $person->setManager($departmentManager);
-            }
+            
         
             // Définir une valeur par défaut pour le champ enabled
             $user->setEnabled(true);
@@ -149,7 +152,7 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('team_index');
         }
 
-        return $this->render('team/new_collaborator.html.twig', [
+        return $this->render('default/team/new_collaborator.html.twig', [
             'userForm' => $userForm->createView(),
         ]);
     }

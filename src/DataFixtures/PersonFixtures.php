@@ -14,18 +14,14 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         // Récupérer les départements et les postes existants
-        $department = $manager->getRepository(Department::class)->findOneBy(['name' => 'IT']);
-        $developerPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'Developer']);
         $managerPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'Manager']);
-        $hrPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'HR']);
-        $designerPosition = $manager->getRepository(Position::class)->findOneBy(['name' => 'Designer']);
-        $anotherDepartment = $manager->getRepository(Department::class)->findOneBy(['name' => 'Finance']);
+    
 
         // Create a manager 1 
         $managerPerson = new Person();
         $managerPerson->setFirstName('Jane');
         $managerPerson->setLastName('Smith');
-        $managerPerson->setDepartment($department);
+        $managerPerson->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Symfony']));
         $managerPerson->setPosition($managerPosition); // Assign the Manager position to Jane
         $managerPerson->setAlertOnAnswer(false);
         $managerPerson->setAlertNewRequest(false);
@@ -36,85 +32,111 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $employee = new Person();
         $employee->setFirstName('John');
         $employee->setLastName('Doe');
-        $employee->setDepartment($department);
-        $employee->setPosition($developerPosition); // Assign the Developer position to John
+        $employee->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Symfony']));
+        $employee->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Developpeur'])); 
         $employee->setManager($managerPerson); // Assign Jane as the manager
         $employee->setAlertOnAnswer(false);
         $employee->setAlertNewRequest(false);
         $employee->setAlertBeforeVacation(false);
         $manager->persist($employee);
 
-        // Create another employee and assign the manager
-        $employee2 = new Person();
-        $employee2->setFirstName('Alice');
-        $employee2->setLastName('Johnson');
-        $employee2->setDepartment($department);
-        $employee2->setPosition($developerPosition); // Assign the Developer position to Alice
-        $employee2->setManager($managerPerson); // Assign Jane as the manager
-        $employee2->setAlertOnAnswer(false);
-        $employee2->setAlertNewRequest(false);
-        $employee2->setAlertBeforeVacation(false);
-        $manager->persist($employee2);
-
-        // Create a HR employee
-        $hrEmployee = new Person();
-        $hrEmployee->setFirstName('Sarah');
-        $hrEmployee->setLastName('Williams');
-        $hrEmployee->setDepartment($department);
-        $hrEmployee->setPosition($developerPosition); // Assign the HR position to Sarah
-        $hrEmployee->setManager($managerPerson); // Assign Jane as the manager
-        $hrEmployee->setAlertOnAnswer(false);
-        $hrEmployee->setAlertNewRequest(false);
-        $hrEmployee->setAlertBeforeVacation(false);
-        $manager->persist($hrEmployee);
-
-        // Create a designer
-        $designer = new Person();
-        $designer->setFirstName('Bob');
-        $designer->setLastName('Martin');
-        $designer->setDepartment($department);
-        $designer->setPosition($developerPosition); // Assign the Designer position to Bob
-        $designer->setManager($managerPerson); // Assign Jane as the manager
-        $designer->setAlertOnAnswer(false);
-        $designer->setAlertNewRequest(false);
-        $designer->setAlertBeforeVacation(false);
-        $manager->persist($designer);
+        $employee1 = new Person();
+        $employee1->setFirstName('Paul');
+        $employee1->setLastName('West');
+        $employee1->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Symfony']));
+        $employee1->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'DevOps']));
+        $employee1->setManager($managerPerson);
+        $employee1->setAlertOnAnswer(false);
+        $employee1->setAlertNewRequest(false);
+        $employee1->setAlertBeforeVacation(false);
+        $manager->persist($employee1);
 
         // Create a manager 2
         $managerPerson2 = new Person();
-        $managerPerson2->setFirstName('Robert');
-        $managerPerson2->setLastName('Johnson');
-        $managerPerson2->setDepartment($anotherDepartment);
-        $managerPerson2->setPosition($managerPosition); // Assign the Manager position to Robert
+        $managerPerson2->setFirstName('Bob');
+        $managerPerson2->setLastName('Dylan');
+        $managerPerson2->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Pôle UX']));
+        $managerPerson2->setPosition($managerPosition); // Assign the Manager position to Bob
         $managerPerson2->setAlertOnAnswer(false);
         $managerPerson2->setAlertNewRequest(false);
         $managerPerson2->setAlertBeforeVacation(false);
         $manager->persist($managerPerson2);
 
         
-       // Create an employee and assign the manager
+        $employee2 = new Person();
+        $employee2->setFirstName('Alice');
+        $employee2->setLastName('Johnson');
+        $employee2->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Pôle UX']));
+        $employee2->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Designeur'])); 
+        $employee2->setManager($managerPerson2); 
+        $employee2->setAlertOnAnswer(false);
+        $employee2->setAlertNewRequest(false);
+        $employee2->setAlertBeforeVacation(false);
+        $manager->persist($employee2);
+
         $employee3 = new Person();
-        $employee3->setFirstName('Michael');
-        $employee3->setLastName('Brown');
-        $employee3->setDepartment($anotherDepartment);
-        $employee3->setPosition($developerPosition); // Assign the Developer position to Michael
-        $employee3->setManager($managerPerson2); // Assign Robert as the manager
+        $employee3->setFirstName('Eva');
+        $employee3->setLastName('Green');
+        $employee3->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Pôle UX']));
+        $employee3->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Designeur']));
+        $employee3->setManager($managerPerson2); 
         $employee3->setAlertOnAnswer(false);
         $employee3->setAlertNewRequest(false);
         $employee3->setAlertBeforeVacation(false);
         $manager->persist($employee3);
 
-        // Create another employee and assign the manager
+        $managerPerson3 = new Person();
+        $managerPerson3->setFirstName('Jack');
+        $managerPerson3->setLastName('Black');
+        $managerPerson3->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Marketing']));
+        $managerPerson3->setPosition($managerPosition); // Assign the Manager position to Jack
+        $managerPerson3->setAlertOnAnswer(false);
+        $managerPerson3->setAlertNewRequest(false);
+        $managerPerson3->setAlertBeforeVacation(false);
+        $manager->persist($managerPerson3);
+
         $employee4 = new Person();
-        $employee4->setFirstName('Emily');
-        $employee4->setLastName('Clark');
-        $employee4->setDepartment($anotherDepartment);
-        $employee4->setPosition($developerPosition); // Assign the Developer position to Emily
-        $employee4->setManager($managerPerson2); // Assign Robert as the manager
+        $employee4->setFirstName('Tom');
+        $employee4->setLastName('Phillips');
+        $employee4->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'Marketing']));
+        $employee4->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Commercial']));
+        $employee4->setManager($managerPerson3);
         $employee4->setAlertOnAnswer(false);
         $employee4->setAlertNewRequest(false);
         $employee4->setAlertBeforeVacation(false);
         $manager->persist($employee4);
+
+        $managerPerson4 = new Person();
+        $managerPerson4->setFirstName('George');
+        $managerPerson4->setLastName('Hanks');
+        $managerPerson4->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'CMS']));
+        $managerPerson4->setPosition($managerPosition); // Assign the Manager position to George
+        $managerPerson4->setAlertOnAnswer(false);
+        $managerPerson4->setAlertNewRequest(false);
+        $managerPerson4->setAlertBeforeVacation(false);
+        $manager->persist($managerPerson4);
+
+        $employee5 = new Person();
+        $employee5->setFirstName('Sam');
+        $employee5->setLastName('Harris');
+        $employee5->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'CMS']));
+        $employee5->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Developpeur']));
+        $employee5->setManager($managerPerson4);
+        $employee5->setAlertOnAnswer(false);
+        $employee5->setAlertNewRequest(false);
+        $employee5->setAlertBeforeVacation(false);
+        $manager->persist($employee5);
+
+        $employee6 = new Person();
+        $employee6->setFirstName('Liam');
+        $employee6->setLastName('Cooper');
+        $employee6->setDepartment($manager->getRepository(Department::class)->findOneBy(['name' => 'CMS']));
+        $employee6->setPosition($manager->getRepository(Position::class)->findOneBy(['name' => 'Developpeur']));
+        $employee6->setManager($managerPerson4);
+        $employee6->setAlertOnAnswer(false);
+        $employee6->setAlertNewRequest(false);
+        $employee6->setAlertBeforeVacation(false);
+        $manager->persist($employee6);
 
         // Flush all the entities to the database
         $manager->flush();
