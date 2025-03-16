@@ -3,137 +3,137 @@
 {% block title %}Mon équipe{% endblock %}
 
 {% block body %}
-<div class="flex items-center">
-    <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Mon équipe</h1>
-    <button class="w-[228px] h-[41px] rounded-[6px] bg-[#004C6C] text-[white] ml-[25px]"><a href="{{ path('team_new') }}">Ajouter un collaborateur</a></button>
-</div>
-{% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="mt-8 alert alert-{{ label }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endfor %}
+    <div class="flex items-center">
+        <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Mon équipe</h1>
+        <button class="w-[228px] h-[41px] rounded-[6px] bg-[#004C6C] text-[white] ml-[25px]"><a href="{{ path('team_new') }}">Ajouter un collaborateur</a></button>
+    </div>
 
-<table class="w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md h-[469px] mt-[65px]">
-    <!-- En-tête des colonnes -->
-    <thead class="bg-[#F9FAFB] font-[Inter] rounded-t-lg">    
-        <tr class="text-left text-[#344054]">
-            <th class="px-4 pt-5 font-medium text-[14px]" data-column="0">
-                <div class="flex items-center cursor-pointer">
-                    <span>Nom</span> 
-                    <div class="flex flex-col ml-[5px]">
-                        <span class="chevron-up">
-                            <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </span>
-                        <span class="chevron-down mt-[-5px]">
-                            <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="mt-8 alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mt-[65px]">
+        <!-- En-tête des colonnes -->
+        <thead class="bg-[#F9FAFB]">
+            <tr class="text-left text-[#344054]">
+                <th class="px-4 pt-5 font-medium text-[14px]" data-column="0">
+                    <div class="flex items-center cursor-pointer">
+                        <span>Nom</span> 
+                        <div class="flex flex-col ml-[5px]">
+                            <span class="chevron-up" id="chevron-up-lastName">
+                                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </span>
+                            <span class="chevron-down mt-[-5px]" id="chevron-down-lastName">
+                                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]" data-column="1">
-                <div class="flex items-center cursor-pointer">
-                    <span>Prénom</span> 
-                    <div class="flex flex-col ml-[5px]">
-                        <span class="chevron-up">
-                            <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </span>
-                        <span class="chevron-down mt-[-5px]">
-                            <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
+                </th>
+                <th class="px-4 pt-5 font-medium text-[14px]" data-column="1">
+                    <div class="flex items-center cursor-pointer">
+                        <span>Prénom</span> 
+                        <div class="flex flex-col ml-[5px]">
+                            <span class="chevron-up" id="chevron-up-firstName">
+                                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </span>
+                            <span class="chevron-down mt-[-5px]" id="chevron-down-firstName">
+                                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]" data-column="2">
-                <div class="flex items-center cursor-pointer">
-                    <span>Adresse email</span> 
-                    <div class="flex flex-col ml-[5px]">
-                        <span class="chevron-up">
-                            <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </span>
-                        <span class="chevron-down mt-[-5px]">
-                            <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
+                </th>
+                <th class="px-4 pt-5 font-medium text-[14px]" data-column="2">
+                    <div class="flex items-center cursor-pointer">
+                        <span>Adresse email</span> 
+                        <div class="flex flex-col ml-[5px]">
+                            <span class="chevron-up" id="chevron-up-email">
+                                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </span>
+                            <span class="chevron-down mt-[-5px]" id="chevron-down-email">
+                                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]" data-column="3">
-                <div class="flex items-center cursor-pointer">
-                    <span>Poste</span> 
-                    <div class="flex flex-col ml-[5px]">
-                        <span class="chevron-up">
-                            <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </span>
-                        <span class="chevron-down mt-[-5px]">
-                            <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
+                </th>
+                <th class="px-4 pt-5 font-medium text-[14px]" data-column="3">
+                    <div class="flex items-center cursor-pointer">
+                        <span>Poste</span> 
+                        <div class="flex flex-col ml-[5px]">
+                            <span class="chevron-up" id="chevron-up-position">
+                                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </span>
+                            <span class="chevron-down mt-[-5px]" id="chevron-down-position">
+                                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]" data-column="4">
-                <div class="flex items-center cursor-pointer">
-                    <span>Nb congés posés sur l’année</span> 
-                    <div class="flex flex-col ml-[5px]">
-                        <span class="chevron-up">
-                            <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </span>
-                        <span class="chevron-down mt-[-5px]">
-                            <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </span>
+                </th>
+                <th class="px-4 pt-5 font-medium text-[14px]" data-column="4">
+                    <div class="flex items-center cursor-pointer">
+                        <span>Nb congés posés sur l’année</span> 
+                        <div class="flex flex-col ml-[5px]">
+                            <span class="chevron-up" id="chevron-up-vacationDays">
+                                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                                </svg>
+                            </span>
+                            <span class="chevron-down mt-[-5px]" id="chevron-down-vacationDays">
+                                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </th>
-            <th></th>
-        </tr>
-        <tr class="text-gray-700 text-left">
-            <th class="px-4 py-1 w-1/6"><input type="text" id="filter_lastName" name="filter_lastName" class="w-[126px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
-            <th class="px-4 py-1 w-1/6"><input type="text" id="filter_firstName" name="filter_firstName" class="w-[126px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
-            <th class="px-4 py-1 w-1/6"><input type="text" id="filter_email" name="filter_email" class="w-[200px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
-            <th class="px-4 py-1 w-1/6"><input type="text" id="filter_position" name="filter_position" class="w-[189px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
-            <th class="px-4 py-1 w-1/6"><input type="text" id="filter_vacationDays" name="filter_vacationDays" class="w-[240px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in pagination %}
-            <tr>
-                <td class="px-4 py-4 text-sm text-gray-700">{{ user.person.lastName }}</td>
-                <td class="px-4 py-4 text-sm text-gray-700">{{ user.person.firstName }}</td>
-                <td class="px-4 py-4 text-sm text-gray-700">{{ user.email }}</td>
-                <td class="px-4 py-4 text-sm text-gray-700">{{ user.person.position.name }}</td>
-                <td class="px-4 py-4 text-sm text-gray-700">{{ vacationDays[user.id] }} jours</td>
-                <td>
-                    <a href="" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+                </th>
+                <th></th>
+            </tr>
+            <tr class="text-gray-700 text-left">
+                <th class="px-4 py-1 w-1/6"><input type="text" id="filter_lastName" name="filter_lastName" class="w-[126px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
+                <th class="px-4 py-1 w-1/6"><input type="text" id="filter_firstName" name="filter_firstName" class="w-[126px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
+                <th class="px-4 py-1 w-1/6"><input type="text" id="filter_email" name="filter_email" class="w-[200px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
+                <th class="px-4 py-1 w-1/6"><input type="text" id="filter_position" name="filter_position" class="w-[189px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
+                <th class="px-4 py-1 w-1/6"><input type="text" id="filter_vacationDays" name="filter_vacationDays" class="w-[240px] h-[44px] px-2 py-1 border rounded-[8px] mt-2"></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pagination %}
+            <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.lastName }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.firstName }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.email }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.position.name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ vacationDays[user.id] }} jours</td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">
+                    <a href="" class="bg-gray-100 text-gray-700 font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 w-[109px] h-[40px] flex items-center justify-center">Détails</a>
                 </td>
             </tr>
-            <tr class="h-[1px] bg-gray-200"><td colspan="6"></td></tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<div class="pagination">
-    {{ knp_pagination_render(pagination) }}
-</div>
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 
 {% endblock %}
