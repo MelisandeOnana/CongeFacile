@@ -105,6 +105,76 @@ document.addEventListener('DOMContentLoaded', function() {
             .sort(comparer(columnIndex, this.asc = !this.asc))
             .forEach(tr => table.appendChild(tr));
     }));
+
+    // Gestion des chevrons pour le tri des colonnes
+    const chevronUpFirstName = document.getElementById('chevron-up-firstName');
+    const chevronDownFirstName = document.getElementById('chevron-down-firstName');
+    const chevronUpLastName = document.getElementById('chevron-up-lastName');
+    const chevronDownLastName = document.getElementById('chevron-down-lastName');
+    const chevronUpEmail = document.getElementById('chevron-up-email');
+    const chevronDownEmail = document.getElementById('chevron-down-email');
+    const chevronUpPosition = document.getElementById('chevron-up-position');
+    const chevronDownPosition = document.getElementById('chevron-down-position');
+    const chevronUpVacationDays = document.getElementById('chevron-up-vacationDays');
+    const chevronDownVacationDays = document.getElementById('chevron-down-vacationDays');
+
+    chevronUpFirstName.addEventListener('click', function() {
+        sortTable(1, 'asc');
+    });
+
+    chevronDownFirstName.addEventListener('click', function() {
+        sortTable(1, 'desc');
+    });
+
+    chevronUpLastName.addEventListener('click', function() {
+        sortTable(0, 'asc');
+    });
+
+    chevronDownLastName.addEventListener('click', function() {
+        sortTable(0, 'desc');
+    });
+
+    chevronUpEmail.addEventListener('click', function() {
+        sortTable(2, 'asc');
+    });
+
+    chevronDownEmail.addEventListener('click', function() {
+        sortTable(2, 'desc');
+    });
+
+    chevronUpPosition.addEventListener('click', function() {
+        sortTable(3, 'asc');
+    });
+
+    chevronDownPosition.addEventListener('click', function() {
+        sortTable(3, 'desc');
+    });
+
+    chevronUpVacationDays.addEventListener('click', function() {
+        sortTable(4, 'asc');
+    });
+
+    chevronDownVacationDays.addEventListener('click', function() {
+        sortTable(4, 'desc');
+    });
+
+    function sortTable(columnIndex, order) {
+        const table = document.querySelector('table tbody');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            const cellA = a.children[columnIndex].innerText.toLowerCase();
+            const cellB = b.children[columnIndex].innerText.toLowerCase();
+
+            if (order === 'asc') {
+                return cellA.localeCompare(cellB);
+            } else {
+                return cellB.localeCompare(cellA);
+            }
+        });
+
+        rows.forEach(row => table.appendChild(row));
+    }
 });
 
 //  Cette fonction permet de basculer la visibilité d'un élément HTML en fonction de son identifiant (id).
