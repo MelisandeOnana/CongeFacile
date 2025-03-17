@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Doctrine\Common\Collections\Criteria;
 use App\Repository\RequestTypeRepository;
 use App\Repository\RequestRepository;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_MANAGER')]
 class RequestTypeController extends AbstractController
 {
     #[Route('/request-type', name: 'request_types')]
@@ -51,7 +53,7 @@ class RequestTypeController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/request_type/index_request_type.html.twig', [
+        return $this->render('default/admin/request_type/index.html.twig', [
             'requestTypes' => $TypesPagination,
             'typesCounts' => $typesCounts,
         ]);

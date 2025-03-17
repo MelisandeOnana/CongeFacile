@@ -435,9 +435,9 @@ class RequestController extends AbstractController
             $refusal = 0;
 
             foreach ($requests as $request) {
-                if ($request->getAnswer() == 1) {
+                if ($request->getAnswer()->label() == "Accepté") {
                     $acceptance++;
-                } elseif ($request->getAnswer() == 2) {
+                } elseif ($request->getAnswer()->label() == "Refusé") {
                     $refusal++;
                 }
             }
