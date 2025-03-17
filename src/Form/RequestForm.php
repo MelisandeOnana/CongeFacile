@@ -14,6 +14,7 @@ use DateTime;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\File;
 
 class RequestForm extends AbstractType
 {
@@ -21,21 +22,22 @@ class RequestForm extends AbstractType
     {
         $builder
         ->add('requestType', EntityType::class, [
-            'class' => RequestType::class,               // L'entité étrangère
-            'choice_label' => 'name',                  // Le champ à afficher dans la liste déroulante
-            'placeholder' => 'Sélectionner un type',     // Texte de placeholder (optionnel)
-            'label' => 'Type de demande - champ obligatoire',                       // Libellé du champ
-            'required' => true,                        // Rendre le champ obligatoire
+            'class' => RequestType::class,
+            'choice_label' => 'name',
+            'placeholder' => 'Sélectionner un type',
+            'label' => 'Type de demande - champ obligatoire',
+            'required' => true,
             'attr' => ['class' => 'appearance-none w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4 text-[#9CA3AF]'],
-            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']  // Ajout de la classe CSS pour le label
+            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ])
         ->add('startAt', DateTimeType::class, [
             'label' => 'Date de début - champ obligatoire',
             'widget' => 'single_text',
             'attr' => [
-            'id' => 'startDate',
-            'onchange' => 'calculateBusinessDays()',
-            'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'],
+                'id' => 'startDate',
+                'onchange' => 'calculateBusinessDays()',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'
+            ],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ])
         ->add('endAt', DateTimeType::class, [
@@ -44,7 +46,8 @@ class RequestForm extends AbstractType
             'attr' => [
                 'id' => 'endDate',
                 'onchange' => 'calculateBusinessDays()',
-                'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'],
+                'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6'
+            ],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]']
         ])
         ->add('fichier', FileType::class, [
@@ -54,12 +57,25 @@ class RequestForm extends AbstractType
             ],
             'mapped' => false,
             'required' => false,
-            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter] ']
+            'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter] '],
+            'constraints' => [
+                new File([
+                    'mimeTypes' => [
+                        'application/pdf',
+                        'image/png',
+                        'image/jpeg',
+                        'image/gif',
+                    ],
+                    'mimeTypesMessage' => 'Veuillez télécharger un fichier PDF ou une image valide (PNG, JPEG, GIF).',
+                ])
+            ]
         ])
         ->add('comment', null, [
             'label' => 'Commentaire supplémentaire',
-            'attr' => ['class' => 'w-[730px] h-[186px] border rounded-[6px] p-4',
-                    'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.'],
+            'attr' => [
+                'class' => 'w-[730px] h-[186px] border rounded-[6px] p-4',
+                'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.'
+            ],
             'required' => false,
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
             'empty_data' => ''
