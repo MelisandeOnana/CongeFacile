@@ -57,8 +57,13 @@ class UserRepository extends ServiceEntityRepository
         foreach ($requests as $request) {
             $startAt = $request['startAt'];
             $endAt = $request['endAt'];
-            $interval = $startAt->diff($endAt);
-            $totalDays += $interval->days + 1; // +1 to include both start and end dates
+            $period = new \DatePeriod($startAt, new \DateInterval('P1D'), $endAt->modify('+1 day'));
+        
+            foreach ($period as $date) {
+                if ($date->format('N') < 6) { // 6 et 7 sont samedi et dimanche
+                    $totalDays++;
+                }
+            }
         }
 
         return $totalDays;
