@@ -54,7 +54,8 @@
                 <p class="text-[16px] mt-5 font-[Epilogue]">Votre commentaire :</p>
                 <textarea class="border-[#DFE4EA] mt-2 w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4" readonly placeholder="{{request.answerComment}}"></textarea>
             {% endif %}
-            <p class="mt-5 font-[Epilogue] text-[16px]">Vous avez {{request.answer.label()}} cette demande le {{request.answerAt.format('d/m/Y')}} à {{request.answerAt.format('H\\\hi')}}</p>
+
+            <p class="mt-5 font-[Epilogue] text-[16px]">Vous avez {{request.answer.label()|lower}} cette demande le {{request.answerAt.format('d/m/Y')}} à {{request.answerAt.format('H\\\hi')}}</p>
         {% endif %}
     {% endif %}
 {% endblock %}

@@ -11,8 +11,8 @@ enum Statut: int
     public function label(): string
     {
         return match($this) {
-            self::Accepter => 'Acceptée',
-            self::Refuser => 'Refusée',
+            self::Accepter => 'Accepté',
+            self::Refuser => 'Refusé',
             self::EnCours => 'En cours',
         };
     }

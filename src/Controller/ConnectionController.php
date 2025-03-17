@@ -50,7 +50,7 @@ class ConnectionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
+            return $this->redirectToRoute('login');
         }
         $person = $user->getPerson();
 

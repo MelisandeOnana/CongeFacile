@@ -14,7 +14,9 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\PositionType;
 use App\Form\DeleteType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_MANAGER')]
 class PositionController extends AbstractController
 {
     #[Route('/position', name: 'positions')]
@@ -55,7 +57,7 @@ class PositionController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/position/index_position.html.twig', [
+        return $this->render('default/admin/position/position.html.twig', [
             'positions' => $PostionsPagination,
             'positionCounts' => $positionCounts,
         ]);

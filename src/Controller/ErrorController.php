@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+
 
 class ErrorController extends AbstractController
 {
