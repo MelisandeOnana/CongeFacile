@@ -18,7 +18,9 @@
             <div class="relative flex flex-col">
                 <label for="email" class="block text-sm font-bold text-[#212B36] mb-2">Adresse Mail</label>
                 <input type="email" id="email" name="_username" placeholder="****@mentalworks.fr"
-                    class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" required />
+                    class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" 
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                    required />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute left-4 top-10"
                     viewBox="0 0 682.667 682.667">
                     <defs>

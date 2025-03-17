@@ -55,7 +55,7 @@ class PositionController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/administration/position/position.html.twig', [
+        return $this->render('default/admin/position/index_position.html.twig', [
             'positions' => $PostionsPagination,
             'positionCounts' => $positionCounts,
         ]);
@@ -104,7 +104,7 @@ class PositionController extends AbstractController
             }
         }
 
-        return $this->render('default/administration/position/position_show.html.twig', [
+        return $this->render('default/admin/position/position_show.html.twig', [
             'position' => $position,
             'formPosition' => $formPosition->createView(),
             'formDelete' => $formDelete->createView(),
@@ -128,7 +128,7 @@ class PositionController extends AbstractController
             }
         }
 
-        return $this->render('default/administration/position/position_new.html.twig', [
+        return $this->render('default/admin/position/position_new.html.twig', [
             'formPosition' => $formPosition->createView(),
         ]);
     }
