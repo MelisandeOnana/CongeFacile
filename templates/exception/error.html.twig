@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ asset('js/scripts.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Oups ! Une erreur est survenue.</h1>
+    <p class="mt-2 text-black text-[16px] font-[Epilogue] font-normal">Une erreur s'est produite lors du traitement de votre demande.</p>
+    <p class="mt-2 text-black text-[16px] font-[Epilogue] font-normal">Vous pouvez retourner à l'accueil <a href="{{ path('home_index') }}" class="btn btn-primary text-[#1B3168] font-bold underline">ici</a>.</p>
+{% endblock %}

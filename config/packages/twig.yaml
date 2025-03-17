@@ -5,7 +5,6 @@ twig:
     globals:
         RequestRepository: '@App\Repository\RequestRepository'
 
-
 when@test:
     twig:
         strict_variables: true
