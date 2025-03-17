@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Statut;
 use App\Repository\RequestRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,8 +38,7 @@ class Request
     private ?string $answerComment = null;
 
     #[ORM\Column]
-    private ?int $answer = null;
-    // La réponse peut etre Acceptée(1), Refusée(2) ou En Cours(3)
+    private ?Statut $answer = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $answerAt = null;
@@ -81,7 +81,7 @@ class Request
         return $this->startAt;
     }
 
-    public function setStartAt(\DateTimeImmutable $startAt): static
+    public function setStartAt(?\DateTimeImmutable $startAt): static
     {
         $this->startAt = $startAt;
 
@@ -93,7 +93,7 @@ class Request
         return $this->endAt;
     }
 
-    public function setEndAt(\DateTimeImmutable $endAt): static
+    public function setEndAt(?\DateTimeImmutable $endAt): static
     {
         $this->endAt = $endAt;
 
@@ -105,7 +105,7 @@ class Request
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
@@ -117,7 +117,7 @@ class Request
         return $this->comment;
     }
 
-    public function setComment(string $comment): static
+    public function setComment(?string $comment): static
     {
         $this->comment = $comment;
 
@@ -129,21 +129,24 @@ class Request
         return $this->answerComment;
     }
 
-    public function setAnswerComment(string $answerComment): static
+    public function setAnswerComment(?string $answerComment): static
     {
         $this->answerComment = $answerComment;
 
         return $this;
     }
 
-    public function getAnswer(): ?int
-    {
+    public function getAnswer(): ?Statut {
         return $this->answer;
     }
 
-    public function setAnswer(int $answer): static
+    public function setAnswer(?int $answer): static
     {
-        $this->answer = $answer;
+        if (!Statut::tryFrom($answer)) {
+            throw new \InvalidArgumentException("Valeur de statut invalide.");
+        }
+
+        $this->answer = Statut::from($answer);
 
         return $this;
     }
@@ -153,7 +156,7 @@ class Request
         return $this->answerAt;
     }
 
-    public function setAnswerAt(\DateTimeImmutable $answerAt): static
+    public function setAnswerAt(?\DateTimeImmutable $answerAt): static
     {
         $this->answerAt = $answerAt;
 
@@ -165,7 +168,7 @@ class Request
         return $this->receiptFile;
     }
 
-    public function setReceiptFile(string $receiptFile): static
+    public function setReceiptFile(?string $receiptFile): static
     {
         $this->receiptFile = $receiptFile;
 

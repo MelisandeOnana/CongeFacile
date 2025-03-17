@@ -21,7 +21,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $enabled = null;
+    private ?bool $enabled = true;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
-    #[ORM\ManyToOne(targetEntity: Person::class, cascade: ["persist"])]
+    #[ORM\OneToOne(targetEntity: Person::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $person = null;
 
@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -55,7 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
@@ -67,7 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled): static
+    public function setEnabled(?bool $enabled): static
     {
         $this->enabled = $enabled;
 
@@ -91,7 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->role;
     }
 
-    public function setRole(string $role): static
+    public function setRole(?string $role): static
     {
         $this->role = $role;
 

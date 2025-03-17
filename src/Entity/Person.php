@@ -32,13 +32,13 @@ class Person
     private ?Position $position = null;
 
     #[ORM\Column]
-    private ?bool $alertOnAnswer = null;
+    private ?bool $alertOnAnswer = false;
 
     #[ORM\Column]
-    private ?bool $alertNewRequest = null;
+    private ?bool $alertNewRequest = false;
 
     #[ORM\Column]
-    private ?bool $alertBeforeVacation = null;
+    private ?bool $alertBeforeVacation = false;
 
     public function getId(): ?int
     {
