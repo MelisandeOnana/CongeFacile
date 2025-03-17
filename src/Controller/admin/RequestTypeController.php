@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Controller;
-
+namespace App\Controller\admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,7 @@ use App\Repository\RequestRepository;
 
 class RequestTypeController extends AbstractController
 {
-    #[Route('/admin/request-type', name: 'request_types')]
+    #[Route('/request-type', name: 'request_types')]
     public function index(RequestTypeRepository $requestTypeRepository, RequestRepository $requestRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $typesCounts = [];

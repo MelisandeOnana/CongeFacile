@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\Position;
 use App\Repository\PersonRepository;
@@ -17,7 +17,7 @@ use App\Form\DeleteType;
 
 class PositionController extends AbstractController
 {
-    #[Route('/admin/position', name: 'positions')]
+    #[Route('/position', name: 'positions')]
     public function index(PositionRepository $positionRepository, PersonRepository $personRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $positionCounts = [];
@@ -61,7 +61,7 @@ class PositionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/position/show/{id}', name: 'position_show')]
+    #[Route('/position/show/{id}', name: 'position_show')]
     public function show(PositionRepository $positionRepository, $id, HttpRequest $request, EntityManagerInterface $entityManager, PersonRepository $personRepository): Response
     {
         $position = $positionRepository->find($id);
@@ -111,7 +111,7 @@ class PositionController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/position/new', name: 'position_new')]
+    #[Route('/position/new', name: 'position_new')]
     public function new(PositionRepository $positionRepository, HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
         $position = new Position();
