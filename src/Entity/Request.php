@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Enum\Statut;
 use App\Repository\RequestRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -16,16 +17,20 @@ class Request
 
     #[ORM\ManyToOne(targetEntity: RequestType::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "Le type de demande ne peut pas être vide.")]
     private ?RequestType $requestType = null;
 
     #[ORM\ManyToOne(targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "Le collaborateur ne peut pas être vide.")]
     private ?Person $collaborator = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "La date de début ne peut pas être vide.")]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "La date de fin ne peut pas être vide.")]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
