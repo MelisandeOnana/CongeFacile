@@ -16,6 +16,8 @@ class DepartmentFixtures extends Fixture
             $department = new Department();
             $department->setName($deptName);
             $manager->persist($department);
+
+            $this->addReference('department_' . strtolower(str_replace(' ', '_', $deptName)), $department);
         }
 
         $manager->flush();

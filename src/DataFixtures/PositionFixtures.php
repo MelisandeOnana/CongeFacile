@@ -16,6 +16,8 @@ class PositionFixtures extends Fixture
             $position = new Position();
             $position->setName($positionName);
             $manager->persist($position);
+
+            $this->addReference('position_' . strtolower(str_replace(' ', '_', $positionName)), $position);
         }
 
         $manager->flush();
