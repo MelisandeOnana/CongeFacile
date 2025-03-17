@@ -16,6 +16,8 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
 use App\Validator\PasswordMatch;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserType extends AbstractType
 {
@@ -28,7 +30,15 @@ class UserType extends AbstractType
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB] pl-10',
-                ], 
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez saisir une adresse email.',
+                    ]),
+                    new Email([
+                        'message' => 'L\'adresse email "{{ value }}" n\'est pas une adresse valide.',
+                    ]),
+                ],
             ])
             ->add('person', PersonType::class, [
                 'label' => false,
@@ -43,7 +53,7 @@ class UserType extends AbstractType
                 'placeholder' => 'Choisir un département', 
                 'attr' => [
                     'id' => 'department',
-                    'class' => 'appearance-none mb-[15px] text-[#9CA3AF] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
+                    'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
             ->add('position', EntityType::class, [
@@ -55,7 +65,7 @@ class UserType extends AbstractType
                 'mapped' => false,
                 'placeholder' => 'Choisir un poste', 
                 'attr' => [
-                    'class' => 'appearance-none text-[#9CA3AF] mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
+                    'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
             ->add('newPassword', PasswordType::class, [
