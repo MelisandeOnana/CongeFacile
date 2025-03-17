@@ -16,8 +16,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         
         // Création d'une demande de congé pour John Doe
         $request1 = new Request();
-        $request1->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé maladie']));
-        $request1->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Doe']));
+        $request1->setRequestType($this->getReference( 'type_congé_maladie', RequestType::class));
+        $request1->setCollaborator($this->getReference( 'person_doe', Person::class));
         $request1->setStartAt(new \DateTimeImmutable('2025-01-06 08:00:00'));
         $request1->setEndAt(new \DateTimeImmutable('2025-01-08 18:00:00'));
         $request1->setCreatedAt(new \DateTimeImmutable('2025-01-05 10:30:19'));
@@ -30,8 +30,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une 2eme demande de congé pour John Doe
         $request2 = new Request();
-        $request2->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé payé']));
-        $request2->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Doe']));
+        $request2->setRequestType($this->getReference('type_congé_payé', RequestType::class));
+        $request2->setCollaborator($this->getReference( 'person_doe', Person::class));
         $request2->setStartAt(new \DateTimeImmutable('2025-02-10 08:00:00'));
         $request2->setEndAt(new \DateTimeImmutable('2025-02-14 18:00:00'));
         $request2->setCreatedAt(new \DateTimeImmutable('2025-01-10 10:23:10'));
@@ -44,8 +44,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Paul West
         $request3 = new Request();
-        $request3->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé sans solde']));
-        $request3->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'West']));
+        $request3->setRequestType($this->getReference('type_congé_sans_solde',RequestType::class));
+        $request3->setCollaborator($this->getReference('person_west',Person::class));
         $request3->setStartAt(new \DateTimeImmutable('2025-03-17 08:00:00'));
         $request3->setEndAt(new \DateTimeImmutable('2025-03-19 18:00:00'));
         $request3->setCreatedAt(new \DateTimeImmutable('2025-03-10 19:43:10'));
@@ -58,8 +58,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Paul West
         $request4 = new Request();
-        $request4->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé sans solde']));
-        $request4->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'West']));
+        $request4->setRequestType($this->getReference('type_congé_sans_solde',RequestType::class));
+        $request4->setCollaborator($this->getReference('person_west',Person::class));
         $request4->setStartAt(new \DateTimeImmutable('2025-03-20 08:00:00'));
         $request4->setEndAt(new \DateTimeImmutable('2025-03-21 18:00:00'));
         $request4->setCreatedAt(new \DateTimeImmutable('2025-03-11 16:23:10'));
@@ -72,8 +72,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Alice Johnson
         $request5 = new Request();
-        $request5->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé maternité']));
-        $request5->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Johnson']));
+        $request5->setRequestType($this->getReference( 'type_congé_maternité', RequestType::class));
+        $request5->setCollaborator($this->getReference('person_johnson', Person::class));
         $request5->setStartAt(new \DateTimeImmutable('2025-04-01 08:00:00'));
         $request5->setEndAt(new \DateTimeImmutable('2025-08-08 18:00:00'));
         $request5->setCreatedAt(new \DateTimeImmutable('2025-02-15 08:56:10'));
@@ -86,8 +86,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Eva Green
         $request6 = new Request();
-        $request6->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé payé']));
-        $request6->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Green']));
+        $request6->setRequestType($this->getReference('type_congé_payé', RequestType::class));
+        $request6->setCollaborator($this->getReference('person_green',Person::class));
         $request6->setStartAt(new \DateTimeImmutable('2025-03-17 08:00:00'));
         $request6->setEndAt(new \DateTimeImmutable('2025-03-21 18:00:00'));
         $request6->setCreatedAt(new \DateTimeImmutable('2025-03-03 08:50:10'));
@@ -100,8 +100,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Eva Green
         $request7 = new Request();
-        $request7->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé payé']));
-        $request7->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Green']));
+        $request7->setRequestType($this->getReference('type_congé_payé', RequestType::class));
+        $request7->setCollaborator($this->getReference('person_green',Person::class));
         $request7->setStartAt(new \DateTimeImmutable('2025-04-07 08:00:00'));
         $request7->setEndAt(new \DateTimeImmutable('2025-04-11 18:00:00'));
         $request7->setCreatedAt(new \DateTimeImmutable('2025-03-03 08:52:58'));
@@ -114,8 +114,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Tom Phillips
         $request8 = new Request();
-        $request8->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé paternité']));
-        $request8->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Phillips']));
+        $request8->setRequestType($this->getReference('type_congé_paternité',RequestType::class));
+        $request8->setCollaborator($this->getReference('person_phillips',Person::class));
         $request8->setStartAt(new \DateTimeImmutable('2025-06-16 08:00:00'));
         $request8->setEndAt(new \DateTimeImmutable('2025-06-27 18:00:00'));
         $request8->setCreatedAt(new \DateTimeImmutable('2025-03-30 18:28:09'));
@@ -128,8 +128,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Sam Harris
         $request9 = new Request();
-        $request9->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé payé']));
-        $request9->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Harris']));
+        $request9->setRequestType($this->getReference('type_congé_payé', RequestType::class));
+        $request9->setCollaborator($this->getReference('person_harris',Person::class));
         $request9->setStartAt(new \DateTimeImmutable('2025-07-21 08:00:00'));
         $request9->setEndAt(new \DateTimeImmutable('2025-08-08 18:00:00'));
         $request9->setCreatedAt(new \DateTimeImmutable('2025-04-02 09:40:37'));
@@ -142,8 +142,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
 
         // Création d'une demande de congé pour Liam Cooper
         $request10 = new Request();
-        $request10->setRequestType($manager->getRepository(RequestType::class)->findOneBy(['name' => 'Congé payé']));
-        $request10->setCollaborator($manager->getRepository(Person::class)->findOneBy(['lastName' => 'Cooper']));
+        $request10->setRequestType($this->getReference('type_congé_payé', RequestType::class));
+        $request10->setCollaborator($this->getReference( 'person_cooper',Person::class));
         $request10->setStartAt(new \DateTimeImmutable('2025-08-11 08:00:00'));
         $request10->setEndAt(new \DateTimeImmutable('2025-08-29 18:00:00'));
         $request10->setCreatedAt(new \DateTimeImmutable('2025-04-10 19:56:27'));

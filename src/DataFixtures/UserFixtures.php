@@ -27,7 +27,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $managerUser->setEnabled(true);
     $managerUser->setCreatedAt(new \DateTimeImmutable());
     $managerUser->setRole('ROLE_MANAGER');
-    $managerUser->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jane', 'lastName' => 'Smith']));
+    $managerUser->setPerson($this->getReference('person_smith', Person::class));
     $manager->persist($managerUser);
     
 
@@ -38,7 +38,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user->setEnabled(true);
     $user->setCreatedAt(new \DateTimeImmutable());
     $user->setRole('ROLE_COLLABORATOR');
-    $user->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'John', 'lastName' => 'Doe']));
+    $user->setPerson($this->getReference( 'person_doe', Person::class));
     $manager->persist($user);
 
     // Create a user for Paul West
@@ -48,7 +48,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user1->setEnabled(true);
     $user1->setCreatedAt(new \DateTimeImmutable());
     $user1->setRole('ROLE_COLLABORATOR');
-    $user1->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Paul', 'lastName' => 'West']));
+    $user1->setPerson($this->getReference('person_west',Person::class));
     $manager->persist($user1);
 
     // Create a user for Bob Dylan
@@ -58,7 +58,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user2->setEnabled(true);
     $user2->setCreatedAt(new \DateTimeImmutable());
     $user2->setRole('ROLE_MANAGER');
-    $user2->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Bob', 'lastName' => 'Dylan']));
+    $user2->setPerson($this->getReference('person_dylan',Person::class));
     $manager->persist($user2);
 
     // Create a user for Alice Johnson
@@ -68,7 +68,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user3->setEnabled(true);
     $user3->setCreatedAt(new \DateTimeImmutable());
     $user3->setRole('ROLE_COLLABORATOR');
-    $user3->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Alice', 'lastName' => 'Johnson']));
+    $user3->setPerson($this->getReference('person_johnson', Person::class));
     $manager->persist($user3);
 
     // Create a user for Eva Green
@@ -78,7 +78,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user4->setEnabled(true);
     $user4->setCreatedAt(new \DateTimeImmutable());
     $user4->setRole('ROLE_COLLABORATOR');
-    $user4->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Eva', 'lastName' => 'Green']));
+    $user4->setPerson($this->getReference('person_green',Person::class));
     $manager->persist($user4);
 
     // Create a user for Jack Black
@@ -88,7 +88,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user5->setEnabled(true);
     $user5->setCreatedAt(new \DateTimeImmutable());
     $user5->setRole('ROLE_MANAGER');
-    $user5->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Jack', 'lastName' => 'Black']));
+    $user5->setPerson($this->getReference('person_black',Person::class));
     $manager->persist($user5);
 
     // Create a user for Tom Phillips
@@ -98,7 +98,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user6->setEnabled(true);
     $user6->setCreatedAt(new \DateTimeImmutable());
     $user6->setRole('ROLE_COLLABORATOR');
-    $user6->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Tom', 'lastName' => 'Phillips']));
+    $user6->setPerson($this->getReference('person_phillips',Person::class));
     $manager->persist($user6);
 
     // Create a user for George Hanks
@@ -108,7 +108,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user7->setEnabled(true);
     $user7->setCreatedAt(new \DateTimeImmutable());
     $user7->setRole('ROLE_MANAGER');
-    $user7->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'George', 'lastName' => 'Hanks']));
+    $user7->setPerson($this->getReference('person_hanks',Person::class));
     $manager->persist($user7);
 
     // Create a user for Sam Harris
@@ -118,7 +118,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user8->setEnabled(true);
     $user8->setCreatedAt(new \DateTimeImmutable());
     $user8->setRole('ROLE_COLLABORATOR');
-    $user8->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Sam', 'lastName' => 'Harris']));
+    $user8->setPerson($this->getReference('person_harris',Person::class));
     $manager->persist($user8);
 
     // Create a user for Liam Cooper
@@ -128,7 +128,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     $user9->setEnabled(true);
     $user9->setCreatedAt(new \DateTimeImmutable());
     $user9->setRole('ROLE_COLLABORATOR');
-    $user9->setPerson($manager->getRepository(Person::class)->findOneBy(['firstName' => 'Liam', 'lastName' => 'Cooper']));
+    $user9->setPerson($this->getReference( 'person_cooper',Person::class));
     $manager->persist($user9);
 
     $manager->flush();

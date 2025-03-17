@@ -15,6 +15,8 @@ class RequestTypeFixtures extends Fixture
             $requestType = new RequestType();
             $requestType->setName($typeName);
             $manager->persist($requestType);
+
+            $this->addReference('type_' . strtolower(str_replace(' ', '_', $typeName)), $requestType);
         }
 
         $manager->flush();
