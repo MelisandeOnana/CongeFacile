@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -15,22 +16,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "L'email ne peut pas être vide.")]
+    #[Assert\Email(message: "L'email '{{ value }}' n'est pas un email valide.")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     private ?string $password = null;
 
     #[ORM\Column]
     private ?bool $enabled = true;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "La date de création ne peut pas être vide.")]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le rôle ne peut pas être vide.")]
     private ?string $role = null;
 
     #[ORM\OneToOne(targetEntity: Person::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "La personne ne peut pas être vide.")]
     private ?Person $person = null;
 
     public function getId(): ?int

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 class Person
@@ -14,9 +15,11 @@ class Person
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de famille ne peut pas être vide.")]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
     private ?string $firstName = null;
 
     #[ORM\ManyToOne(targetEntity: self::class)]
@@ -25,10 +28,12 @@ class Person
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "Le département ne peut pas être vide.")]
     private ?Department $department = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank(message: "Le poste ne peut pas être vide.")]
     private ?Position $position = null;
 
     #[ORM\Column]
