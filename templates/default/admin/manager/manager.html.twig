@@ -9,6 +9,13 @@
         Ajouter un manager
     </a>
 </div>
+{% for label, messages in app.flashes %}
+<div class=" mt-6 alert alert-{{ label }}">
+    {% for message in messages %}
+        <p class="font-bold" >{{ message }}</p>
+    {% endfor %}
+</div>
+{% endfor %}
 <div class="max-w-[1000px]">
     <table class="min-w-full bg-white border border-gray-300">
     <!-- En-tête des colonnes -->

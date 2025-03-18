@@ -233,7 +233,7 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('team_index');
         }
 
-        return $this->render('default/admin/team/memberInformations.html.twig', [
+        return $this->render('default/admin/team/collaborator_show.html.twig', [
             'userForm' => $userForm->createView(),
             'member' => $person,
             'user' => $user,

@@ -21,18 +21,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le mot de passe ne peut pas être vide.")]
     private ?string $password = null;
 
     #[ORM\Column]
     private ?bool $enabled = true;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "La date de création ne peut pas être vide.")]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le rôle ne peut pas être vide.")]
     private ?string $role = null;
 
     #[ORM\OneToOne(targetEntity: Person::class, cascade: ["persist"])]
