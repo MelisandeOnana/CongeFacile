@@ -125,8 +125,7 @@
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.position.name }}</td>
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ vacationDays[user.id] }} jours</td>
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">
-                    <a href="" class="bg-gray-100 text-gray-700 font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 w-[109px] h-[40px] flex items-center justify-center">Détails</a>
-                </td>
+                <a href="{{ path('memberInformations', {'id': user.id}) }}" class="bg-gray-100 text-gray-700 font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 w-[109px] h-[40px] flex items-center justify-center">Détails</a></td>
             </tr>
             {% endfor %}
         </tbody>

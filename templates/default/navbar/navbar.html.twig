@@ -47,7 +47,7 @@
                 <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/department' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
             </div>
               <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/manager' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Managers</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/manager' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('managers')}}">Managers</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
                 <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/position' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('positions')}}">Postes</a>
