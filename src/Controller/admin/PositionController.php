@@ -126,6 +126,7 @@ class PositionController extends AbstractController
             } else {
                 $entityManager->persist($position);
                 $entityManager->flush();
+                $this->addFlash('success', 'Le poste a été créé avec succès.');
                 return $this->redirectToRoute('positions');
             }
         }
