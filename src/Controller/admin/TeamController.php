@@ -4,8 +4,9 @@ namespace App\Controller\admin;
 
 use App\Entity\User;
 use App\Entity\Person;
-use App\Entity\Department;
 use App\Entity\Position;
+use App\Form\DeleteType;
+use App\Form\UserInformationsType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -156,6 +157,86 @@ class TeamController extends AbstractController
 
         return $this->render('default/admin/team/new_collaborator.html.twig', [
             'userForm' => $userForm->createView(),
+        ]);
+    }
+
+    #[Route('/team/details/{id}', name: 'memberInformations')]
+    public function memberUpdate(Request $request, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $user = $userRepository->find($id);
+
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
+        }
+
+        $person = $user->getPerson();
+
+        // Créer le formulaire avec l'utilisateur récupéré
+        $userForm = $this->createForm(UserInformationsType::class, $user);
+        $userForm->handleRequest($request);
+        $delete = $request->query->get('delete');
+        $formDelete = $this->createForm(DeleteType::class);
+        $formDelete->handleRequest($request);
+
+
+        if ($delete == 'true') {
+            if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+                $entityManager->remove($person);
+                $entityManager->remove($user);
+                $entityManager->flush();
+                return $this->redirectToRoute('team_index');
+            }
+        }
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+        
+            // Définir une valeur par défaut pour le champ position_id
+            $position = $userForm->get('position')->getData();
+            if ($position) {
+                $person->setPosition($position);
+            } else {
+                // Définir une valeur par défaut si nécessaire
+                $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
+                $person->setPosition($defaultPosition);
+            }
+        
+            // Définir le département de la personne
+            $department = $userForm->get('department')->getData();
+            if ($department) {
+                $person->setDepartment($department);
+            } else {
+                // Ajouter un message de débogage si le département n'est pas trouvé
+                $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
+            }
+
+            // Définir une valeur par défaut pour le champ enabled
+            $user->setEnabled($userForm->get('enabled')->getData());
+        
+            // Hash the password
+            $newPassword = $userForm->get('newPassword')->getData();
+            if ($newPassword) {
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $newPassword
+                );
+                $user->setPassword($hashedPassword);
+            }
+        
+            $entityManager->persist($person); // Persister d'abord la personne
+            $entityManager->persist($user);   // Puis persister l'utilisateur
+        
+            $entityManager->flush();
+            // Ajouter un message flash
+            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+        
+            return $this->redirectToRoute('team_index');
+        }
+
+        return $this->render('default/admin/team/memberInformations.html.twig', [
+            'userForm' => $userForm->createView(),
+            'member' => $person,
+            'user' => $user,
         ]);
     }
 }

@@ -17,7 +17,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserType extends AbstractType
+class ManagerInformationsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -49,27 +49,16 @@ class UserType extends AbstractType
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'mapped' => false,
                 'placeholder' => 'Choisir un département', 
+                'data' => $options['data']->getPerson()->getDepartment(), // On récupère le département du manager
                 'attr' => [
                     'id' => 'department',
-                    'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                ], 
-            ])
-            ->add('position', EntityType::class, [
-                'class' => Position::class,
-                'choice_label' => 'name',
-                'label' => 'Poste - champ obligatoire',
-                'required' => true,
-                'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
-                'mapped' => false,
-                'placeholder' => 'Choisir un poste', 
-                'attr' => [
                     'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
-                'required' => true,
+                'required' => false,
                 'mapped' => false,
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
@@ -78,7 +67,7 @@ class UserType extends AbstractType
             ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirmation de mot de passe',
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
-                'required' => true,
+                'required' => false,
                 'mapped' => false,
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',

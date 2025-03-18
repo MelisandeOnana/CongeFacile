@@ -132,6 +132,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
+    public function getDepartment(): ?Department
+    {
+        return $this->person->getDepartment();
+    }
+
+    public function setDepartment(?Department $newDepartment): static
+    {
+        $this->person->setDepartment($newDepartment);
+        return $this;
+    }
+
+    public function getPosition() : ?Position
+    {
+        return $this->person->getPosition();
+    }
+
+    public function setPosition(?Position $newPosition): static
+    {
+        $this->person->setPosition($newPosition);
+        return $this;
+    }
+
+    public function getManager(): ?Person
+    {
+        return $this->person->getManager();
+    }
+
+    public function setManager(?Person $newPerson): static
+    {
+        $this->person->setManager($newPerson);
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
