@@ -57,7 +57,7 @@ class PositionController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/position/position.html.twig', [
+        return $this->render('default/admin/position/index.html.twig', [
             'positions' => $PostionsPagination,
             'positionCounts' => $positionCounts,
         ]);

@@ -13,10 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\DeleteType;
-use App\Form\ManagerInformationsType;
 use App\Form\ManagerType;
-use App\Form\UserType;
 use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -65,7 +62,7 @@ class ManagerController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/manager/manager.html.twig', [
+        return $this->render('default/admin/manager/index.html.twig', [
             'managers' => $ManagersPagination,
             'departments' => $departments,
         ]);
@@ -84,7 +81,7 @@ class ManagerController extends AbstractController
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
-        $userForm = $this->createForm(ManagerInformationsType::class, $manager);
+        $userForm = $this->createForm(ManagerType::class, $manager);
 
         $criteria->andWhere(Criteria::expr()->isNull('manager'));
         $criteria->andWhere(Criteria::expr()->neq('id', $manager->getId()));

@@ -82,17 +82,11 @@ class ProfileController extends AbstractController
         }
 
         // Rediriger vers la vue appropriée en fonction du rôle
-        if ($isManager) {
-            return $this->render('default/profile/manager/manager.html.twig', [
-                'form' => $form->createView(),
-                'resetPasswordForm' => $resetPasswordForm->createView(),
-            ]);
-        } else {
-            return $this->render('default/profile/collaborator/collaborator.html.twig', [
-                'form' => $form->createView(),
-                'resetPasswordForm' => $resetPasswordForm->createView(),
-            ]);
-        }
+        return $this->render('default/profile/profile.html.twig', [
+            'form' => $form->createView(),
+            'resetPasswordForm' => $resetPasswordForm->createView(),
+            'isManager' => $isManager,
+        ]);
     }
 
     #[Route('/preferences', name: 'preferences')]

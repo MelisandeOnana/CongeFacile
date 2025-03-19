@@ -33,24 +33,24 @@
         <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') == 'preferences' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('preferences')}}">Mes préférences</a>
     </div>
     {% if is_granted('ROLE_MANAGER') %}
-        <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer {% if app.request.pathinfo starts with '/admin' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}" onclick="toggleLinks('admin-links')">
+        <div class="h-[44px] mt-[10px] w-full flex items-center cursor-pointer {% if app.request.pathinfo starts with '/manager' or app.request.pathinfo starts with '/position' or app.request.pathinfo starts with '/request-type' or app.request.pathinfo starts with '/department' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}" onclick="toggleLinks('admin-links')">
             <p class="pl-[2rem] pr-4 text-base block w-[80%] text-[#637381]">Administration</p>
             <svg class="w-4 h-4 ml-2 text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
         </div>
-        <div id="admin-links" class="admin-links hidden">
+        <div id="admin-links" class="admin-links {% if app.request.pathinfo starts with '/manager' or app.request.pathinfo starts with '/position' or app.request.pathinfo starts with '/request-type' or app.request.pathinfo starts with '/department' %}block{% else %}hidden{% endif %}">
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/request-type' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('request_types')}}">Types de demandes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/request-type' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('request_types')}}">Types de demandes</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/department' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
-            </div>
-              <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/manager' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('managers')}}">Managers</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/department' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="">Directions/Services</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
-                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/admin/position' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('positions')}}">Postes</a>
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/manager' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('managers')}}">Managers</a>
+            </div>
+            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center">
+                <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.pathinfo starts with '/position' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{path('positions')}}">Postes</a>
             </div>
         </div>
     {% endif %}
