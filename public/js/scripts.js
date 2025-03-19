@@ -41,29 +41,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('filter_email').value.toLowerCase();
         const position = document.getElementById('filter_position').value.toLowerCase();
         const vacationDays = document.getElementById('filter_vacationDays').value.toLowerCase();
-
-        // Vérifier si tous les champs de filtre sont vides
-        if (!lastName && !firstName && !email && !position && !vacationDays) {
-            // Si tous les champs sont vides, afficher toutes les lignes et supprimer le message "Aucun résultat trouvé"
-            document.querySelectorAll('tbody tr').forEach(function(row) {
-                row.style.display = '';
-            });
-            const noResultsRow = document.getElementById('no-results-row');
-            if (noResultsRow) {
-                noResultsRow.remove();
-            }
-            return;
-        }
-
+    
         let hasResults = false;
-
+    
         document.querySelectorAll('tbody tr').forEach(function(row) {
-            const rowLastName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
-            const rowFirstName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-            const rowEmail = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
-            const rowPosition = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
-            const rowVacationDays = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+            if (row.id === 'no-results-row') {
+                return;
+            }
 
+            const rowLastName = row.getAttribute('data-lastname').toLowerCase();
+            const rowFirstName = row.getAttribute('data-firstname').toLowerCase();
+            const rowEmail = row.getAttribute('data-email').toLowerCase();
+            const rowPosition = row.getAttribute('data-position').toLowerCase();
+            const rowVacationDays = row.getAttribute('data-vacationdays').toLowerCase();
+    
             if (rowLastName.includes(lastName) && rowFirstName.includes(firstName) && rowEmail.includes(email) && rowPosition.includes(position) && rowVacationDays.includes(vacationDays)) {
                 row.style.display = '';
                 hasResults = true;
@@ -71,26 +62,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 row.style.display = 'none';
             }
         });
-
+    
         const noResultsRow = document.getElementById('no-results-row');
         if (!hasResults) {
-            if (!noResultsRow) {
-                const tbody = document.querySelector('tbody');
-                const tr = document.createElement('tr');
-                tr.id = 'no-results-row';
-                const td = document.createElement('td');
-                td.colSpan = 6;
-                td.className = 'text-center text-gray-700';
-                td.textContent = 'Aucun résultat trouvé';
-                tr.appendChild(td);
-                tbody.appendChild(tr);
-            }
+            noResultsRow.style.display = '';
         } else {
-            if (noResultsRow) {
-                noResultsRow.remove();
-            }
+            noResultsRow.style.display = 'none';
         }
     }
+
+    // Initial call to updateResults to handle the case when the page loads with filters already set
+    updateResults();
 
     const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
 
