@@ -34,9 +34,11 @@
                 {{ form_row(form.lastName) }}
             </div>
         </div>
-        <div class="mt-6">
-            {{ form_row(form.department) }}
-        </div>
+        {% if is_granted('ROLE_MANAGER') %}
+            <div class="mt-6">
+                {{ form_row(form.department) }}
+            </div>
+        {% endif %}
     {{ form_end(form) }}
 
     <!-- Formulaire de changement de mot de passe -->
@@ -79,7 +81,7 @@
         </div>
         <!-- Affichage des messages flash -->
         {% for label, messages in app.flashes %}
-            <div class="alert alert-{{ label }}">
+            <div class="mt-5 alert alert-{{ label }}">
                 {% for message in messages %}
                     <p>{{ message }}</p>
                 {% endfor %}

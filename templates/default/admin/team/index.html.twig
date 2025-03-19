@@ -118,16 +118,17 @@
         </thead>
         <tbody>
             {% for user in pagination %}
-            <tr class="hover:bg-gray-50">
+            <tr class="hover:bg-gray-50" data-lastname="{{ user.person.lastName }}" data-firstname="{{ user.person.firstName }}" data-email="{{ user.email }}" data-position="{{ user.person.position.name }}" data-vacationdays="{{ vacationDays[user.id] }}">
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.lastName }}</td>
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.firstName }}</td>
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.email }}</td>
                 <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ user.person.position.name }}</td>
-                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ vacationDays[user.id] }} jours</td>
-                <td class="px-6 py-4 text-sm text-gray-700 border-b">
-                <a href="{{ path('memberInformations', {'id': user.id}) }}" class="bg-gray-100 text-gray-700 font-medium rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 w-[109px] h-[40px] flex items-center justify-center">Détails</a></td>
+                <td class="px-6 py-4 text-sm text-gray-700 border-b">{{ vacationDays[user.id] }}</td>
             </tr>
             {% endfor %}
+            <tr id="no-results-row" style="display: none;">
+                <td colspan="6" class="text-center text-gray-700">Aucun résultat trouvé</td>
+            </tr>
         </tbody>
     </table>
 

@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Entity\Person;
 use App\Entity\Position;
 use App\Form\DeleteType;
-use App\Form\UserInformationsType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -155,7 +154,7 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('team_index');
         }
 
-        return $this->render('default/admin/team/new_collaborator.html.twig', [
+        return $this->render('default/admin/team/collaborator_new.html.twig', [
             'userForm' => $userForm->createView(),
         ]);
     }
@@ -173,7 +172,7 @@ class TeamController extends AbstractController
         $person = $user->getPerson();
 
         // Créer le formulaire avec l'utilisateur récupéré
-        $userForm = $this->createForm(UserInformationsType::class, $user);
+        $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
         $delete = $request->query->get('delete');
         $formDelete = $this->createForm(DeleteType::class);
@@ -233,7 +232,7 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('team_index');
         }
 
-        return $this->render('default/admin/team/memberInformations.html.twig', [
+        return $this->render('default/admin/team/collaborator_show.html.twig', [
             'userForm' => $userForm->createView(),
             'member' => $person,
             'user' => $user,

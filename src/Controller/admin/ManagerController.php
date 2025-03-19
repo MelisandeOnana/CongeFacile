@@ -13,14 +13,12 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\DeleteType;
-use App\Form\ManagerInformationsType;
 use App\Form\ManagerType;
-use App\Form\UserType;
 use App\Repository\DepartmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Form\FormError;
 
 #[IsGranted('ROLE_MANAGER')]
 class ManagerController extends AbstractController
@@ -64,7 +62,7 @@ class ManagerController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/manager/manager.html.twig', [
+        return $this->render('default/admin/manager/index.html.twig', [
             'managers' => $ManagersPagination,
             'departments' => $departments,
         ]);
@@ -83,7 +81,7 @@ class ManagerController extends AbstractController
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
-        $userForm = $this->createForm(ManagerInformationsType::class, $manager);
+        $userForm = $this->createForm(ManagerType::class, $manager);
 
         $criteria->andWhere(Criteria::expr()->isNull('manager'));
         $criteria->andWhere(Criteria::expr()->neq('id', $manager->getId()));
@@ -136,7 +134,7 @@ class ManagerController extends AbstractController
     }
 
     #[Route('/manager/new', name: 'manager_new')]
-    public function new(HttpRequest $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository): Response
+    public function new(HttpRequest $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository, DepartmentRepository $departmentRepository, PositionRepository $positionRepository): Response
     {
         $criteria = Criteria::create();
         $departmentIsallowed = true;
@@ -156,25 +154,31 @@ class ManagerController extends AbstractController
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // Définir le département de la personne
             $department = $userForm->get('department')->getData();
-
-            foreach($managers as $theManager){
-                if($theManager->getDepartment()->getName() == $department->getName()){
-                    $this->addFlash('error', 'Le département sélectionné est deja attribué');
-                    $departmentIsallowed = false;
-                }
+        
+            // Vérifier si le département est déjà attribué
+            $existingManager = $personRepository->findOneBy(['department' => $department]);
+            if ($existingManager) {
+                $this->addFlash('error', 'Le département sélectionné est déjà attribué.');
+                return $this->redirectToRoute('manager_new'); // Rediriger vers la page de création avec le message d'erreur
             }
-            if ($department && $departmentIsallowed) {
-                $manager->getPerson()->setDepartment($department);
+        
+            // Définir la position par défaut pour un manager
+            $managerPosition = $positionRepository->findOneBy(['name' => 'Manager']);
+            if ($managerPosition) {
+                $manager->setPosition($managerPosition);
             } else {
-                $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
+                $userForm->get('position')->addError(new FormError('La position "manager" n\'existe pas.'));
             }
+        
+            // Définir le rôle par défaut pour un manager
+            $manager->setRole('ROLE_MANAGER');
         
             // Définir une valeur par défaut pour le champ enabled
             $manager->setEnabled(true);
-
+        
             // Définir une valeur par défaut pour le champ created_at
             $manager->setCreatedAt(new \DateTimeImmutable());
-
+        
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -194,8 +198,6 @@ class ManagerController extends AbstractController
         
             return $this->redirectToRoute('managers');
         }
-
-
 
         return $this->render('default/admin/manager/manager_new.html.twig', [
             'userForm' => $userForm,
