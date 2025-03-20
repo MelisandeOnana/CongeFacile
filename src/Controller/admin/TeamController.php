@@ -159,7 +159,7 @@ class TeamController extends AbstractController
         ]);
     }
 
-    #[Route('/team/details/{id}', name: 'memberInformations')]
+    #[Route('/team/details/{id}', name: 'team_details')]
     public function memberUpdate(Request $request, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = $userRepository->find($id);
