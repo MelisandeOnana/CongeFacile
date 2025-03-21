@@ -164,7 +164,7 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('login');
         }
         $personManager = $userManager->getPerson();
-        
+
         $user = $userRepository->find($id);
 
         // Vérifier si l'utilisateur existe
@@ -224,7 +224,7 @@ class TeamController extends AbstractController
         
             $entityManager->flush();
             // Ajouter un message flash
-            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+            $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
         
             return $this->redirectToRoute('team_index');
         }
