@@ -233,6 +233,7 @@ class TeamController extends AbstractController
             'userForm' => $userForm->createView(),
             'member' => $person,
             'user' => $user,
+            'formDelete' => $formDelete
         ]);
     }
 }
