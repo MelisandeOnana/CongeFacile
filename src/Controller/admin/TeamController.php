@@ -7,6 +7,7 @@ use App\Entity\Person;
 use App\Entity\Position;
 use App\Form\DeleteType;
 use App\Form\UserType;
+use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -84,9 +85,19 @@ class TeamController extends AbstractController
     #[Route('/team/new', name: 'team_new')]
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        $userManager = $this->getUser();
+        if (!$userManager instanceof User) {
+            return $this->redirectToRoute('login');
+        }
+        $personManager = $userManager->getPerson();
+    
+
         $person = new Person();
         $user = new User();
-        $user->setPerson($person); // Associer la personne à l'utilisateur
+        $user->setPerson($person);
+
+        $user->setManager($personManager);
+        $user->getPerson()->setDepartment($personManager->getDepartment());
 
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
@@ -107,27 +118,7 @@ class TeamController extends AbstractController
                 $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
                 $person->setPosition($defaultPosition);
             }
-        
-            // Définir le département de la personne
-            $department = $userForm->get('department')->getData();
-            if ($department) {
-                $person->setDepartment($department);
-            } else {
-                // Ajouter un message de débogage si le département n'est pas trouvé
-                $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
-            }
-        
-            // Définir le rôle et le manager en fonction de la position
-            
-                $user->setRole('ROLE_COLLABORATOR');
-                // Trouver le manager du département et l'affilier
-                $departmentManager = $entityManager->getRepository(Person::class)->findOneBy([
-                    'department' => $person->getDepartment()
-                    , 'manager' => null
-                ]);
-                $person->setManager($departmentManager);
-            
-        
+                  
             // Définir une valeur par défaut pour le champ enabled
             $user->setEnabled(true);
         
@@ -144,6 +135,12 @@ class TeamController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
         
+            
+            $user->setManager($personManager);
+            $user->getPerson()->setDepartment($personManager->getDepartment());
+            $user->setPerson($person);
+            $user->setRole('ROLE_COLLABORATOR');
+
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
         
@@ -162,6 +159,12 @@ class TeamController extends AbstractController
     #[Route('/team/details/{id}', name: 'team_details')]
     public function memberUpdate(Request $request, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
+        $userManager = $this->getUser();
+        if (!$userManager instanceof User) {
+            return $this->redirectToRoute('login');
+        }
+        $personManager = $userManager->getPerson();
+
         $user = $userRepository->find($id);
 
         // Vérifier si l'utilisateur existe
@@ -199,15 +202,6 @@ class TeamController extends AbstractController
                 $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
                 $person->setPosition($defaultPosition);
             }
-        
-            // Définir le département de la personne
-            $department = $userForm->get('department')->getData();
-            if ($department) {
-                $person->setDepartment($department);
-            } else {
-                // Ajouter un message de débogage si le département n'est pas trouvé
-                $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
-            }
 
             // Définir une valeur par défaut pour le champ enabled
             $user->setEnabled($userForm->get('enabled')->getData());
@@ -221,13 +215,16 @@ class TeamController extends AbstractController
                 );
                 $user->setPassword($hashedPassword);
             }
-        
+
+            $user->setManager($personManager);
+            $user->getPerson()->setDepartment($personManager->getDepartment());
+            $user->setPerson($person);
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
         
             $entityManager->flush();
             // Ajouter un message flash
-            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+            $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
         
             return $this->redirectToRoute('team_index');
         }
@@ -236,6 +233,7 @@ class TeamController extends AbstractController
             'userForm' => $userForm->createView(),
             'member' => $person,
             'user' => $user,
+            'formDelete' => $formDelete
         ]);
     }
 }
