@@ -3,6 +3,16 @@
 {% block title %}Ajouter un membre{% endblock %}
 
 {% block body %}
+    <!-- retire l'option manager de position  pour evite la creation de manager -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let select = document.getElementById("user_position");
+            let optionToRemove = select.querySelector('option[value="7"]');
+            if (optionToRemove) {
+                optionToRemove.remove();
+            }
+    });
+    </script>
     <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Ajouter un nouveau membre</h1>
 
     {{ form_start(userForm) }}
@@ -31,8 +41,7 @@
         </div>
         <div class="flex space-x-4 relative">
             <div class="relative">
-                {{ form_row(userForm.department) }}
-                <svg class="w-4 h-4 absolute top-[50%] right-4 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    {{ form_row(userForm.department, {'attr': {'disabled': 'disabled','class': 'bg-[#F3F4F6] appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]'}}) }}                <svg class="w-4 h-4 absolute top-[50%] right-4 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </div>
@@ -41,6 +50,11 @@
                 <svg class="w-4 h-4 absolute top-[50%] right-4 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
+            </div>
+        </div>
+        <div class="flex space-x-4 relative">
+            <div class="relative">
+                {{ form_row(userForm.manager) }}
             </div>
         </div>
         <div class="flex space-x-4 relative">
@@ -63,6 +77,7 @@
             <a href="{{ path('team_index') }}" class="bg-gray-700 text-white px-4 py-2 rounded">Retour</a>
             <button type="submit" class="bg-[#004C6C] text-white px-4 py-2 rounded ml-[25px]">Ajouter</button>
         </div>
+
     {{ form_end(userForm) }}
 
 {% endblock %}
