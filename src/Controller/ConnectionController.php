@@ -36,7 +36,11 @@ class ConnectionController extends AbstractController
         // Personnaliser le message d'erreur
         $errorMessage = null;
         if ($error) {
-           $errorMessage = 'Identifiants invalides. Veuillez vérifier votre adresse e-mail et votre mot de passe.';
+            if ($error->getMessageKey() === 'Disabled account.') {
+                $errorMessage = 'Ce compte a été désactivé.';
+            } else {
+                $errorMessage = 'Identifiants invalides. Veuillez vérifier votre adresse e-mail et votre mot de passe.';
+            }
         }
 
         return $this->render('security/login.html.twig', [

@@ -9,11 +9,6 @@
             Plus besoin d’échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer<br>
             vos absences en toute transparence et simplicité. Connectez-vous ci-dessous pour accéder à votre espace.</p>
         <h2 class="font-[Epilogue] text-[#1B3168] text-[24px] font-bold mt-4">Connectez-vous</h2>
-
-        {% if error %}
-            <div class="alert alert-danger text-red-500">{{ error }}</div>
-        {% endif %}
-
         <form action="{{ path('login') }}" method="post" class="space-y-4 font-[sans-serif] text-[#333] max-w-md mt-4">
             <div class="relative flex flex-col">
                 <label for="email" class="block text-sm font-bold text-[#212B36] mb-2">Adresse Mail</label>
@@ -52,6 +47,9 @@
                     </svg>
                 </div>
             </div>
+            {% if error %}
+                <div class="alert alert-danger text-red-500">{{ error }}</div>
+            {% endif %}
             <button type="submit" class="bg-[#1B3168] text-white text-[16px] font-[Inter] font-[500] px-4 py-2 rounded w-[215px] h-[50px]">Connexion au portail</button>
         </form>
         <p class="text-[16px] mt-[1.5rem] font-[400] font-[Epilogue]">Vous avez oublié votre mot de passe ? <a class="text-[#004C6C] font-bold" href="{{ path('forgot_password') }}">Cliquez ici</a> pour le réinitialiser.</p>
