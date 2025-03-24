@@ -62,7 +62,7 @@ class ManagerController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/manager/index.html.twig', [
+        return $this->render('admin/manager/index.html.twig', [
             'managers' => $ManagersPagination,
             'departments' => $departments,
         ]);
@@ -127,7 +127,7 @@ class ManagerController extends AbstractController
 
 
 
-        return $this->render('default/admin/manager/manager_show.html.twig', [
+        return $this->render('admin/manager/manager_show.html.twig', [
             'manager' => $manager,
             'userForm' => $userForm,
         ]);
@@ -199,7 +199,7 @@ class ManagerController extends AbstractController
             return $this->redirectToRoute('managers');
         }
 
-        return $this->render('default/admin/manager/manager_new.html.twig', [
+        return $this->render('admin/manager/manager_new.html.twig', [
             'userForm' => $userForm,
         ]);
     }
