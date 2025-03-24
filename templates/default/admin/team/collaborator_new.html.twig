@@ -7,11 +7,14 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let select = document.getElementById("user_position");
-            let optionToRemove = select.querySelector('option[value="7"]');
-            if (optionToRemove) {
-                optionToRemove.remove();
-            }
-    });
+            let options = select.querySelectorAll('option');
+
+            options.forEach(option => {
+                if (option.textContent.trim() === "Manager") {
+                    option.remove();
+                }
+            });
+        });
     </script>
     <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Ajouter un nouveau membre</h1>
 
