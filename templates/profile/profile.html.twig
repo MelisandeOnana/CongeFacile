@@ -45,7 +45,9 @@
             {% endif %}
         </div>
         <div class="mt-6">
-           {{ form_row(form.manager) }}
+            {% if form.manager is defined %}
+                {{ form_row(form.manager) }}
+            {% endif %}
         </div>
     {{ form_end(form) }}
 

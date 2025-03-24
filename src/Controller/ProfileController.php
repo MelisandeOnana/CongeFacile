@@ -82,7 +82,7 @@ class ProfileController extends AbstractController
         }
 
         // Rediriger vers la vue appropriée en fonction du rôle
-        return $this->render('profile/index.html.twig', [
+        return $this->render('profile/profile.html.twig', [
             'form' => $form->createView(),
             'resetPasswordForm' => $resetPasswordForm->createView(),
             'isManager' => $isManager,
