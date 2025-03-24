@@ -170,15 +170,6 @@ class ManagerController extends AbstractController
                 $userForm->get('position')->addError(new FormError('La position "manager" n\'existe pas.'));
             }
         
-            // Définir le rôle par défaut pour un manager
-            $manager->setRole('ROLE_MANAGER');
-        
-            // Définir une valeur par défaut pour le champ enabled
-            $manager->setEnabled(true);
-        
-            // Définir une valeur par défaut pour le champ created_at
-            $manager->setCreatedAt(new \DateTimeImmutable());
-        
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
