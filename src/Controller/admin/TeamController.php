@@ -34,12 +34,7 @@ class TeamController extends AbstractController
         $manager = $user->getPerson();
         $department = $manager->getDepartment(); // Récupérer le département du manager
 
-        $queryBuilder = $userRepository->createQueryBuilder('user')
-            ->join('user.person', 'person')
-            ->where('person.manager = :manager')
-            ->andWhere('person.department = :department') // Filtrer par département
-            ->setParameter('manager', $manager)
-            ->setParameter('department', $department);
+        $queryBuilder = $userRepository->findByManagerDepartment($manager,$department);
 
         // Ajout des filtres
         $filters = [

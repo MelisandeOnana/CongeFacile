@@ -26,6 +26,15 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findByManagerDepartment($manager, $department){
+        return $this->createQueryBuilder('user') 
+            ->join('user.person', 'person') 
+            ->where('person.manager = :manager') 
+            ->andWhere('person.department = :department')
+            ->setParameter('manager', $manager) 
+            ->setParameter('department', $department); 
+    }
+
     public function findByManager($manager)
     {
         return $this->createQueryBuilder('u')
