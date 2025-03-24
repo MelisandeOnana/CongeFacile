@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\ProfileType;
 use App\Form\PreferencesType;
 use App\Form\ResetPasswordType;
+use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'profile_index')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository): Response
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
@@ -27,7 +28,7 @@ class ProfileController extends AbstractController
         $person = $user->getPerson();
 
         // Forcer le chargement de l'entité
-        $person = $entityManager->getRepository(Person::class)->find($person->getId());
+        $person = $personRepository->find($person->getId());
 
         // Déterminer si l'utilisateur est un manager
         $isManager = $this->isGranted('ROLE_MANAGER');
@@ -105,7 +106,7 @@ class ProfileController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array("ROLE_MANAGER", $roles)) {
+            if ($this->isGranted('ROLE_MANAGER')) {
                 $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
             } else {
                 $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
