@@ -9,16 +9,16 @@
     <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-6">{{ position.name }}</h1>
     {{ form_start(formPosition) }}
         {{ form_row(formPosition.name) }}
-        {% for label, messages in app.flashes %}
-            <div class=" mt-6 alert alert-{{ label }}">
-                {% for message in messages %}
-                    <p class="font-bold" >{{ message }}</p>
-                {% endfor %}
+            {% for label, messages in app.flashes %}
+                <div class=" mt-6 alert alert-{{ label }}">
+                    {% for message in messages %}
+                        <p class="font-bold" >{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="flex mt-6">
+                <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'delete': 'true', 'id': position.id})) }} " class="btn flex items-center justify-center w-[136px] h-[40px] rounded-[6px] text-[16px] text-white bg-[#E10E0E]">Supprimer</a>
+                <button type="submit" class="ml-6 bg-[#1B3168] text-white py-2 px-4 rounded-[6px] w-[154px] h-[40px]">Mettre à jour</button>
             </div>
-        {% endfor %}
-        <div class="flex mt-6">
-            <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'delete': 'true', 'id': position.id})) }} " class="btn flex items-center justify-center w-[136px] h-[40px] rounded-[6px] text-[16px] text-white bg-[#E10E0E]">Supprimer</a>
-            <button type="submit" class="ml-6 bg-[#1B3168] text-white py-2 px-4 rounded-[6px] w-[154px] h-[40px]">Mettre à jour</button>
-        </div>
       {{ form_end(formPosition) }}
 {% endblock %}
