@@ -34,11 +34,19 @@
                 {{ form_row(form.lastName) }}
             </div>
         </div>
-        {% if is_granted('ROLE_MANAGER') %}
+        <div class="flex space-x-4">
             <div class="mt-6">
                 {{ form_row(form.department) }}
             </div>
-        {% endif %}
+            {% if form.position is defined %}
+                <div class="mt-6">
+                    {{ form_row(form.position) }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mt-6">
+           {{ form_row(form.manager) }}
+        </div>
     {{ form_end(form) }}
 
     <!-- Formulaire de changement de mot de passe -->
