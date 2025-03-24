@@ -73,6 +73,7 @@ class UserType extends AbstractType
                 'mapped' => true,
                 'placeholder' => 'Choisir un poste', 
                 'attr' => [
+                    'id'=> 'position',
                     'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ], 
             ])
