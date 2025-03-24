@@ -25,7 +25,7 @@ class ProfileType extends AbstractType
                 'label' => 'Nom de famille',
                 'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                 'attr' => [
-                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6] text-gray-500',
                     'readonly' => true,
                 ],
             ])
@@ -33,7 +33,7 @@ class ProfileType extends AbstractType
                 'label' => 'Prénom',
                 'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                 'attr' => [
-                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6]',
+                    'class' => 'mt-1 block w-[350px] h-[46px] px-3 py-2 rounded-[6px] bg-[#F3F4F6] text-gray-500',
                     'readonly' => true,
                 ],
             ])
@@ -42,7 +42,7 @@ class ProfileType extends AbstractType
                 'label' => 'Adresse mail',
                 'label_attr' => ['class' => 'block text-sm font-medium text-[#6B7280] font-[Inter]'],
                 'attr' => [
-                    'class' => 'mt-1 block w-[350px] h-[46px] px-[2.75rem] pr-[0.75rem] py-2 rounded-[6px] bg-[#F3F4F6]',
+                    'class' => 'mt-1 block w-[350px] h-[46px] px-[2.75rem] pr-[0.75rem] py-2 rounded-[6px] bg-[#F3F4F6] text-gray-500 ',
                     'readonly' => true,
                 ],
             ])

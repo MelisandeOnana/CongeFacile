@@ -76,6 +76,71 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findFilteredRequests($collaborators, $filterType, $filterDate, $filterStart, $filterEnd, $filterNumber, $filterCollaborator)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where('r.collaborator IN (:collaborators)')
+            ->andWhere('r.answer = :status')
+            ->setParameter('collaborators', $collaborators)
+            ->setParameter('status', 3);
+
+        if ($filterType) {
+            $qb->andWhere('r.requestType = :filterType')
+               ->setParameter('filterType', $filterType);
+        }
+
+        if ($filterCollaborator) {
+            $qb->andWhere('r.collaborator = :filterCollaborator')
+               ->setParameter('filterCollaborator', $filterCollaborator);
+        }
+
+        if ($filterDate) {
+            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+            $qb->andWhere('r.createdAt BETWEEN :startOfDay AND :endOfDay')
+               ->setParameter('startOfDay', $startOfDay)
+               ->setParameter('endOfDay', $endOfDay);
+        }
+
+        if ($filterStart) {
+            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $qb->andWhere('r.startAt BETWEEN :startOfDay AND :endOfDay')
+               ->setParameter('startOfDay', $startOfDay)
+               ->setParameter('endOfDay', $endOfDay);
+        }
+
+        if ($filterEnd) {
+            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $qb->andWhere('r.endAt BETWEEN :startOfDay AND :endOfDay')
+               ->setParameter('startOfDay', $startOfDay)
+               ->setParameter('endOfDay', $endOfDay);
+        }
+
+        if ($filterNumber) {
+            $qb->andWhere('r.workingdays = :filterNumber')
+               ->setParameter('filterNumber', $filterNumber);
+        }
+
+        return $qb->orderBy('r.createdAt', 'DESC')
+                  ->getQuery()
+                  ->getResult();
+    }
+
+    public function findRequestsGroupedByMonth(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('SUBSTRING(r.answerAt, 1, 7) as month, COUNT(r.id) as requestCount')
+            ->where('r.answerAt BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->groupBy('month')
+            ->orderBy('month', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Request[] Returns an array of Request objects
     //     */

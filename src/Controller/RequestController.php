@@ -19,6 +19,9 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\PersonRepository;
 use App\Service\MailerService;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
+use App\Enum\Statut;
 
 class RequestController extends AbstractController
 {
@@ -58,30 +61,19 @@ class RequestController extends AbstractController
             }
         }
         if ($filterStart) {
-            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $startOfDay = (new DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new DateTimeImmutable($filterStart))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
         }
         if ($filterEnd) {
-            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $startOfDay = (new DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
         }
         if ($filterNumber) {
-            $requests = $requestRepository->findAll();
-            $matchingRequests = [];
-
-            foreach ($requests as $req) {
-                if ($req->getWorkingdays() == $filterNumber) {
-                    $matchingRequests[] = $req;
-                }
-            }
-
-            $criteria->andWhere(Criteria::expr()->in('id', array_map(function($req) {
-                return $req->getId();
-            }, $matchingRequests)));
+            $criteria->andWhere(Criteria::expr()->eq('workingdays', $filterNumber));
         }
         if ($filterAnswer) {
             $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
@@ -97,8 +89,8 @@ class RequestController extends AbstractController
             $filterDate = $request->query->get('requested');
             
             if ($filterDate) {
-                $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
-                $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+                $startOfDay = (new DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+                $endOfDay = (new DateTimeImmutable($filterDate))->setTime(23, 59, 59);
                 $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
                         ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
             }
@@ -108,7 +100,7 @@ class RequestController extends AbstractController
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
                 $request->query->getInt('page', 1), /*page number*/
-                6 /*limit per page*/
+                10 /*limit per page*/
             );
 
             return $this->render('default/request/request_historic.html.twig', [
@@ -198,18 +190,23 @@ class RequestController extends AbstractController
                     $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
                 }
             } else {
-                $fileName = "";
+                $fileName = null;
             }
 
-            $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-            $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
+            $currentDateTime = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $answerAt = new DateTimeImmutable('1970-01-01 00:00:00');
 
             $theRequest->setReceiptFile($fileName);
             $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
             $theRequest->setAnswerComment("");
-            $theRequest->setAnswer(3); // 3 = En cours 
+            $theRequest->setAnswer(Statut::EnCours->value);
             $theRequest->setAnswerAt($answerAt);
+
+            // Vérifier si la demande a déjà une réponse
+            if ($theRequest->getAnswer() === Statut::EnCours->value) {
+                $theRequest->setAnswerAt($answerAt);
+            }
 
             $entityManager->persist($theRequest);
             $entityManager->flush();
@@ -226,13 +223,12 @@ class RequestController extends AbstractController
             if ($alert == true) {
                 $to = $emailManager;
                 $subject = "CongéFacile : Nouvelle demande de congé déposée";
-                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." à déposé une demande de congé.<br>
+                $message = "".$person->getFirstName()." ".$person->getLastName()." à déposé une demande de congé.<br>
                 Merci de vous connecter à votre espace pour valider ou refuser la demande.";
 
                 $this->mailerService->sendEmail($to, $subject, $message);
             }
-            
-                
+               
             return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -259,7 +255,7 @@ class RequestController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $comment = $form['answerComment']->getData();
-            $answerAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+            $answerAt = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
             $answer = 3;
             $result = "";
 
@@ -335,61 +331,8 @@ class RequestController extends AbstractController
         $filterNumber = $request->query->get('days');
         $filterCollaborator = $request->query->get('collaborator');
 
-        $criteria = Criteria::create();
-        $criteria->andWhere(Criteria::expr()->in('collaborator',$collaborators));
-        $criteria->andWhere(Criteria::expr()->eq('answer', "3"));
-
-        
-        if ($filterType) {
-            $filterTypeObject = $requestTypeRepository->find($filterType);
-            if ($filterTypeObject) {
-                $criteria->andWhere(Criteria::expr()->eq('requestType', $filterTypeObject));
-            }
-        }
-        if($filterCollaborator){
-            $filterCollaboratorObject = $personRepository->find($filterCollaborator);
-            if ($filterCollaboratorObject) {
-                $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
-            }
-        }
-        
-        if ($filterDate) {
-            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
-            $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
-        }
-        if ($filterStart) {
-            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
-            $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
-        }
-        if ($filterEnd) {
-            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
-            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
-            $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
-                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
-        }
-        if ($filterNumber) {
-            $requests = $requestRepository->findAll();
-            $matchingRequests = [];
-
-            foreach ($requests as $req) {
-                if ($req->getWorkingdays() == $filterNumber) {
-                    $matchingRequests[] = $req;
-                }
-            }
-
-            $criteria->andWhere(Criteria::expr()->in('id', array_map(function($req) {
-                return $req->getId();
-            }, $matchingRequests)));
-        }
-
-    
-        // Rechercher les requêtes en fonction des critères
-        $criteria->orderBy(['createdAt' => 'DESC']);
-        $requests = $requestRepository->matching($criteria);
+        // Utiliser la méthode du repository pour obtenir les requêtes filtrées
+        $requests = $requestRepository->findFilteredRequests($collaborators, $filterType, $filterDate, $filterStart, $filterEnd, $filterNumber, $filterCollaborator);
 
         $requestTypes = $requestTypeRepository->findAll();
 
@@ -450,11 +393,27 @@ class RequestController extends AbstractController
             }
         }
 
+        $startDate = new DateTime('first day of January this year');
+        $endDate = new DateTime('last day of December this year');
+
+        $requestsGroupedByMonth = $requestRepository->findRequestsGroupedByMonth($startDate, $endDate);
+
+        $acceptance = 0;
+        $refusal = 0;
+
+        foreach ($requestsGroupedByMonth as $result) {
+            // On peut traiter les résultats ici
+            // Par exemple, pour chaque mois, on peut compter les acceptations et les refus
+            $month = $result['month'];
+            $requestCount = $result['requestCount'];
+            // Traitement des résultats selon les besoins
+        }
 
         return $this->render('default/request/request_statistics.html.twig', [
             'requestTypes' => $requestTypes,
             'countRequest' => $countRequest,
             'acceptancePercentage' => $acceptancePercentage,
+            'requestsGroupedByMonth' => $requestsGroupedByMonth,
         ]);
     }
 }
