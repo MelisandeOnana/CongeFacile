@@ -31,7 +31,7 @@ class ManagerController extends AbstractController
         // Récupérer les valeurs des filtres depuis la requête
         $filterFirstName = $request->query->get('firstname');
         $filterLastName = $request->query->get('lastname');
-        $filterDepartment = $request->query->get('service');
+        $filterDepartment = $request->query->get('department');
 
         $criteria = Criteria::create();
 

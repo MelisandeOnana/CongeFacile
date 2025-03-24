@@ -103,7 +103,7 @@
                     </select>
                     </th>
                     <th class="px-4 py-1 w-1/12">
-                    {% if app.request.query.get('lastname') is not empty or app.request.query.get('firstname') is not empty or app.request.query.get('service') is not empty %}
+                    {% if app.request.query.get('lastname') is not empty or app.request.query.get('firstname') is not empty or app.request.query.get('department') is not empty %}
                         <div class="mb-5">
                         <a href="{{ path('managers') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-2 px-3 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 mr-5">X</a>
                         </div>
