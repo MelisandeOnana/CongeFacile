@@ -53,7 +53,7 @@ class RequestTypeController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/admin/request_type/index.html.twig', [
+        return $this->render('admin/request_type/index.html.twig', [
             'requestTypes' => $TypesPagination,
             'typesCounts' => $typesCounts,
         ]);

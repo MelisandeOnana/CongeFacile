@@ -103,7 +103,7 @@ class RequestController extends AbstractController
                 10 /*limit per page*/
             );
 
-            return $this->render('default/request/request_historic.html.twig', [
+            return $this->render('request/request_historic.html.twig', [
                 'requests' => $pagination,
                 'requestTypes' => $requestTypes,
                 'filterType' => $filterType,
@@ -139,7 +139,7 @@ class RequestController extends AbstractController
                 6 /*limit per page*/
             );
 
-            return $this->render('default/request/request_historic.html.twig', [
+            return $this->render('request/request_historic.html.twig', [
                 'requests' => $pagination,
                 'requestTypes' => $requestTypes,
                 'collaborators' => $collaborators,
@@ -232,7 +232,7 @@ class RequestController extends AbstractController
             return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('default/request/request_new.html.twig', [
+        return $this->render('request/request_new.html.twig', [
             'requete' => $theRequest,
             'form' => $form,
         ]);
@@ -306,7 +306,7 @@ class RequestController extends AbstractController
             }
         }
 
-        return $this->render('default/request/request_show.html.twig', [
+        return $this->render('request/request_show.html.twig', [
             'request' => $request,
             'form' => $form,
         ]);
@@ -342,7 +342,7 @@ class RequestController extends AbstractController
             6 /*limit par page*/
         );
 
-        return $this->render('default/request/request_pending.html.twig', [
+        return $this->render('request/request_pending.html.twig', [
             'requests' => $pagination,
             'requestTypes' => $requestTypes,
             'collaborators' => $collaborators,
@@ -409,7 +409,7 @@ class RequestController extends AbstractController
             // Traitement des résultats selon les besoins
         }
 
-        return $this->render('default/request/request_statistics.html.twig', [
+        return $this->render('request/request_statistics.html.twig', [
             'requestTypes' => $requestTypes,
             'countRequest' => $countRequest,
             'acceptancePercentage' => $acceptancePercentage,

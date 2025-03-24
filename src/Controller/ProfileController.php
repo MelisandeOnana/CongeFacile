@@ -82,7 +82,7 @@ class ProfileController extends AbstractController
         }
 
         // Rediriger vers la vue appropriée en fonction du rôle
-        return $this->render('default/profile/profile.html.twig', [
+        return $this->render('profile/index.html.twig', [
             'form' => $form->createView(),
             'resetPasswordForm' => $resetPasswordForm->createView(),
             'isManager' => $isManager,
@@ -119,7 +119,7 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute('preferences');
         }
 
-        return $this->render('default/profile/preferences.html.twig', [
+        return $this->render('profile/preferences.html.twig', [
             'form' => $form->createView(),
             'alertNewRequest' => $alertNewRequest,
             'alertOnAnswer' => $alertOnAnswer,
