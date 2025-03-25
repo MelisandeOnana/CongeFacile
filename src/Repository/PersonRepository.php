@@ -17,14 +17,16 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function getPersonByManager($manager){
+    public function getPersonByManager($manager)
+    {
         return $this->createQueryBuilder('p')
             ->andWhere('p.manager = :manager_id')
             ->setParameter('manager_id', $manager->getId())
             ->getQuery()
             ->getResult()
-            ;
+        ;
     }
+
     public function countByPosition(Position $position): int
     {
         return $this->createQueryBuilder('p')

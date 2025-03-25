@@ -15,11 +15,11 @@ class Person
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le nom de famille ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le nom de famille ne peut pas être vide.')]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le prénom ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le prénom ne peut pas être vide.')]
     private ?string $firstName = null;
 
     #[ORM\ManyToOne(targetEntity: self::class)]
@@ -28,12 +28,12 @@ class Person
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: "Le département ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le département ne peut pas être vide.')]
     private ?Department $department = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: "Le poste ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le poste ne peut pas être vide.')]
     private ?Position $position = null;
 
     #[ORM\Column]
@@ -74,12 +74,12 @@ class Person
         return $this;
     }
 
-    public function getManager(): ?Person
+    public function getManager(): ?self
     {
         return $this->manager;
     }
 
-    public function setManager(?Person $manager): static
+    public function setManager(?self $manager): static
     {
         $this->manager = $manager;
 

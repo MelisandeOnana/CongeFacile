@@ -14,7 +14,7 @@ class RequestType
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank(message: "Le nom du type de demande ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le nom du type de demande ne peut pas être vide.')]
     private string $name;
 
     public function getId(): int

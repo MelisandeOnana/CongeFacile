@@ -2,26 +2,22 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use App\Entity\User;
-use App\Form\RequestForm;
-use App\Form\AnswerType;
 use App\Entity\Request;
+use App\Entity\User;
+use App\Enum\Statut;
+use App\Form\AnswerType;
+use App\Form\RequestForm;
+use App\Repository\PersonRepository;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Doctrine\Common\Collections\Criteria;
-use Knp\Component\Pager\PaginatorInterface;
-use App\Repository\PersonRepository;
 use App\Service\MailerService;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeZone;
-use App\Enum\Statut;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class RequestController extends AbstractController
 {
@@ -37,8 +33,8 @@ class RequestController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        if (! $user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
 
         $person = $user->getPerson();
@@ -53,7 +49,7 @@ class RequestController extends AbstractController
         $requestTypes = $requestTypeRepository->findAll();
 
         $criteria = Criteria::create();
-        
+
         if ($filterType) {
             $filterTypeObject = $requestTypeRepository->find($filterType);
             if ($filterTypeObject) {
@@ -61,14 +57,14 @@ class RequestController extends AbstractController
             }
         }
         if ($filterStart) {
-            $startOfDay = (new DateTimeImmutable($filterStart))->setTime(0, 0, 0);
-            $endOfDay = (new DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
         }
         if ($filterEnd) {
-            $startOfDay = (new DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
-            $endOfDay = (new DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
             $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
         }
@@ -81,16 +77,16 @@ class RequestController extends AbstractController
 
         $criteria->orderBy(['createdAt' => 'DESC']);
 
-        if ($user->getRole() == "ROLE_COLLABORATOR") {
+        if ('ROLE_COLLABORATOR' == $user->getRole()) {
             // PAGE COLLABORATEUR
 
             $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
 
             $filterDate = $request->query->get('requested');
-            
+
             if ($filterDate) {
-                $startOfDay = (new DateTimeImmutable($filterDate))->setTime(0, 0, 0);
-                $endOfDay = (new DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+                $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+                $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
                 $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
                         ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
             }
@@ -99,8 +95,8 @@ class RequestController extends AbstractController
 
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                10 /*limit per page*/
+                $request->query->getInt('page', 1), /* page number */
+                10 /* limit per page */
             );
 
             return $this->render('request/request_historic.html.twig', [
@@ -113,7 +109,6 @@ class RequestController extends AbstractController
                 'filterNumber' => $filterNumber,
                 'filterAnswer' => $filterAnswer,
             ]);
-
         } else {
             // PAGE MANAGER
 
@@ -124,7 +119,7 @@ class RequestController extends AbstractController
 
             $filterCollaborator = $request->query->get('collaborator');
 
-            if($filterCollaborator){
+            if ($filterCollaborator) {
                 $filterCollaboratorObject = $personRepository->find($filterCollaborator);
                 if ($filterCollaboratorObject) {
                     $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
@@ -135,8 +130,8 @@ class RequestController extends AbstractController
 
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                6 /*limit per page*/
+                $request->query->getInt('page', 1), /* page number */
+                6 /* limit per page */
             );
 
             return $this->render('request/request_historic.html.twig', [
@@ -151,8 +146,8 @@ class RequestController extends AbstractController
             ]);
         }
     }
-    
-    #[Route('/request/new', name: 'request_new', methods: ['POST','GET'])]
+
+    #[Route('/request/new', name: 'request_new', methods: ['POST', 'GET'])]
     public function request_new(HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
         $theRequest = new Request();
@@ -160,17 +155,15 @@ class RequestController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $user = $this->getUser();
 
-            if (!$user instanceof User) {
-                throw new Exception('L\'utilisateur n\'est pas connecté.');
+            if (! $user instanceof User) {
+                throw new \Exception('L\'utilisateur n\'est pas connecté.');
             }
 
             $person = $user->getPerson();
 
-            if ($form['fichier']->getData() != null) {
-
+            if (null != $form['fichier']->getData()) {
                 $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
                 $destination = $this->getParameter('kernel.project_dir') . '/public/files';
 
@@ -180,26 +173,25 @@ class RequestController extends AbstractController
                 $requestCount = $entityManager->getRepository(Request::class)->count(['collaborator' => $person]);
                 $idfile = $requestCount + 1;
 
-
                 // Générer un nom unique pour le fichier
                 $fileName = $personId . '-' . $idfile . ' ' . $file->getClientOriginalName();
                 try {
                     $file->move($destination, $fileName);
                     $this->addFlash('success', 'Fichier téléchargé avec succès !');
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
                 }
             } else {
                 $fileName = null;
             }
 
-            $currentDateTime = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
-            $answerAt = new DateTimeImmutable('1970-01-01 00:00:00');
+            $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+            $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
 
             $theRequest->setReceiptFile($fileName);
             $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
-            $theRequest->setAnswerComment("");
+            $theRequest->setAnswerComment('');
             $theRequest->setAnswer(Statut::EnCours->value);
             $theRequest->setAnswerAt($answerAt);
 
@@ -209,26 +201,29 @@ class RequestController extends AbstractController
             }
 
             $entityManager->persist($theRequest);
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Requête créé avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de la requête.');
+            }
 
-            $this->addFlash('success', 'Requete créé avec succès.');
+            // Envoi d'un email au manager
 
-            //Envoi d'un email au manager
-
-            $manager = $person->getManager(); 
+            $manager = $person->getManager();
             $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
             $emailManager = $managerUser->getEmail();
             $alert = $manager->getAlertNewRequest();
 
-            if ($alert == true) {
+            if (true == $alert) {
                 $to = $emailManager;
-                $subject = "CongéFacile : Nouvelle demande de congé déposée";
-                $message = "".$person->getFirstName()." ".$person->getLastName()." à déposé une demande de congé.<br>
-                Merci de vous connecter à votre espace pour valider ou refuser la demande.";
+                $subject = 'CongéFacile : Nouvelle demande de congé déposée';
+                $message = '' . $person->getFirstName() . ' ' . $person->getLastName() . ' à déposé une demande de congé.<br>
+                Merci de vous connecter à votre espace pour valider ou refuser la demande.';
 
                 $this->mailerService->sendEmail($to, $subject, $message);
             }
-               
+
             return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -238,13 +233,13 @@ class RequestController extends AbstractController
         ]);
     }
 
-    #[Route('/request/show/{id}', name: 'request_show', methods: ['POST','GET'])]
+    #[Route('/request/show/{id}', name: 'request_show', methods: ['POST', 'GET'])]
     public function show(HttpRequest $httpRequest, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        if (! $user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
 
         $person = $user->getPerson();
@@ -253,50 +248,54 @@ class RequestController extends AbstractController
         $form->handleRequest($httpRequest);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $comment = $form['answerComment']->getData();
-            $answerAt = new DateTimeImmutable('now', new DateTimeZone('Europe/Paris'));
+            $answerAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
             $answer = 3;
-            $result = "";
+            $result = '';
 
             /** @var \Symfony\Component\Form\SubmitButton $approveButton */
             $approveButton = $form->get('approve');
             if ($approveButton->isClicked()) {
                 $answer = 1;
-                $result = "validé";
+                $result = 'validé';
             }
 
             /** @var \Symfony\Component\Form\SubmitButton $rejectButton */
             $rejectButton = $form->get('reject');
             if ($rejectButton->isClicked()) {
                 $answer = 2;
-                $result = "refusé";
+                $result = 'refusé';
             }
-            
+
             $request->setAnswer($answer);
             $request->setAnswerComment($comment);
             $request->setAnswerAt($answerAt);
 
             $entityManager->persist($request);
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'La réponse a été enregistrée avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement de la réponse.');
+            }
 
-            //Envoi d'un email au collaborateur
+            // Envoi d'un email au collaborateur
 
-            $collaborator = $request->getCollaborator(); 
+            $collaborator = $request->getCollaborator();
             $collaboratorUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
             $email = $collaboratorUser->getEmail();
             $alert = $collaborator->getAlertOnAnswer();
 
-            if ($alert == true) {
+            if (true == $alert) {
                 $to = $email;
-                $subject = "CongéFacile : Votre demande de congé à été ".$result."e.";
-                $message = "".$person->getFirstName()." ".$person->getLastName()." à ".$result." votre demande de congé du ".date_format($request->getCreatedAt(), 'd/m/Y').".";
+                $subject = 'CongéFacile : Votre demande de congé à été ' . $result . 'e.';
+                $message = '' . $person->getFirstName() . ' ' . $person->getLastName() . ' à ' . $result . ' votre demande de congé du ' . date_format($request->getCreatedAt(), 'd/m/Y') . '.';
 
                 $this->mailerService->sendEmail($to, $subject, $message);
             }
         }
 
-        if ($user->getRole() == "ROLE_COLLABORATOR") {
+        if ('ROLE_COLLABORATOR' == $user->getRole()) {
             if ($request->getCollaborator()->getId() !== $person->getId()) {
                 return $this->redirectToRoute('request_historic');
             }
@@ -311,14 +310,14 @@ class RequestController extends AbstractController
             'form' => $form,
         ]);
     }
- 
-    #[Route('/request/pending', name: 'request_pending', methods: ['POST','GET'])]
-    public function request_pending(HttpRequest $request,PersonRepository $personRepository, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
+
+    #[Route('/request/pending', name: 'request_pending', methods: ['POST', 'GET'])]
+    public function request_pending(HttpRequest $request, PersonRepository $personRepository, RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        if (! $user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
         $manager = $user->getPerson();
         $collaborators = $personRepository->getPersonByManager($manager);
@@ -338,8 +337,8 @@ class RequestController extends AbstractController
 
         $pagination = $paginator->paginate(
             $requests, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit par page*/
+            $request->query->getInt('page', 1), /* page number */
+            6 /* limit par page */
         );
 
         return $this->render('request/request_pending.html.twig', [
@@ -353,6 +352,7 @@ class RequestController extends AbstractController
             'filterNumber' => $filterNumber,
         ]);
     }
+
     #[Route('/statistics', name: 'statistics', methods: ['GET'])]
     public function statistic(RequestRepository $requestRepository, RequestTypeRepository $requestTypeRepository): Response
     {
@@ -367,34 +367,34 @@ class RequestController extends AbstractController
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
 
         $acceptancePercentage = [];
-        
-        for ($number = 1; $number <= 12; $number++) {
-            $month = new DateTime();
+
+        for ($number = 1; $number <= 12; ++$number) {
+            $month = new \DateTime();
             $month->setDate((int)date('Y'), $number, 1);
-            
+
             $requests = $requestRepository->findRequestsByMonthOfAnswer($month);
 
             $acceptance = 0;
             $refusal = 0;
 
             foreach ($requests as $request) {
-                if ($request->getAnswer()->label() == "Accepté") {
-                    $acceptance++;
-                } elseif ($request->getAnswer()->label() == "Refusé") {
-                    $refusal++;
+                if ('Accepté' == $request->getAnswer()->label()) {
+                    ++$acceptance;
+                } elseif ('Refusé' == $request->getAnswer()->label()) {
+                    ++$refusal;
                 }
             }
 
-            if ($acceptance == 0 && $refusal == 0) {
+            if (0 == $acceptance && 0 == $refusal) {
                 $acceptancePercentage[$number] = null;
             } else {
-                $percent = $acceptance*100/($acceptance+$refusal);
+                $percent = $acceptance * 100 / ($acceptance + $refusal);
                 $acceptancePercentage[$number] = $percent;
             }
         }
 
-        $startDate = new DateTime('first day of January this year');
-        $endDate = new DateTime('last day of December this year');
+        $startDate = new \DateTime('first day of January this year');
+        $endDate = new \DateTime('last day of December this year');
 
         $requestsGroupedByMonth = $requestRepository->findRequestsGroupedByMonth($startDate, $endDate);
 

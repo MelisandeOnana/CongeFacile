@@ -10,7 +10,7 @@ enum Statut: int
 
     public function label(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Accepter => 'Accepté',
             self::Refuser => 'Refusé',
             self::EnCours => 'En cours',

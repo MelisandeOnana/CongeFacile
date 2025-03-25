@@ -16,7 +16,7 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findByEmail($email): ?user
+    public function findByEmail($email): ?User
     {
         return $this->createQueryBuilder('u')
             ->select('u')
@@ -26,13 +26,14 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findByManagerDepartment($manager, $department){
-        return $this->createQueryBuilder('user') 
-            ->join('user.person', 'person') 
-            ->where('person.manager = :manager') 
+    public function findByManagerDepartment($manager, $department)
+    {
+        return $this->createQueryBuilder('user')
+            ->join('user.person', 'person')
+            ->where('person.manager = :manager')
             ->andWhere('person.department = :department')
-            ->setParameter('manager', $manager) 
-            ->setParameter('department', $department); 
+            ->setParameter('manager', $manager)
+            ->setParameter('department', $department);
     }
 
     public function findByManager($manager)
@@ -67,10 +68,10 @@ class UserRepository extends ServiceEntityRepository
             $startAt = $request['startAt'];
             $endAt = $request['endAt'];
             $period = new \DatePeriod($startAt, new \DateInterval('P1D'), $endAt->modify('+1 day'));
-        
+
             foreach ($period as $date) {
                 if ($date->format('N') < 6) { // 6 et 7 sont samedi et dimanche
-                    $totalDays++;
+                    ++$totalDays;
                 }
             }
         }

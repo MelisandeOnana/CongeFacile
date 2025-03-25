@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\MailerService;
-use Exception;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 class ConnectionController extends AbstractController
 {
     private MailerService $mailerService;
@@ -36,7 +36,7 @@ class ConnectionController extends AbstractController
         // Personnaliser le message d'erreur
         $errorMessage = null;
         if ($error) {
-            if ($error->getMessageKey() === 'Disabled account.') {
+            if ('Disabled account.' === $error->getMessageKey()) {
                 $errorMessage = 'Ce compte a été désactivé.';
             } else {
                 $errorMessage = 'Identifiants invalides. Veuillez vérifier votre adresse e-mail et votre mot de passe.';
@@ -53,7 +53,7 @@ class ConnectionController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             return $this->redirectToRoute('login');
         }
         $person = $user->getPerson();
@@ -67,7 +67,7 @@ class ConnectionController extends AbstractController
     public function logout(): void
     {
         // Ce contrôleur peut être vide : il ne sera jamais exécuté !
-        throw new Exception('N\'oubliez pas d\'activer la déconnexion dans security.yaml');
+        throw new \Exception('N\'oubliez pas d\'activer la déconnexion dans security.yaml');
     }
 
     #[Route('/forgotpassword', name: 'forgot_password', methods: ['GET'])]
@@ -82,27 +82,27 @@ class ConnectionController extends AbstractController
             if ($user) {
                 $to = $this->params->get('mailer_contact_email');
                 $subject = sprintf(
-                    "CongéFacile : %s %s demande un changement de mot de passe.",
+                    'CongéFacile : %s %s demande un changement de mot de passe.',
                     $user->getPerson()->getFirstName(),
                     $user->getPerson()->getLastName()
                 );
-                $message = $user->getPerson()->getFirstName() . " " . $user->getPerson()->getLastName() . " demande un changement de mot de passe.<br>
-                Adresse email de la personne : " . $email . ".<br><br>
-                Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.";
+                $message = $user->getPerson()->getFirstName() . ' ' . $user->getPerson()->getLastName() . ' demande un changement de mot de passe.<br>
+                Adresse email de la personne : ' . $email . '.<br><br>
+                Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.';
 
                 try {
                     $this->mailerService->sendEmail($to, $subject, $message);
-                    $result = "Demande envoyée";
-                } catch (Exception $e) {
-                    $result = "Demande non envoyée";
+                    $result = 'Demande envoyée';
+                } catch (\Exception $e) {
+                    $result = 'Demande non envoyée';
                 }
             } else {
-                $result = "Email incorrect";
+                $result = 'Email incorrect';
             }
 
-            return $this->render('security/forgot_password.html.twig', ["result" => $result]);
+            return $this->render('security/forgot_password.html.twig', ['result' => $result]);
         }
 
-        return $this->render('security/forgot_password.html.twig', ["result" => ""]);
+        return $this->render('security/forgot_password.html.twig', ['result' => '']);
     }
 }

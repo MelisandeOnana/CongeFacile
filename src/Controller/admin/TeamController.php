@@ -2,21 +2,19 @@
 
 namespace App\Controller\admin;
 
-use App\Entity\User;
 use App\Entity\Person;
 use App\Entity\Position;
+use App\Entity\User;
 use App\Form\DeleteType;
 use App\Form\UserType;
-use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Exception;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MANAGER')]
@@ -27,14 +25,14 @@ class TeamController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (!$user instanceof User) {
-            throw new Exception('L\'utilisateur n\'est pas connecté.');
+        if (! $user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
 
         $manager = $user->getPerson();
         $department = $manager->getDepartment(); // Récupérer le département du manager
 
-        $queryBuilder = $userRepository->findByManagerDepartment($manager,$department);
+        $queryBuilder = $userRepository->findByManagerDepartment($manager, $department);
 
         // Ajout des filtres
         $filters = [
@@ -58,7 +56,7 @@ class TeamController extends AbstractController
             10
         );
 
-        $currentYear = (int) date('Y');
+        $currentYear = (int)date('Y');
         $vacationDays = [];
         foreach ($pagination as $user) {
             $vacationDays[$user->getId()] = $userRepository->getVacationDaysForYear($user, $currentYear);
@@ -81,11 +79,10 @@ class TeamController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $userManager = $this->getUser();
-        if (!$userManager instanceof User) {
+        if (! $userManager instanceof User) {
             return $this->redirectToRoute('login');
         }
         $personManager = $userManager->getPerson();
-    
 
         $person = new Person();
         $user = new User();
@@ -98,12 +95,11 @@ class TeamController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-        
             // Définir des valeurs par défaut pour les champs requis
             $person->setAlertOnAnswer(false);
             $person->setAlertNewRequest(false);
             $person->setAlertBeforeVacation(false);
-        
+
             // Définir une valeur par défaut pour le champ position_id
             $position = $userForm->get('position')->getData();
             if ($position) {
@@ -113,13 +109,13 @@ class TeamController extends AbstractController
                 $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
                 $person->setPosition($defaultPosition);
             }
-                  
+
             // Définir une valeur par défaut pour le champ enabled
             $user->setEnabled(true);
-        
+
             // Définir une valeur par défaut pour le champ created_at
             $user->setCreatedAt(new \DateTimeImmutable());
-        
+
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -129,8 +125,7 @@ class TeamController extends AbstractController
                 );
                 $user->setPassword($hashedPassword);
             }
-        
-            
+
             $user->setManager($personManager);
             $user->getPerson()->setDepartment($personManager->getDepartment());
             $user->setPerson($person);
@@ -138,11 +133,15 @@ class TeamController extends AbstractController
 
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
-        
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du nouveau membre.');
+            }
+
             return $this->redirectToRoute('team_index');
         }
 
@@ -155,7 +154,7 @@ class TeamController extends AbstractController
     public function memberUpdate(Request $request, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $userManager = $this->getUser();
-        if (!$userManager instanceof User) {
+        if (! $userManager instanceof User) {
             return $this->redirectToRoute('login');
         }
         $personManager = $userManager->getPerson();
@@ -163,7 +162,7 @@ class TeamController extends AbstractController
         $user = $userRepository->find($id);
 
         // Vérifier si l'utilisateur existe
-        if (!$user) {
+        if (! $user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
@@ -176,18 +175,17 @@ class TeamController extends AbstractController
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
 
-
-        if ($delete == 'true') {
+        if ('true' == $delete) {
             if ($formDelete->isSubmitted() && $formDelete->isValid()) {
                 $entityManager->remove($person);
                 $entityManager->remove($user);
                 $entityManager->flush();
+
                 return $this->redirectToRoute('team_index');
             }
         }
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-        
             // Définir une valeur par défaut pour le champ position_id
             $position = $userForm->get('position')->getData();
             if ($position) {
@@ -200,7 +198,7 @@ class TeamController extends AbstractController
 
             // Définir une valeur par défaut pour le champ enabled
             $user->setEnabled($userForm->get('enabled')->getData());
-        
+
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -216,11 +214,15 @@ class TeamController extends AbstractController
             $user->setPerson($person);
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
-        
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du membre.');
+            }
+
             return $this->redirectToRoute('team_index');
         }
 
@@ -228,7 +230,7 @@ class TeamController extends AbstractController
             'userForm' => $userForm->createView(),
             'member' => $person,
             'user' => $user,
-            'formDelete' => $formDelete
+            'formDelete' => $formDelete,
         ]);
     }
 }

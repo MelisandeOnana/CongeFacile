@@ -2,21 +2,21 @@
 
 namespace App\Controller\admin;
 
+use App\Repository\RequestRepository;
+use App\Repository\RequestTypeRepository;
+use Doctrine\Common\Collections\Criteria;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Doctrine\Common\Collections\Criteria;
-use App\Repository\RequestTypeRepository;
-use App\Repository\RequestRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MANAGER')]
 class RequestTypeController extends AbstractController
 {
     #[Route('/request-type', name: 'request_types')]
-    public function index(RequestTypeRepository $requestTypeRepository, RequestRepository $requestRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
+    public function index(RequestTypeRepository $requestTypeRepository, RequestRepository $requestRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $typesCounts = [];
 
@@ -37,20 +37,20 @@ class RequestTypeController extends AbstractController
             $typesCounts[$type->getId()] = $requestRepository->countRequestsByRequestType($type);
         }
 
-        if ($filterNumber != null) {
+        if (null != $filterNumber) {
             $filteredTypesByNumber = [];
             foreach ($filteredTypes as $type) {
-            if ($typesCounts[$type->getId()] == $filterNumber) {
-                $filteredTypesByNumber[] = $type;
-            }
+                if ($typesCounts[$type->getId()] == $filterNumber) {
+                    $filteredTypesByNumber[] = $type;
+                }
             }
             $filteredTypes = $filteredTypesByNumber;
         }
 
         $TypesPagination = $paginator->paginate(
             $filteredTypes, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit par page*/
+            $request->query->getInt('page', 1), /* page number */
+            6 /* limit par page */
         );
 
         return $this->render('admin/request_type/index.html.twig', [

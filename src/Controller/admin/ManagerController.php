@@ -4,27 +4,27 @@ namespace App\Controller\admin;
 
 use App\Entity\Person;
 use App\Entity\User;
-use App\Repository\PersonRepository;
-use App\Repository\PositionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Form\ManagerType;
 use App\Repository\DepartmentRepository;
+use App\Repository\PersonRepository;
+use App\Repository\PositionRepository;
 use App\Repository\UserRepository;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MANAGER')]
 class ManagerController extends AbstractController
 {
     #[Route('/manager', name: 'managers')]
-    public function index(DepartmentRepository $departmentRepository, PersonRepository $personRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
+    public function index(DepartmentRepository $departmentRepository, PersonRepository $personRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $departments = $departmentRepository->findAll();
 
@@ -45,7 +45,7 @@ class ManagerController extends AbstractController
         }
         if ($filterDepartment) {
             $department = $departmentRepository->find(intval($filterDepartment));
-        
+
             if ($department) {
                 $criteria->andWhere(Criteria::expr()->eq('department', $department));
             } else {
@@ -58,8 +58,8 @@ class ManagerController extends AbstractController
 
         $ManagersPagination = $paginator->paginate(
             $filteredManagers, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit par page*/
+            $request->query->getInt('page', 1), /* page number */
+            6 /* limit par page */
         );
 
         return $this->render('admin/manager/index.html.twig', [
@@ -77,7 +77,7 @@ class ManagerController extends AbstractController
         $manager = $userRepository->find($id);
 
         // Vérifier si l'utilisateur existe
-        if (!$manager) {
+        if (! $manager) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
@@ -93,8 +93,8 @@ class ManagerController extends AbstractController
             // Définir le département de la personne
             $department = $userForm->get('department')->getData();
 
-            foreach($managers as $theManager){
-                if($theManager->getDepartment()->getName() == $department->getName()){
+            foreach ($managers as $theManager) {
+                if ($theManager->getDepartment()->getName() == $department->getName()) {
                     $this->addFlash('error', 'Le département sélectionné est deja attribué');
                     $departmentIsallowed = false;
                 }
@@ -104,7 +104,7 @@ class ManagerController extends AbstractController
             } else {
                 $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
             }
-        
+
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -114,18 +114,20 @@ class ManagerController extends AbstractController
                 );
                 $manager->setPassword($hashedPassword);
             }
-        
+
             $entityManager->persist($manager->getPerson()); // Persister d'abord la personne
             $entityManager->persist($manager);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le manager a été ajouté avec succès.');
-        
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le manager a été mis à jour avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du manager.');
+            }
+
             return $this->redirectToRoute('managers');
         }
-
-
 
         return $this->render('admin/manager/manager_show.html.twig', [
             'manager' => $manager,
@@ -154,14 +156,15 @@ class ManagerController extends AbstractController
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // Définir le département de la personne
             $department = $userForm->get('department')->getData();
-        
+
             // Vérifier si le département est déjà attribué
             $existingManager = $personRepository->findOneBy(['department' => $department]);
             if ($existingManager) {
                 $this->addFlash('error', 'Le département sélectionné est déjà attribué.');
+
                 return $this->redirectToRoute('manager_new'); // Rediriger vers la page de création avec le message d'erreur
             }
-        
+
             // Définir la position par défaut pour un manager
             $managerPosition = $positionRepository->findOneBy(['name' => 'Manager']);
             if ($managerPosition) {
@@ -169,16 +172,7 @@ class ManagerController extends AbstractController
             } else {
                 $userForm->get('position')->addError(new FormError('La position "manager" n\'existe pas.'));
             }
-        
-            // Définir le rôle par défaut pour un manager
-            $manager->setRole('ROLE_MANAGER');
-        
-            // Définir une valeur par défaut pour le champ enabled
-            $manager->setEnabled(true);
-        
-            // Définir une valeur par défaut pour le champ created_at
-            $manager->setCreatedAt(new \DateTimeImmutable());
-        
+
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -188,14 +182,18 @@ class ManagerController extends AbstractController
                 );
                 $manager->setPassword($hashedPassword);
             }
-        
+
             $entityManager->persist($manager->getPerson()); // Persister d'abord la personne
             $entityManager->persist($manager);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le manager a été ajouté avec succès.');
-        
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le manager a été ajouté avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du manager.');
+            }
+
             return $this->redirectToRoute('managers');
         }
 
