@@ -7,7 +7,8 @@ use App\Entity\User;
 use App\Form\PreferencesType;
 use App\Form\ProfileType;
 use App\Form\ResetPasswordType;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface
+use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'profile_index')]
-    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository): Response
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
@@ -27,7 +28,7 @@ class ProfileController extends AbstractController
         $person = $user->getPerson();
 
         // Forcer le chargement de l'entité
-        $person = $entityManager->getRepository(Person::class)->find($person->getId());
+        $person = $personRepository->find($person->getId());
 
         // Déterminer si l'utilisateur est un manager
         $isManager = $this->isGranted('ROLE_MANAGER');
@@ -125,6 +126,7 @@ class ProfileController extends AbstractController
                 $this->addFlash('success', 'Vos préférences ont été mises à jour.');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de vos préférences.');
+
             }
 
             return $this->redirectToRoute('preferences');
