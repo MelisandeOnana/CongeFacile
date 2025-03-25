@@ -3,14 +3,12 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-
-
-class PreferencesType extends AbstractType 
+class PreferencesType extends AbstractType
 {
     private $tokenStorage;
 
@@ -24,7 +22,7 @@ class PreferencesType extends AbstractType
         $user = $this->tokenStorage->getToken()->getUser();
         $roles = $user->getRoles();
 
-        if (in_array("ROLE_MANAGER", $roles)) {
+        if (in_array('ROLE_MANAGER', $roles)) {
             $builder
             ->add('alertNewRequest', CheckboxType::class, [
                 'label' => 'Être alerté par email lorsqu’une demande arrive',
@@ -52,14 +50,13 @@ class PreferencesType extends AbstractType
                     'class' => 'hidden peer', // Cache la case à cocher
                 ],
             ]);
-
         }
     }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => 'App\Entity\Person',
         ]);
     }
-
 }

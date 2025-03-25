@@ -3,24 +3,24 @@
 namespace App\Controller\admin;
 
 use App\Entity\Position;
+use App\Form\DeleteType;
+use App\Form\PositionType;
 use App\Repository\PersonRepository;
 use App\Repository\PositionRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Form\PositionType;
-use App\Form\DeleteType;
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('ROLE_MANAGER')]
 class PositionController extends AbstractController
 {
     #[Route('/position', name: 'positions')]
-    public function index(PositionRepository $positionRepository, PersonRepository $personRepository,  PaginatorInterface $paginator, HttpRequest $request): Response
+    public function index(PositionRepository $positionRepository, PersonRepository $personRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $positionCounts = [];
 
@@ -41,20 +41,20 @@ class PositionController extends AbstractController
             $positionCounts[$position->getId()] = $personRepository->countByPosition($position);
         }
 
-        if ($filterNumber != null) {
+        if (null != $filterNumber) {
             $filteredPositionsByNumber = [];
             foreach ($filteredPositions as $position) {
-            if ($positionCounts[$position->getId()] == $filterNumber) {
-                $filteredPositionsByNumber[] = $position;
-            }
+                if ($positionCounts[$position->getId()] == $filterNumber) {
+                    $filteredPositionsByNumber[] = $position;
+                }
             }
             $filteredPositions = $filteredPositionsByNumber;
         }
 
         $PostionsPagination = $paginator->paginate(
             $filteredPositions, /* query NOT result */
-            $request->query->getInt('page', 1), /*page number*/
-            6 /*limit par page*/
+            $request->query->getInt('page', 1), /* page number */
+            6 /* limit par page */
         );
 
         return $this->render('admin/position/index.html.twig', [
@@ -68,7 +68,7 @@ class PositionController extends AbstractController
     {
         $position = $positionRepository->find($id);
 
-        if (!$position) {
+        if (! $position) {
             throw $this->createNotFoundException('Le poste n\'existe pas.');
         }
 
@@ -82,6 +82,7 @@ class PositionController extends AbstractController
             $existingPosition = $positionRepository->findOneBy(['name' => $position->getName()]);
             if ($existingPosition && $existingPosition->getId() !== $position->getId()) {
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
+
                 return $this->redirectToRoute('position_show', ['id' => $id]);
             } else {
                 $entityManager->persist($position);
@@ -91,6 +92,7 @@ class PositionController extends AbstractController
                 } catch (Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
                 }
+
                 return $this->redirectToRoute('positions');
             }
         }
@@ -120,6 +122,7 @@ class PositionController extends AbstractController
                 } catch (Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
                 }
+
                 return $this->redirectToRoute('positions');
             }
         }

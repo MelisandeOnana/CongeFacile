@@ -4,15 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Person;
 use App\Entity\User;
-use App\Form\ProfileType;
 use App\Form\PreferencesType;
+use App\Form\ProfileType;
 use App\Form\ResetPasswordType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
@@ -21,7 +21,7 @@ class ProfileController extends AbstractController
     {
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
@@ -50,6 +50,7 @@ class ProfileController extends AbstractController
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de vos informations.');
             }
+
             return $this->redirectToRoute('profile_index');
         }
 
@@ -60,7 +61,7 @@ class ProfileController extends AbstractController
         if ($resetPasswordForm->isSubmitted() && $resetPasswordForm->isValid()) {
             // Vérifier le mot de passe actuel
             $currentPassword = $resetPasswordForm->get('currentPassword')->getData();
-            if (!$passwordHasher->isPasswordValid($user, $currentPassword)) {
+            if (! $passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
             } else {
                 // Réinitialiser le mot de passe
@@ -80,6 +81,7 @@ class ProfileController extends AbstractController
                     } catch (\Exception $e) {
                         $this->addFlash('error', 'Une erreur est survenue lors de la réinitialisation de votre mot de passe.');
                     }
+
                     return $this->redirectToRoute('profile_index');
                 }
             }
@@ -98,7 +100,7 @@ class ProfileController extends AbstractController
     {
         $form = $this->createForm(PreferencesType::class);
         $user = $this->getUser();
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
@@ -110,7 +112,7 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                if (in_array("ROLE_MANAGER", $roles)) {
+                if (in_array('ROLE_MANAGER', $roles)) {
                     $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
                 } else {
                     $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
@@ -124,6 +126,7 @@ class ProfileController extends AbstractController
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de vos préférences.');
             }
+
             return $this->redirectToRoute('preferences');
         }
 

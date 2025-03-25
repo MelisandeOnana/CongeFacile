@@ -4,10 +4,10 @@ namespace App\Form;
 
 use App\Entity\Request;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AnswerType extends AbstractType
 {
@@ -21,7 +21,7 @@ class AnswerType extends AbstractType
                 'attr' => [
                     'class' => 'border-[#DFE4EA] mt-2 w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4',
                     'placeholder' => '',
-                    'value' => ''
+                    'value' => '',
                 ],
             ])
             ->add('reject', SubmitType::class, [

@@ -17,20 +17,20 @@ class Request
 
     #[ORM\ManyToOne(targetEntity: RequestType::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: "Le type de demande ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le type de demande ne peut pas être vide.')]
     private ?RequestType $requestType = null;
 
     #[ORM\ManyToOne(targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank(message: "Le collaborateur ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'Le collaborateur ne peut pas être vide.')]
     private ?Person $collaborator = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "La date de début ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'La date de début ne peut pas être vide.')]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message: "La date de fin ne peut pas être vide.")]
+    #[Assert\NotBlank(message: 'La date de fin ne peut pas être vide.')]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column]
@@ -50,7 +50,6 @@ class Request
 
     #[ORM\Column]
     private ?string $receiptFile = null;
-
 
     public function getId(): ?int
     {
@@ -141,14 +140,15 @@ class Request
         return $this;
     }
 
-    public function getAnswer(): ?Statut {
+    public function getAnswer(): ?Statut
+    {
         return $this->answer;
     }
 
     public function setAnswer(?int $answer): static
     {
-        if (!Statut::tryFrom($answer)) {
-            throw new \InvalidArgumentException("Valeur de statut invalide.");
+        if (! Statut::tryFrom($answer)) {
+            throw new \InvalidArgumentException('Valeur de statut invalide.');
         }
 
         $this->answer = Statut::from($answer);
@@ -179,12 +179,13 @@ class Request
 
         return $this;
     }
+
     public function getWorkingDays(): float
     {
         $start = $this->getStartAt();
         $end = $this->getEndAt();
 
-        if (!$start || !$end) {
+        if (! $start || ! $end) {
             return 0;
         }
 
@@ -201,12 +202,12 @@ class Request
 
         // Calculer les jours ouvrés en excluant les samedis et dimanches
         $workingDays = 0;
-        for ($i = 0; $i < $days; $i++) {
+        for ($i = 0; $i < $days; ++$i) {
             $currentDay = (clone $tempStart)->modify("+$i days");
             $dayOfWeek = $currentDay->format('N'); // 1 (lundi) à 7 (dimanche)
 
             if ($dayOfWeek < 6) { // Exclure samedi (6) et dimanche (7)
-                $workingDays++;
+                ++$workingDays;
             }
         }
 
@@ -221,5 +222,4 @@ class Request
 
         return $workingDays - $halfDays;
     }
-
 }

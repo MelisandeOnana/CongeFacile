@@ -2,16 +2,16 @@
 
 namespace App\Form;
 
+use App\Entity\Department;
+use App\Entity\Person;
+use App\Entity\Position;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Person;
-use App\Entity\Department;
-use App\Entity\Position;
-use Doctrine\ORM\EntityRepository;
 
 class ProfileType extends AbstractType
 {
@@ -57,7 +57,7 @@ class ProfileType extends AbstractType
                 ],
             ]);
 
-        if (!$isManager) {
+        if (! $isManager) {
             $builder
                 ->add('position', EntityType::class, [
                     'class' => Position::class,

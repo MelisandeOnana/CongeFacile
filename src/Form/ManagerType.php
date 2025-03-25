@@ -2,18 +2,17 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\Department;
-use App\Entity\Position;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -72,23 +71,23 @@ class ManagerType extends AbstractType
                 ],
             ]);
 
-            $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-                $form = $event->getForm();
-                $data = $event->getData();
-            
-                // Vérifiez si les mots de passe correspondent
-                if ($form->get('newPassword')->getData() !== $form->get('confirmPassword')->getData()) {
-                    $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
-                }
-            
-                // Assurez-vous que le département est défini
-                $department = $form->get('department')->getData();
-                if ($department) {
-                    $data->getPerson()->setDepartment($department);
-                } else {
-                    $form->get('department')->addError(new FormError('Le département ne peut pas être vide.'));
-                }
-            });
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
+            // Vérifiez si les mots de passe correspondent
+            if ($form->get('newPassword')->getData() !== $form->get('confirmPassword')->getData()) {
+                $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
+            }
+
+            // Assurez-vous que le département est défini
+            $department = $form->get('department')->getData();
+            if ($department) {
+                $data->getPerson()->setDepartment($department);
+            } else {
+                $form->get('department')->addError(new FormError('Le département ne peut pas être vide.'));
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)

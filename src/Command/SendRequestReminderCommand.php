@@ -2,14 +2,14 @@
 
 namespace App\Command;
 
+use App\Entity\User;
 use App\Repository\RequestRepository;
+use App\Service\MailerService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\MailerService;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\User;
 
 #[AsCommand(
     name: 'app:send-request-reminder',
@@ -37,13 +37,13 @@ class SendRequestReminderCommand extends Command
 
         foreach ($requests as $request) {
             $answer = $request->getAnswer();
-            if ($answer == 1) {
+            if (1 == $answer) {
                 $collaborator = $request->getCollaborator();
                 $alert = $collaborator->getAlertBeforeVacation();
-                if ($alert == true) {
+                if (true == $alert) {
                     $user = $this->entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
                     $to = $user->getEmail();
-                    
+
                     $subject = 'Votre congé commence dans une semaine !';
 
                     $requestType = strtolower($request->getRequestType()->getName());
@@ -54,12 +54,13 @@ class SendRequestReminderCommand extends Command
                     $message = "Votre $requestType débutant le $startAt et d'une durée de $workingDays$dayLabel arrive très bientôt.";
 
                     $this->mailerService->sendEmail($to, $subject, $message);
-                    $mails++;
+                    ++$mails;
                 }
             }
         }
 
-        $output->writeln($mails.' email(s) de rappel envoyé(s).');
+        $output->writeln($mails . ' email(s) de rappel envoyé(s).');
+
         return Command::SUCCESS;
     }
 }

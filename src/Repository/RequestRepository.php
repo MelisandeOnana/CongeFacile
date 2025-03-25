@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Repository\PersonRepository;
 
 /**
  * @extends ServiceEntityRepository<Request>
@@ -19,6 +18,7 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
         $this->personRepository = $personRepository;
     }
+
     public function findRequestsWithDate(\DateTime $date)
     {
         $startOfDay = (clone $date)->setTime(0, 0, 0);
@@ -46,7 +46,7 @@ class RequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    
+
     public function countRequestsByRequestType($requestType)
     {
         $startOfYear = (new \DateTime())->setDate((int)date('Y'), 1, 1)->setTime(0, 0, 0);
@@ -63,7 +63,9 @@ class RequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    public function findRequestsByMonthOfAnswer(\DateTime $date) {
+
+    public function findRequestsByMonthOfAnswer(\DateTime $date)
+    {
         $startOfMonth = (clone $date)->setDate((int)$date->format('Y'), (int)$date->format('m'), 1)->setTime(0, 0, 0);
         $endOfMonth = (clone $date)->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$date->format('t'))->setTime(23, 59, 59);
 

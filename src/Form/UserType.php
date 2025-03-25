@@ -2,20 +2,20 @@
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Entity\Department;
 use App\Entity\Person;
 use App\Entity\Position;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -58,11 +58,11 @@ class UserType extends AbstractType
                 'required' => true,
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'mapped' => true,
-                'placeholder' => 'Choisir un département', 
+                'placeholder' => 'Choisir un département',
                 'attr' => [
                     'id' => 'department',
                     'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                ], 
+                ],
             ])
             ->add('position', EntityType::class, [
                 'class' => Position::class,
@@ -71,11 +71,11 @@ class UserType extends AbstractType
                 'required' => true,
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'mapped' => true,
-                'placeholder' => 'Choisir un poste', 
+                'placeholder' => 'Choisir un poste',
                 'attr' => [
                     'id'=> 'position',
                     'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                ], 
+                ],
             ])
             ->add('manager', EntityType::class, [
                 'class' => Person::class,
@@ -86,12 +86,12 @@ class UserType extends AbstractType
                 'required' => true,
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'mapped' => true,
-                'placeholder' => 'Choisir un manager', 
+                'placeholder' => 'Choisir un manager',
                 'attr' => [
                     'id' => 'manager',
                     'class' => 'bg-[#F3F4F6] appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                    'disabled' => 'disabled'
-                ], 
+                    'disabled' => 'disabled',
+                ],
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
@@ -112,14 +112,14 @@ class UserType extends AbstractType
                 ],
             ]);
 
-            $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-                $form = $event->getForm();
-            
-                // Vérifiez si les mots de passe correspondent
-                if ($form->get('newPassword')->getData() !== $form->get('confirmPassword')->getData()) {
-                    $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
-                }
-            });
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+
+            // Vérifiez si les mots de passe correspondent
+            if ($form->get('newPassword')->getData() !== $form->get('confirmPassword')->getData()) {
+                $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
