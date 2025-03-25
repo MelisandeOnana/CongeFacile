@@ -74,24 +74,9 @@ class PositionController extends AbstractController
 
         $positionCount = $personRepository->countByPosition($position);
 
-        $delete = $request->query->get('delete');
         $formPosition = $this->createForm(PositionType::class, $position);
         $formPosition->handleRequest($request);
         $formDelete = $this->createForm(DeleteType::class);
-        $formDelete->handleRequest($request);
-
-        if ($delete == 'true') {
-            if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-                if ($positionCount > 0) {
-                    $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
-                    return $this->redirectToRoute('position_show', ['id' => $id]);
-                } else {
-                    $entityManager->remove($position);
-                    $entityManager->flush();
-                    return $this->redirectToRoute('positions');
-                }
-            }
-        }
 
         if ($formPosition->isSubmitted() && $formPosition->isValid()) {
             $existingPosition = $positionRepository->findOneBy(['name' => $position->getName()]);
@@ -99,7 +84,6 @@ class PositionController extends AbstractController
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
                 return $this->redirectToRoute('position_show', ['id' => $id]);
             } else {
-
                 $entityManager->persist($position);
                 $entityManager->flush();
                 return $this->redirectToRoute('positions');
@@ -134,5 +118,21 @@ class PositionController extends AbstractController
         return $this->render('admin/position/position_new.html.twig', [
             'formPosition' => $formPosition->createView(),
         ]);
+    }
+
+    #[Route('/position/delete/{id}', name: 'position_delete', methods: ['POST'])]
+    public function delete(Position $position, EntityManagerInterface $entityManager, PersonRepository $personRepository, HttpRequest $request): Response
+    {
+        $positionCount = $personRepository->countByPosition($position);
+
+        if ($positionCount > 0) {
+            $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
+        } else {
+            $entityManager->remove($position);
+            $entityManager->flush();
+            $this->addFlash('success', 'Le poste a été supprimé avec succès.');
+        }
+
+        return $this->redirectToRoute('positions');
     }
 }
