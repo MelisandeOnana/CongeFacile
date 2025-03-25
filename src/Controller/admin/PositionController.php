@@ -85,7 +85,12 @@ class PositionController extends AbstractController
                 return $this->redirectToRoute('position_show', ['id' => $id]);
             } else {
                 $entityManager->persist($position);
-                $entityManager->flush();
+                try {
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le poste a été créé avec succès.');
+                } catch (Exception $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
+                }
                 return $this->redirectToRoute('positions');
             }
         }
@@ -109,8 +114,12 @@ class PositionController extends AbstractController
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
             } else {
                 $entityManager->persist($position);
-                $entityManager->flush();
-                $this->addFlash('success', 'Le poste a été créé avec succès.');
+                try {
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le poste a été créé avec succès.');
+                } catch (Exception $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
+                }
                 return $this->redirectToRoute('positions');
             }
         }
@@ -129,8 +138,12 @@ class PositionController extends AbstractController
             $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
         } else {
             $entityManager->remove($position);
-            $entityManager->flush();
-            $this->addFlash('success', 'Le poste a été supprimé avec succès.');
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Le poste a été supprimé avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du poste.');
+            }
         }
 
         return $this->redirectToRoute('positions');

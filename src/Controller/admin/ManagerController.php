@@ -104,7 +104,7 @@ class ManagerController extends AbstractController
             } else {
                 $this->addFlash('error', 'Le département sélectionné n\'a pas été trouvé.');
             }
-        
+            
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -114,18 +114,20 @@ class ManagerController extends AbstractController
                 );
                 $manager->setPassword($hashedPassword);
             }
-        
+            
             $entityManager->persist($manager->getPerson()); // Persister d'abord la personne
             $entityManager->persist($manager);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le manager a été ajouté avec succès.');
-        
+            
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le manager a été mis à jour avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du manager.');
+            }
+            
             return $this->redirectToRoute('managers');
         }
-
-
 
         return $this->render('admin/manager/manager_show.html.twig', [
             'manager' => $manager,
@@ -154,14 +156,14 @@ class ManagerController extends AbstractController
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // Définir le département de la personne
             $department = $userForm->get('department')->getData();
-        
+            
             // Vérifier si le département est déjà attribué
             $existingManager = $personRepository->findOneBy(['department' => $department]);
             if ($existingManager) {
                 $this->addFlash('error', 'Le département sélectionné est déjà attribué.');
                 return $this->redirectToRoute('manager_new'); // Rediriger vers la page de création avec le message d'erreur
             }
-        
+            
             // Définir la position par défaut pour un manager
             $managerPosition = $positionRepository->findOneBy(['name' => 'Manager']);
             if ($managerPosition) {
@@ -169,7 +171,7 @@ class ManagerController extends AbstractController
             } else {
                 $userForm->get('position')->addError(new FormError('La position "manager" n\'existe pas.'));
             }
-        
+            
             // Hash the password
             $newPassword = $userForm->get('newPassword')->getData();
             if ($newPassword) {
@@ -179,14 +181,18 @@ class ManagerController extends AbstractController
                 );
                 $manager->setPassword($hashedPassword);
             }
-        
+            
             $entityManager->persist($manager->getPerson()); // Persister d'abord la personne
             $entityManager->persist($manager);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le manager a été ajouté avec succès.');
-        
+            
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le manager a été ajouté avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du manager.');
+            }
+            
             return $this->redirectToRoute('managers');
         }
 

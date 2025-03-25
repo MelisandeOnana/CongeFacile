@@ -43,12 +43,13 @@ class ProfileController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // Enregistrer les modifications
-            $entityManager->persist($person);
-            $entityManager->flush();
-
-            // Ajouter un message flash ou rediriger l'utilisateur
-            $this->addFlash('success', 'Vos informations ont été mises à jour.');
+            try {
+                $entityManager->persist($person);
+                $entityManager->flush();
+                $this->addFlash('success', 'Vos informations ont été mises à jour.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de vos informations.');
+            }
             return $this->redirectToRoute('profile_index');
         }
 
@@ -68,14 +69,17 @@ class ProfileController extends AbstractController
                 if ($newPassword !== $confirmPassword) {
                     $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
                 } else {
-                    $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
-                    $user->setPassword($hashedPassword);
+                    try {
+                        $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
+                        $user->setPassword($hashedPassword);
 
-                    $entityManager->persist($user);
-                    $entityManager->flush();
+                        $entityManager->persist($user);
+                        $entityManager->flush();
 
-                    // Ajouter un message flash et rediriger
-                    $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
+                        $this->addFlash('success', 'Votre mot de passe a été réinitialisé.');
+                    } catch (\Exception $e) {
+                        $this->addFlash('error', 'Une erreur est survenue lors de la réinitialisation de votre mot de passe.');
+                    }
                     return $this->redirectToRoute('profile_index');
                 }
             }
@@ -105,17 +109,21 @@ class ProfileController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if (in_array("ROLE_MANAGER", $roles)) {
-                $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
-            } else {
-                $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
-                $person->setAlertBeforeVacation($form->get('alertBeforeVacation')->getData());
-            }
-            
-            $entityManager->persist($person);
-            $entityManager->flush();
+            try {
+                if (in_array("ROLE_MANAGER", $roles)) {
+                    $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
+                } else {
+                    $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
+                    $person->setAlertBeforeVacation($form->get('alertBeforeVacation')->getData());
+                }
 
-            $this->addFlash('success', 'Vos préférences ont été mises à jour.');
+                $entityManager->persist($person);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Vos préférences ont été mises à jour.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour de vos préférences.');
+            }
             return $this->redirectToRoute('preferences');
         }
 

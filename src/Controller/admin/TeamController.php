@@ -138,10 +138,14 @@ class TeamController extends AbstractController
 
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du nouveau membre.');
+            }
         
             return $this->redirectToRoute('team_index');
         }
@@ -216,10 +220,14 @@ class TeamController extends AbstractController
             $user->setPerson($person);
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
-        
-            $entityManager->flush();
-            // Ajouter un message flash
-            $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
+
+            try {
+                $entityManager->flush();
+                // Ajouter un message flash
+                $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
+            } catch (Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du membre.');
+            }
         
             return $this->redirectToRoute('team_index');
         }

@@ -23,6 +23,8 @@ use DateTimeImmutable;
 use DateTimeZone;
 use App\Enum\Statut;
 
+
+
 class RequestController extends AbstractController
 {
     private MailerService $mailerService;
@@ -209,9 +211,12 @@ class RequestController extends AbstractController
             }
 
             $entityManager->persist($theRequest);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Requete créé avec succès.');
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'Requête créé avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de la requête.');
+            }
 
             //Envoi d'un email au manager
 
@@ -278,7 +283,12 @@ class RequestController extends AbstractController
             $request->setAnswerAt($answerAt);
 
             $entityManager->persist($request);
-            $entityManager->flush();
+            try {
+                $entityManager->flush();
+                $this->addFlash('success', 'La réponse a été enregistrée avec succès.');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement de la réponse.');
+            }
 
             //Envoi d'un email au collaborateur
 
