@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Person;
 use App\Entity\User;
 use App\Form\PreferencesType;
 use App\Form\ProfileType;
 use App\Form\ResetPasswordType;
-use Doctrine\ORM\EntityManagerInterface
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
