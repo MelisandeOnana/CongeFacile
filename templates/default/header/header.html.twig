@@ -1,6 +1,15 @@
 <div class="relative">
-    <div class="bg-[#B4C4CF] h-[63px] rounded-[12px] absolute left-[50%] right-[50%] w-[95%] bottom-[5px] translate-x-[-50%]"></div>
-    <header class="bg-[#004C6C] text-white h-[58px] text-center rounded-[12px] relative z-10 mt-[15px] ml-[auto] mr-[auto] w-[98%]">
+    <div class="bg-[#B4C4CF] h-[63px] rounded-[12px] absolute left-[50%] right-[50%] w-[95%] bottom-[5px] translate-x-[-50%] z-40"></div>
+    <header class="bg-[#004C6C] text-white h-[58px] text-center rounded-[12px] relative z-40 mt-[15px] ml-[auto] mr-[auto] w-[98%]">
+        {% if app.request.attributes.get('_route') != 'login' %}
+                <button id="hamburger" class="lg:hidden text-white focus:outline-none mt-[10px] ">
+                    <svg viewBox="0 0 100 80" width="40" height="40" class="fill-current text-white">
+                        <rect width="100" height="10" rx="8"></rect>
+                        <rect y="30" width="80" height="10" rx="8"></rect>
+                        <rect y="60" width="70" height="10" rx="8"></rect>
+                    </svg>
+                </button>
+        {% endif %}
         <img src="{{asset('images/logo.png')}}" alt="Logo" class="absolute left-[10px] top-[10px] h-[37px] w-[167px]">
     </header>
 </div>

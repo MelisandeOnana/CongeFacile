@@ -3,65 +3,61 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-
-<div class="max-w-4xl mx-auto py-8 px-1 ml-[-0.1%]">
-    <div>
-        <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">CongéFacile</h1>
-        <p class="mt-2 text-black text-[16px] font-[Epilogue] font-normal">
-            CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise. 
-            <br>
-            Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer
-            <br>
-            vos absences en toute transparence et simplicité.
-        </p>
+    <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue] text-center md:text-left">CongéFacile</h1>
+    <p class="mt-2 text-black text-[16px] font-[Epilogue] font-normal text-center md:text-left">
+        CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise. 
+    </p>
+    <p class="text-black text-[16px] font-[Epilogue] font-normal text-center md:text-left">
+        Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer
+    </p>
+    <p class="text-black text-[16px] font-[Epilogue] font-normal text-center md:text-left">
+        vos absences en toute transparence et simplicité.
+    </p>
+    <!-- Étapes de la demande de congés -->
+    <h2 class="text-[24px] font-semibold text-[#1B3168] font-[Epilogue] mt-8 text-center md:text-left">Étapes</h2>
+    <div class="flex flex-wrap justify-center md:justify-start">
+        <svg class="w-full max-w-[674px] h-auto md:ml-[80px]" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ligne droite reliant les chiffres -->
+            <line x1="50" y1="80" x2="550" y2="80" stroke="#004C6C" stroke-width="2" />
+        
+            <!-- Cercles pour les chiffres -->
+            <circle cx="50" cy="80" r="25" fill="#004C6C" />
+            <circle cx="300" cy="80" r="25" class="fill-white stroke-[#004C6C]" stroke-width="2" />
+            <circle cx="550" cy="80" r="25" class="fill-white stroke-[#004C6C]" stroke-width="2" />
+        
+            <!-- Texte des chiffres -->
+            <text x="50" y="85" font-size="20" text-anchor="middle" class="fill-white font-[Inter]">1</text>
+            <text x="300" y="85" font-size="20" text-anchor="middle" class="fill-[#004C6C] font-[Inter] font-medium">2</text>
+            <text x="550" y="85" font-size="20" text-anchor="middle" class="fill-[#004C6C] font-[Inter] font-medium">3</text>
+        
+            <!-- Texte en dessous des chiffres -->
+            <text x="50" y="130" font-size="16" text-anchor="middle" class="fill-[#111928] font-[Inter]">Étape 1</text>
+            <text x="300" y="130" font-size="16" text-anchor="middle" class="fill-[#111928] font-[Inter]">Étape 2</text>
+            <text x="550" y="130" font-size="16" text-anchor="middle" class="fill-[#111928] font-[Inter]">Étape 3</text>
+        </svg>
     </div>
 
-    <!-- Etapes -->
-    <div class="mt-10">
-        <h2 class="text-xl font-semibold text-gray-700">Étapes</h2>
-
-        <div class="flex items-center justify-between mt-6 relative space-x-8">
-            <!-- Etape 1 -->
-            <div class="flex flex-col items-center relative">
-                <div class="w-12 h-12 bg-[#004C6C] text-white flex items-center justify-center rounded-full text-lg font-bold z-10">1</div>
-                <p class="mt-2 text-sm font-medium text-gray-700">Étape 1</p>
-                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
-                    J'effectue ma demande de congés
-                </div>
-                <!-- Trait -->
-                <div class="absolute top-[13%] right-[-7%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+    <!-- Rectangles sous chaque étape -->
+    <div class="flex flex-wrap justify-center md:justify-start md:ml-[35px]">
+        <div class="flex flex-col mr-[25px] items-center mb-4">
+            <div class="w-full sm:w-[244px] h-[110px] p-[30px] bg-[#004C6C0D] rounded-lg flex items-center justify-center">
+                <p class="text-center text-black text-[15px] font-[Epilogue]">J’effectue ma demande de congés</p>
             </div>
-
-            <!-- Etape 2 -->
-            <div class="flex flex-col items-center relative">
-                <div class="w-12 h-12 border-[#004C6C] text-[#004C6C] border-2 flex items-center justify-center rounded-full text-lg font-bold z-10">2</div>
-                <p class="mt-2 text-sm font-medium text-[#004C6C]">Étape 2</p>
-                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
-                    Mon manager valide ou refuse la demande
-                </div>
-                <!-- Traits -->
-                <div class="absolute top-[13%]  left-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
-                <div class="absolute top-[13%] right-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+        </div>
+        <div class="flex flex-col items-center mr-[25px] mb-4">
+            <div class="w-full sm:w-[244px] h-[110px] p-[30px] bg-[#004C6C0D] rounded-lg flex items-center justify-center">
+                <p class="text-center text-black text-[15px] font-[Epilogue]">Mon manager valide ou refuse la demande</p>
             </div>
-
-            <!-- Etape 3 -->
-            <div class="flex flex-col items-center relative">
-                <div class="w-12 h-12 border-[#004C6C] text-[#004C6C] border-2 flex items-center justify-center rounded-full text-lg font-bold z-10">3</div>
-                <p class="mt-2 text-sm font-medium text-[#004C6C]">Étape 3</p>
-                <div class="mt-4 p-4 bg-gray-100 rounded-lg shadow-md text-center text-gray-600">
-                    Je consulte l'historique de mes demandes
-                </div>
-                <!-- Trait -->
-                <div class="absolute top-[13%] left-[-6%] w-[calc(50%-6px)] h-0.5 bg-[#004C6C]"></div>
+        </div>
+        <div class="flex flex-col items-center mb-4">
+            <div class="w-full sm:w-[244px] h-[110px] p-[30px] bg-[#004C6C0D] rounded-lg flex items-center justify-center">
+                <p class="text-center text-black text-[15px] font-[Epilogue]">Je consulte l’historique de mes demandes</p>
             </div>
         </div>
     </div>
-
-    <div class="mt-12">
+    <div class="mt-12 text-center md:text-left">
         <p class="text-sm text-gray-600 font-[Epilogue] text-[16px] font-normal">
             En cas de difficulté avec l'application, veuillez envoyer un email à <a href="mailto:contact@mentalworks.fr" class="text-blue-600 underline">contact@mentalworks.fr</a>.
         </p>
     </div>
-</div>
-
 {% endblock %}
