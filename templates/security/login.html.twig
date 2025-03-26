@@ -4,16 +4,18 @@
 
 {% block body %}
     <div class="container mx-auto px-4">
-        <h1 class="font-[Epilogue] text-[#1B3168] text-[28.85px] font-bold mb-4">CongéFacile</h1>
-        <p class="font-[Epilogue] text-[16px]">CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l’entreprise.<br>
+        <h1 class="font-[Epilogue] text-[#1B3168] text-[28.85px] font-bold mb-4 text-center md:text-left">CongéFacile</h1>
+        <p class="font-[Epilogue] text-[16px] text-center md:text-left">
+            CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l’entreprise.<br>
             Plus besoin d’échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer<br>
-            vos absences en toute transparence et simplicité. Connectez-vous ci-dessous pour accéder à votre espace.</p>
-        <h2 class="font-[Epilogue] text-[#1B3168] text-[24px] font-bold mt-4">Connectez-vous</h2>
-        <form action="{{ path('login') }}" method="post" class="space-y-4 font-[sans-serif] text-[#333] max-w-md mt-4">
+            vos absences en toute transparence et simplicité. Connectez-vous ci-dessous pour accéder à votre espace.
+        </p>
+        <h2 class="font-[Epilogue] text-[#1B3168] text-[24px] font-bold mt-4 text-center md:text-left">Connectez-vous</h2>
+        <form action="{{ path('login') }}" method="post" class="space-y-4 font-[sans-serif] text-[#333] max-w-md mt-4 mx-auto md:mx-0">
             <div class="relative flex flex-col">
                 <label for="email" class="block text-sm font-bold text-[#212B36] mb-2">Adresse Mail</label>
                 <input type="email" id="email" name="_username" placeholder="****@mentalworks.fr"
-                    class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" 
+                    class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-full md:w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" 
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
                     required />
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute left-4 top-10"
@@ -37,7 +39,7 @@
                 <label for="password" class="block text-sm font-bold text-[#212B36] mb-2">Mot de passe</label>
                 <div class="relative">
                     <input type="password" id="password" name="_password" required
-                        class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" />
+                        class="px-4 pl-[3rem] py-3 text-[#9CA3AF] w-full md:w-[350px] h-[46px] text-sm border outline-[#007bff] rounded transition-all" />
                     <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
                         class="mr-[95px] w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-4 cursor-pointer toggle-password" data-target="password"
                         viewBox="0 0 128 128">
@@ -50,8 +52,8 @@
             {% if error %}
                 <div class="alert alert-danger text-red-500">{{ error }}</div>
             {% endif %}
-            <button type="submit" class="bg-[#1B3168] text-white text-[16px] font-[Inter] font-[500] px-4 py-2 rounded w-[215px] h-[50px]">Connexion au portail</button>
+            <button type="submit" class="bg-[#1B3168] text-white text-[16px] font-[Inter] font-[500] px-4 py-2 rounded w-full md:w-[215px] h-[50px]">Connexion au portail</button>
         </form>
-        <p class="text-[16px] mt-[1.5rem] font-[400] font-[Epilogue]">Vous avez oublié votre mot de passe ? <a class="text-[#004C6C] font-bold" href="{{ path('forgot_password') }}">Cliquez ici</a> pour le réinitialiser.</p>
+        <p class="text-[16px] mt-[1.5rem] font-[400] font-[Epilogue] text-center md:text-left">Vous avez oublié votre mot de passe ? <a class="text-[#004C6C] font-bold" href="{{ path('forgot_password') }}">Cliquez ici</a> pour le réinitialiser.</p>
     </div>
 {% endblock %}
