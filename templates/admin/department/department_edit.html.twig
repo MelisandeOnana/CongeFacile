@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail d'un département/sercice{% endblock %}
+
+{% block body %}
+    <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-6">{{ department.name }}</h1>
+    {{ form_start(formDepartment) }}
+        {{ form_row(formDepartment.name) }}
+        <div class="flex mt-6">
+            {{ form_widget(formDelete) }}
+            <button type="submit" class="ml-6 bg-[#1B3168] text-white py-2 px-4 rounded-[6px] w-[154px] h-[40px]">Mettre à jour</button>
+        </div>
+    {{ form_end(formDepartment) }}
+{% endblock %}

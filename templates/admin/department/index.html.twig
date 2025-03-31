@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des départements{% endblock %}
+
+{% block body %}
+    <div class="flex">
+        <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Départements</h1>
+        <a href="{{ path('department_new') }}" class="justify-center py-[9px] px-12 shadow-sm text-sm font-medium rounded-md text-white bg-[#004C6C] hover:bg-[#1B3168] h-10 ml-8">
+            Ajouter un département
+        </a>
+    </div>
+    {% for label, messages in app.flashes %}
+        <div class=" mt-6 alert alert-{{ label }}">
+            {% for message in messages %}
+                <p class="font-bold" >{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="max-w-[1000px]">
+        <table class="w-[937px] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mt-[20px]">
+            <!-- En-tête des colonnes -->
+            <thead class="bg-[#F9FAFB] font-[Inter]">
+                <tr class="text-left text-[#344054]">
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            <span>Nom du département</span>
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="px-4 pt-5"><!-- Vide --></th>
+                </tr>
+                <!-- Ligne des champs de recherche -->
+                <tr class="text-gray-700">
+                    <th class="px-4 py-1 flex">
+                        <input 
+                            type="text" 
+                            name="name" 
+                            class="appearance-none text-sm font-medium mb-5 w-[558px] h-[44px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+                            value="{{ app.request.query.get('name') }}" 
+                            placeholder="Rechercher un département..."
+                            onchange="updateUrl('name', this.value)">
+                    </th>
+                    <th class="px-4 py-1">
+                        {% if app.request.query.get('name') is not empty %}
+                            <div class="mb-5">
+                                <a href="{{ path('departments') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-2 px-3 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 mr-5">X</a>
+                            </div>
+                        {% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <!-- Corps du tableau -->
+            <tbody>
+                {% for department in departments %}
+                    <tr class="border-b">
+                        <td class="px-4 py-6 text-sm text-gray-700">{{ department.name }}</td>
+                        <td class="px-4 py-6">
+                            <a href="{{ path('department_edit', { 'id': department.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="px-4 py-6 text-sm text-gray-500 text-center">Aucun département trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+    function updateUrl(param, value) {
+        const url = new URL(window.location.href);
+        if (value) {
+            url.searchParams.set(param, value);
+        } else {
+            url.searchParams.delete(param);
+        }
+        window.location.href = url.toString();
+    }
+</script>
+{% endblock %}

@@ -16,6 +16,23 @@ class DepartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Department::class);
     }
 
+    public function findByName(string $name): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllOrderedByNewest(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.id', 'DESC') // Trie par ID décroissant
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Department[] Returns an array of Department objects
     //     */
