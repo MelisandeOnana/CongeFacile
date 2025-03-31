@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un type de demande{% endblock %}
+
+{% block body %}
+    <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-6">Ajouter un type de demande</h1>
+        {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {% for label, messages in app.flashes %}
+            <div class=" mt-6 alert alert-{{ label }}">
+                {% for message in messages %}
+                    <p class="font-bold" >{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <div class="flex mt-6">
+            <button type="submit" class="bg-[#1B3168] text-white py-2 px-4 rounded-[6px] w-[154px] h-[40px]">Ajouter</button>
+        </div>
+        {{ form_end(form) }}
+{% endblock %}

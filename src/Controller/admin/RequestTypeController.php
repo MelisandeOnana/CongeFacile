@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\RequestType;
+use App\Form\RequestTypeFormType;
 
 #[IsGranted('ROLE_MANAGER')]
 class RequestTypeController extends AbstractController
@@ -50,12 +53,33 @@ class RequestTypeController extends AbstractController
         $TypesPagination = $paginator->paginate(
             $filteredTypes, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            6 /* limit par page */
+            10 /* limit par page */
         );
 
         return $this->render('admin/request_type/index.html.twig', [
             'requestTypes' => $TypesPagination,
             'typesCounts' => $typesCounts,
+        ]);
+    }
+
+    #[Route('/request-type/new', name: 'request_type_new')]
+    public function new(HttpRequest $request, EntityManagerInterface $entityManager): Response
+    {
+        $requestType = new RequestType();
+        $form = $this->createForm(RequestTypeFormType::class, $requestType);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($requestType);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le type de demande a été ajouté avec succès.');
+
+            return $this->redirectToRoute('request_types');
+        }
+
+        return $this->render('admin/request_type/request_type_new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }
