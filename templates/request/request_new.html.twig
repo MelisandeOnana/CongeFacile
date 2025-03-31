@@ -3,66 +3,66 @@
 {% block title %}Nouvelle demande{% endblock %}
 
 {% block body %}
-    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Effectuer une nouvelle demande</h1>
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">
+        Effectuer une nouvelle demande
+    </h1>
     {{ form_start(form) }}
 
-        {% if form_errors(form.startAt) or form_errors(form.endAt) or form_errors(form.requestType) %}
-        <div class="mt-8 text-red-700 border border-red-700 rounded-[6px] p-4 bg-red-100 inline-block">
-            {{ form_errors(form.startAt) }}
-            {{ form_errors(form.endAt) }}
-            {{ form_errors(form.requestType) }}
-        </div>
-        {% endif %}
+    {% if form_errors(form.startAt) or form_errors(form.endAt) or form_errors(form.requestType) %}
+    <div class="mt-8 text-red-700 border border-red-700 rounded-[6px] p-4 bg-red-100 inline-block">
+        {{ form_errors(form.startAt) }}
+        {{ form_errors(form.endAt) }}
+        {{ form_errors(form.requestType) }}
+    </div>
+    {% endif %}
 
-        <div class="mt-8">
-            {{ form_label(form.requestType) }}
-            {{ form_widget(form.requestType) }}
+    <div class="mt-8">
+        {{ form_label(form.requestType) }}
+        {{ form_widget(form.requestType) }}
+    </div>
+    <div class="mt-8 flex flex-col md:flex-row md:space-x-4">
+        <div>
+            {{ form_label(form.startAt) }}
+            {{ form_widget(form.startAt) }}
         </div>
-        <div class="mt-8 flex space-x-4">
-            <div>
-                {{ form_label(form.startAt) }}
-                {{ form_widget(form.startAt) }}
-            </div>
-            <div class="ml-[30px]">
-                {{ form_label(form.endAt) }}
-                {{ form_widget(form.endAt) }}
-            </div>
+        <div class="mt-4 md:mt-0">
+            {{ form_label(form.endAt) }}
+            {{ form_widget(form.endAt) }}
         </div>
-        <div class="flex mt-8 flex-column">
-            <div>
-                <label class="block mb-2 text-[#212B36] font-[Inter]" for="result">Nombre de jours ouvrés :</label>
-                <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
-            </div>
+    </div>
+    <div class="flex flex-col mt-8">
+        <div>
+            <label class="block mb-2 text-[#6B7280] font-[Inter]" for="result">Nombre de jours ouvrés :</label>
+            <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
         </div>
-        <div class="flex mt-8 flex-row">
-            <div>
-                <label class="block mb-2 text-[#212B36] font-[Inter]" for="result">Justificatif si applicable :</label>
-            <div>
-            <div class="flex w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6">
-                <!-- Champ input caché -->
-                {{ form_widget(form.fichier, {'attr': {'class': 'hidden', 'id': 'request_form_fichier'}}) }}
-
-                <!-- Bouton personnalisé avec une image -->
-                <label for="request_form_fichier" class="cursor-pointer">
-                    <img src="{{ asset('images/file.png') }}" alt="Télécharger" class="w-5 h-5 mt-3 mb-4 mx-auto">
-                </label>
-
-                <!-- Zone pour afficher le nom du fichier -->
-                <div id="file-name" class="mx-auto mt-2 mb-2 text-gray-700">Aucun fichier sélectionné</div>
+    </div>
+    <div class="flex flex-col mt-8">
+        <div class="relative">
+            {{ form_label(form.file) }}
+            <div class="relative">
+                {{ form_widget(form.file, { 'attr': { 'class': 'opacity-0 absolute inset-0 w-full h-full cursor-pointer' } }) }}
+                <div class="flex items-center p-[14px] w-[350px] h-[46px] border rounded-[6px] bg-white">
+                    <img src="{{asset('images/file.png')}}" alt="Logo" class="w-[16px] h-[16px] mr-[15px]">
+                    <span class="text-[#9CA3AF]">Sélectionner un fichier</span>
+                </div>
             </div>
-            <!-- Afficher les erreurs du champ fichier -->
-            {% if form_errors(form.fichier) %}
+            {% if form_errors(form.file) %}
             <div class="mt-2 text-red-700">
-                {{ form_errors(form.fichier) }}
+                {{ form_errors(form.file) }}
             </div>
             {% endif %}
         </div>
-        <div class="flex mt-8">
+    </div>
+    <div class="flex flex-col mt-8">
+        <div class="w-full md:w-[350px] mx-auto">
             {{ form_row(form.comment) }}
         </div>
-        <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
-            Soumettre ma demande*
-        </button>
-        <p class="text-[#000000] text-sm mt-2">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
+    </div>
+    <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-full md:w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
+        Soumettre ma demande*
+    </button>
+    <p class="text-[#000000] text-sm mt-2 text-center">
+        *En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.
+    </p>
     {{ form_end(form) }}
 {% endblock %}

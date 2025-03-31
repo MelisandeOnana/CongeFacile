@@ -159,6 +159,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Gestion de la sidebar et de l'overlay
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.getElementById('hamburger');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.createElement('div'); // Overlay pour fermer la sidebar en cliquant à l'extérieur
+
+    // Configuration de l'overlay
+    overlay.id = 'sidebar-overlay';
+    overlay.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'hidden', 'z-10');
+    document.body.appendChild(overlay);
+
+    if (hamburger && sidebar) {
+        // Ouvrir la sidebar
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
+
+        // Fermer la sidebar en cliquant sur l'overlay
+        overlay.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
+    }
+});
+
 //  Cette fonction permet de basculer la visibilité d'un élément HTML en fonction de son identifiant (id).
 function toggleLinks(id) {
     var element = document.getElementById(id);

@@ -131,7 +131,7 @@ class RequestController extends AbstractController
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
                 $request->query->getInt('page', 1), /* page number */
-                6 /* limit per page */
+                10 /* limit per page */
             );
 
             return $this->render('request/request_historic.html.twig', [

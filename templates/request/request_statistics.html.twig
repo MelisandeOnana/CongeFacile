@@ -3,9 +3,15 @@
 {% block title %}Statistiques{% endblock %}
 
 {% block body %}
-    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px]">Statistiques</h1>
-    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-5 font-semibold">Types de demandes sur l'année</h2>
-    <canvas id="doughnutChart" class="mt-10 max-h-500"></canvas>
+    <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">
+        Statistiques
+    </h1>
+    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-5 font-semibold text-center md:text-left">
+        Types de demandes sur l'année
+    </h2>
+    <div class="flex justify-center md:justify-start">
+        <canvas id="doughnutChart" class="mt-10 h-auto max-h-[500px] w-full max-w-[90%] sm:max-w-[600px] md:max-w-[600px] lg:max-w-[800px]"></canvas>
+    </div>
     <script>
         var ctx = document.getElementById('doughnutChart').getContext('2d');
         var doughnutChart = new Chart(ctx, {
@@ -34,27 +40,42 @@
                     ],
                     borderColor: [
                         'rgb(255, 255, 255)',
-                        
                     ],
                     borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
-                aspectRatio: 3.5,
+                aspectRatio: 2, // Augmente la taille du graphique
                 plugins: {
                     legend: {
-                        position: 'left',
+                        position: 'bottom', // Place la légende en bas
                         labels: {
-                            padding: 40
+                            padding: 20, // Ajoute de l'espace autour des éléments
+                            font: {
+                                size: 14 // Augmente la taille de la police
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.raw || 0;
+                                return `${label}: ${value}`;
+                            }
                         }
                     }
                 }
             }
         });
     </script>
-    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-10 font-semibold">Pourcentage d’acceptation des demandes sur l’année</h2>
-    <canvas id="LineChart" class="mt-8"></canvas>
+    <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-10 font-semibold text-center md:text-left">
+        Pourcentage d’acceptation des demandes sur l’année
+    </h2>
+    <div class="flex justify-center md:justify-start">
+        <canvas id="LineChart" class="mt-8 max-w-[90%] md:max-w-[700px]"></canvas>
+    </div>
     <script>
         var ctx = document.getElementById('LineChart').getContext('2d');
         var lineChart = new Chart(ctx, {

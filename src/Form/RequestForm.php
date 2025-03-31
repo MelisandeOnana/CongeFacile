@@ -49,7 +49,7 @@ class RequestForm extends AbstractType
             ],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
         ])
-        ->add('fichier', FileType::class, [
+        ->add('file', FileType::class, [
             'label' => 'Justificatif si applicable',
             'attr' => [
                 'class' => 'w-[350px] h-[46px] border rounded-[6px]',
@@ -72,7 +72,7 @@ class RequestForm extends AbstractType
         ->add('comment', null, [
             'label' => 'Commentaire supplémentaire',
             'attr' => [
-                'class' => 'w-[730px] h-[186px] border rounded-[6px] p-4',
+                'class' => 'w-[730px] h-[186px] border rounded-[6px] p-4 sm:w-[655px]',
                 'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
             ],
             'required' => false,

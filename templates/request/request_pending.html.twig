@@ -3,188 +3,201 @@
 {% block title %}Demandes en attente{% endblock %}
 
 {% block body %}
-  <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Demandes en attente</h1>
-  <table class="min-w-full bg-white border border-gray-300">
-  <!-- En-tête des colonnes -->
-  <thead class="bg-[#F9FAFB] font-[Inter]">    
-    <!-- Ligne des noms des colonnes -->
-    <tr class="text-left text-[#344054]">
-      <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Type de demande</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
-            </div>
-          </div>
-        </th>
+  <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10 text-center md:text-left">Demandes en attente</h1>
+  <div class="hidden md:block">
+    <table class="min-w-full bg-white border border-gray-300">
+      <!-- Ligne des noms des colonnes -->
+      <tr class="text-left text-[#344054]">
         <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Demandée le</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
+            <div class="flex items-center">
+              <span>Type de demande</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Collaborateur</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+              <span>Demandée le</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Date de début</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+              <span>Collaborateur</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Date de fin</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+              <span>Date de début</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            <span>Nb jours</span>
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-              <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
-              </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-              <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
-              </span>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+              <span>Date de fin</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5"><!-- Vide --></th>
-    </tr>
-      <!-- Ligne des champs de recherche -->
-      <tr class="text-gray-700">
-        <th class="px-4 py-1 w-1/6">
-          <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('type', this.value)">
-            <option value=""></option>
-              {% for type in requestTypes %}
-                <option value="{{ type.id }}" {% if app.request.query.get('type') == type.id %}selected{% endif %}>{{ type.name }}</option>
-              {% endfor %}
-          </select>
-        </th>
-        <th class="px-4 py-1">
-          <input 
-            type="date" 
-            class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-            value="{{ app.request.query.get('requested') }}" 
-            onchange="updateUrl('requested', this.value)">
-        </th>
-        <th class="px-4 py-1 w-1/6">
-          <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('collaborator', this.value)">
-            <option value=""></option>
-              {% for collaborator in collaborators %}
-                <option value="{{ collaborator.id }}" {% if app.request.query.get('collaborator') == collaborator.id %}selected{% endif %}>{{collaborator.firstname}} {{collaborator.lastname }}</option>
-              {% endfor %}
-          </select>
-        </th>
-        <th class="px-4 py-1">
-          <input 
-            type="date" 
-            class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-            value="{{ app.request.query.get('start') }}" 
-            onchange="updateUrl('start', this.value)">
-        </th>
-        <th class="px-4 py-1">
-          <input 
-            type="date" 
-            class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-            value="{{ app.request.query.get('end') }}" 
-            onchange="updateUrl('end', this.value)">
-        </th>
-        <th class="px-4 py-1 w-1/6">
-          <input 
-            type="text" 
-            class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-            value="{{ app.request.query.get('days') }}" 
-            onchange="updateUrl('days', this.value)">
-        </th>
-        <th class="px-4 py-1 ">
-          {% if app.request.query.get('collaborator') is not empty or app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty %}
-            <div class="mb-5">
-              <a href="{{ path('request_pending') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+              <span>Nb jours</span>
+              <div class="flex flex-col ml-[5px]">
+                <span class="chevron-up">
+                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+                </span>
+                <span class="chevron-down mt-[-5px]">
+                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                </span>
+              </div>
             </div>
-          {% endif %}
-        </th>
+          </th>
+          <th class="px-4 pt-5"><!-- Vide --></th>
       </tr>
-    </thead>
-    <!-- Corps du tableau -->
-    <tbody>
-      {% for request in requests %}
-        <tr class="border-b">
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.collaborator.firstname }} {{ request.collaborator.lastname }}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
-          <td class="px-4 py-4">
-            <a href="{{ path('request_show', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
-          </td>
+        <!-- Ligne des champs de recherche -->
+        <tr class="text-gray-700">
+          <th class="px-4 py-1 w-1/6">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('type', this.value)">
+              <option value=""></option>
+                {% for type in requestTypes %}
+                  <option value="{{ type.id }}" {% if app.request.query.get('type') == type.id %}selected{% endif %}>{{ type.name }}</option>
+                {% endfor %}
+            </select>
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="date" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('requested') }}" 
+              onchange="updateUrl('requested', this.value)">
+          </th>
+          <th class="px-4 py-1 w-1/6">
+            <select class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" onchange="updateUrl('collaborator', this.value)">
+              <option value=""></option>
+                {% for collaborator in collaborators %}
+                  <option value="{{ collaborator.id }}" {% if app.request.query.get('collaborator') == collaborator.id %}selected{% endif %}>{{collaborator.firstname}} {{collaborator.lastname }}</option>
+                {% endfor %}
+            </select>
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="date" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('start') }}" 
+              onchange="updateUrl('start', this.value)">
+          </th>
+          <th class="px-4 py-1">
+            <input 
+              type="date" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('end') }}" 
+              onchange="updateUrl('end', this.value)">
+          </th>
+          <th class="px-4 py-1 w-1/6">
+            <input 
+              type="text" 
+              class="appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
+              value="{{ app.request.query.get('days') }}" 
+              onchange="updateUrl('days', this.value)">
+          </th>
+          <th class="px-4 py-1 ">
+            {% if app.request.query.get('collaborator') is not empty or app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty %}
+              <div class="mb-5">
+                <a href="{{ path('request_pending') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+              </div>
+            {% endif %}
+          </th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <!-- Corps du tableau -->
+      <tbody>
+        {% for request in requests %}
+          <tr class="border-b">
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.collaborator.firstname }} {{ request.collaborator.lastname }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
+            <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
+            <td class="px-4 py-4">
+              <a href="{{ path('request_show', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="block md:hidden">
+    {% for request in requests %}
+      <div class="bg-white border border-gray-300 rounded-lg shadow-md mb-4 p-4">
+        <p class="text-sm font-medium text-gray-700"><strong>Type de demande :</strong> {{ request.requestType.name }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Demandée le :</strong> {{ request.createdAt|date('d/m/Y H\\\hi') }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Collaborateur :</strong> {{ request.collaborator.firstname }} {{ request.collaborator.lastname }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Date de début :</strong> {{ request.startAt|date('d/m/Y H\\\hi') }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Date de fin :</strong> {{ request.endAt|date('d/m/Y H\\\hi') }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Nb jours :</strong> {{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
+        <a href="{{ path('request_show', { 'id': request.id }) }}" class="block mt-2 bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+      </div>
+    {% endfor %}
+  </div>
   <div class="pagination flex justify-center mt-8">
     {% set paginationData = requests.getPaginationData() %}
     {% if paginationData.pageCount > 1 %}
