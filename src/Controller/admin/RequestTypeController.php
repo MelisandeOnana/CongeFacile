@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\RequestType;
 use App\Form\RequestTypeFormType;
+use App\Form\DeleteType;
 
 #[IsGranted('ROLE_MANAGER')]
 class RequestTypeController extends AbstractController
@@ -80,6 +81,41 @@ class RequestTypeController extends AbstractController
 
         return $this->render('admin/request_type/request_type_new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/request-type/{id}/edit', name: 'request_type_edit')]
+    public function edit(RequestType $requestType, HttpRequest $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(RequestTypeFormType::class, $requestType);
+
+        // Créer un formulaire de suppression
+        $formDelete = $this->createForm(DeleteType::class);
+        $formDelete->handleRequest($request);
+
+        // Gestion de la suppression
+        if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+            $entityManager->remove($requestType);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+
+            return $this->redirectToRoute('request_types');
+        }
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le type de demande a été modifié avec succès.');
+
+            return $this->redirectToRoute('request_types');
+        }
+
+        return $this->render('admin/request_type/request_type_edit.html.twig', [
+            'form' => $form->createView(),
+            'requestType' => $requestType,
+            'formDelete' => $formDelete->createView(),
         ]);
     }
 }

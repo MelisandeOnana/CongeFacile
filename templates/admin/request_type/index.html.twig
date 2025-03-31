@@ -90,7 +90,7 @@
                         <td class="px-4 py-6 text-sm text-gray-700">{{ type.name }}</td>
                         <td class="px-8 py-6 text-sm text-gray-700">{{ typesCounts[type.id] }}</td>
                         <td class="px-4 py-6">
-                            <a href="" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+                            <a href="{{ path('request_type_edit', { id: type.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
                         </td>
                     </tr>
                 {% endfor %}
