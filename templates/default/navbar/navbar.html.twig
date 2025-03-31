@@ -11,9 +11,9 @@
                 <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
             </div>
         {% elseif is_granted('ROLE_MANAGER') %}
-            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') == 'request_pending' %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
-                <a class="hover:text-[#004C6C] pl-[2rem] text-base block {% if app.request.attributes.get('_route') == 'request_pending' %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_pending') }}">Demandes en attente</a>
-                <a class="block text-base h-[34px] w-[38px] flex items-center justify-center pt-1 bg-[#004C6C0E] ml-2 rounded {% if app.request.attributes.get('_route') == 'request_pending' %} text-[#004C6C] {% else %} text-[#637381] hover:text-[#004C6C]{% endif %}" href="{{ path('request_pending') }}">{{ RequestRepository.countPendingRequestsByManager(app.user.person) }}</a>
+            <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') in ['request_pending', 'request_show'] %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
+                <a class="hover:text-[#004C6C] pl-[2rem] text-base block {% if app.request.attributes.get('_route') in ['request_pending', 'request_show'] %}text-[#004C6C] font-medium font-[Inter]{% else %}text-[#637381]{% endif %}" href="{{ path('request_pending') }}">Demandes en attente</a>
+                <a class="block text-base h-[34px] w-[38px] flex items-center justify-center pt-1 bg-[#004C6C0E] ml-2 rounded {% if app.request.attributes.get('_route')  in ['request_pending', 'request_show'] %} text-[#004C6C] {% else %} text-[#637381] hover:text-[#004C6C]{% endif %}" href="{{ path('request_pending') }}">{{ RequestRepository.countPendingRequestsByManager(app.user.person) }}</a>
             </div>
             <div class="hover:bg-[#004C6C0D] hover:border-r-4 hover:border-[#004C6C] h-[44px] mt-[10px] w-full flex items-center {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}bg-[#004C6C0D] border-r-4 border-[#004C6C]{% endif %}">
                 <a class="hover:text-[#004C6C] pl-[2rem] pr-4 text-base block w-full {% if app.request.attributes.get('_route') in ['request_historic', 'request_details'] %}text-[#004C6C] {% else %}text-[#637381]{% endif %}" href="{{ path('request_historic') }}">Historique des demandes</a>
@@ -79,29 +79,3 @@
         </p>
     </div>
 </nav>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const hamburger = document.getElementById('hamburger');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.createElement('div'); // Overlay pour fermer la sidebar en cliquant à l'extérieur
-
-        // Configuration de l'overlay
-        overlay.id = 'sidebar-overlay';
-        overlay.classList.add('fixed', 'inset-0', 'bg-black', 'bg-opacity-50', 'hidden', 'z-10');
-        document.body.appendChild(overlay);
-
-        if (hamburger && sidebar) {
-            // Ouvrir la sidebar
-            hamburger.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-                overlay.classList.toggle('hidden');
-            });
-
-            // Fermer la sidebar en cliquant sur l'overlay
-            overlay.addEventListener('click', () => {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
-        }
-    });
-</script>

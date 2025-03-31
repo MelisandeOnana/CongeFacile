@@ -53,7 +53,7 @@
                 </g>
             </svg>
         </div>
-        <div class="flex space-x-4">
+        <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
             <div>
                 {{ form_row(userForm.person.lastName) }}
             </div>
@@ -61,16 +61,16 @@
                 {{ form_row(userForm.person.firstName) }}
             </div>
         </div>
-        <div class="flex space-x-4 relative">
+        <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 relative">
             <div class="relative">
-                {{ form_row(userForm.department, {'attr': {'class': 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]'}}) }}
-                <svg class="w-4 h-4 absolute top-[50%] right-4 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                {{ form_row(userForm.department) }}
+                <svg class="w-4 h-4 absolute top-[50%] right-4 sm:right-[22rem] pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </div>
             <div class="relative">
                 {{ form_row(userForm.position) }}
-                <svg class="w-4 h-4 absolute top-[50%] right-4 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-4 h-4 absolute top-[50%] right-4 sm:right-[22rem] pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </div>
@@ -78,7 +78,7 @@
         <div class="flex flex-row pt-4 pb-4">
             {{ form_row(userForm.manager) }}
         </div>
-        <div class="flex space-x-4 relative">
+        <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 relative">
             <div class="relative">
                 {{ form_row(userForm.newPassword, {'attr': {'required': false}}) }}
                 <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute top-[50%] right-4 cursor-pointer toggle-password hidden" data-target="{{ userForm.newPassword.vars.id }}" viewBox="0 0 128 128">
