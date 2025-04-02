@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Repository\DepartmentRepository;
 use App\Entity\Department;
 use App\Form\DepartmentType;
+use App\Form\DepartmentSearchType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,22 +14,39 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\DeleteType;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Exception;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class DepartmentController extends AbstractController
 {
+   
     #[Route('/departments', name: 'departments')]
-    public function index(Request $request, DepartmentRepository $departmentRepository): Response
+    public function index(DepartmentRepository $departmentRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $name = $request->query->get('name', ''); // Récupère la valeur du champ de recherche
-        $departments = $name 
-            ? $departmentRepository->findByName($name) 
-            : $departmentRepository->findAllOrderedByNewest(); // Utilise la méthode triée
+        $form = $this->createForm(DepartmentSearchType::class);
+        $form->handleRequest($request);
+
+        $search = $form->get('search')->getData() ?? '';
+
+        // Récupérer les départements avec ou sans recherche
+        $query = $departmentRepository->createQueryBuilder('d')
+            ->where('d.name LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery();
+
+        // Pagination : 10 départements par page
+        $departments = $paginator->paginate(
+            $query, // Query ou tableau
+            $request->query->getInt('page', 1), // Numéro de la page
+            10 // Limite par page
+        );
 
         return $this->render('admin/department/index.html.twig', [
             'departments' => $departments,
+            'form' => $form->createView(),
         ]);
     }
+    
 
     #[Route('/departments/new', name: 'department_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -67,14 +85,19 @@ class DepartmentController extends AbstractController
     
         // Vérifiez si le formulaire de suppression a été soumis
         if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-            try {
-                $entityManager->remove($department);
-                $entityManager->flush();
-                $this->addFlash('success', 'Le département a été supprimé avec succès.');
-            } catch (Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du département.');
+            // Vérifiez si des collaborateurs ou managers sont liés au département
+            if ($department->getCollaborators()->count() > 0 || $department->getManagers()->count() > 0) {
+                $this->addFlash('error', 'Impossible de supprimer ce département car des collaborateurs ou managers y sont liés.');
+            } else {
+                try {
+                    $entityManager->remove($department);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le département a été supprimé avec succès.');
+                } catch (Exception $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la suppression du département.');
+                }
             }
-    
+
             return $this->redirectToRoute('departments');
         }
     
