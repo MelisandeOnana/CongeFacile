@@ -5,10 +5,17 @@
 {% block body %}
     <div class="flex">
         <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Types de demandes</h1>
-        <a href="" class="justify-center py-[9px] px-8 shadow-sm text-sm font-medium rounded-md text-white bg-[#004C6C] hover:bg-[#1B3168] h-10 ml-8">
+        <a href="{{ path('request_type_new') }}" class="justify-center py-[9px] px-8 shadow-sm text-sm font-medium rounded-md text-white bg-[#004C6C] hover:bg-[#1B3168] h-10 ml-8">
             Ajouter un type de demande
         </a>
     </div>
+    {% for label, messages in app.flashes %}
+        <div class=" mt-6 alert alert-{{ label }}">
+            {% for message in messages %}
+                <p class="font-bold" >{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
     <div class="max-w-[1000px]">
         <table class="w-[937px] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mt-[65px]">
             <!-- En-tête des colonnes -->
@@ -83,7 +90,7 @@
                         <td class="px-4 py-6 text-sm text-gray-700">{{ type.name }}</td>
                         <td class="px-8 py-6 text-sm text-gray-700">{{ typesCounts[type.id] }}</td>
                         <td class="px-4 py-6">
-                            <a href="" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+                            <a href="{{ path('request_type_edit', { id: type.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
                         </td>
                     </tr>
                 {% endfor %}

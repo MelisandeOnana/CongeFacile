@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Exception;
 
 #[IsGranted('ROLE_MANAGER')]
 class PositionController extends AbstractController
@@ -63,8 +64,8 @@ class PositionController extends AbstractController
         ]);
     }
 
-    #[Route('/position/show/{id}', name: 'position_show')]
-    public function show(PositionRepository $positionRepository, $id, HttpRequest $request, EntityManagerInterface $entityManager, PersonRepository $personRepository): Response
+    #[Route('/position/edit/{id}', name: 'position_edit')]
+    public function edit(PositionRepository $positionRepository, $id, HttpRequest $request, EntityManagerInterface $entityManager, PersonRepository $personRepository): Response
     {
         $position = $positionRepository->find($id);
 
@@ -83,7 +84,7 @@ class PositionController extends AbstractController
             if ($existingPosition && $existingPosition->getId() !== $position->getId()) {
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
 
-                return $this->redirectToRoute('position_show', ['id' => $id]);
+                return $this->redirectToRoute('position_edit', ['id' => $id]);
             } else {
                 $entityManager->persist($position);
                 try {
@@ -97,7 +98,7 @@ class PositionController extends AbstractController
             }
         }
 
-        return $this->render('admin/position/position_show.html.twig', [
+        return $this->render('admin/position/position_edit.html.twig', [
             'position' => $position,
             'formPosition' => $formPosition->createView(),
             'formDelete' => $formDelete->createView(),

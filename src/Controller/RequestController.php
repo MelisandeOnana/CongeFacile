@@ -372,7 +372,7 @@ class RequestController extends AbstractController
             $month = new \DateTime();
             $month->setDate((int)date('Y'), $number, 1);
 
-            $requests = $requestRepository->findRequestsByMonthOfAnswer($month);
+            $requests = $requestRepository->findRequestsByMonthOfAnswer($month);//revoir
 
             $acceptance = 0;
             $refusal = 0;
@@ -404,7 +404,9 @@ class RequestController extends AbstractController
         foreach ($requestsGroupedByMonth as $result) {
             // On peut traiter les résultats ici
             // Par exemple, pour chaque mois, on peut compter les acceptations et les refus
+            
             $month = $result['month'];
+            //dd($month);
             $requestCount = $result['requestCount'];
             // Traitement des résultats selon les besoins
         }

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un type de demande{% endblock %}
+
+{% block body %}
+    <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-6">{{ requestType.name }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        <div class="flex mt-6">
+            {{ form_widget(formDelete) }}
+            <button type="submit" class="ml-6 bg-[#1B3168] text-white py-2 px-4 rounded-[6px] w-[154px] h-[40px]">Mettre à jour</button>
+            {{ form_end(formDelete) }}
+        </div>
+    {{ form_end(form) }}
+
+{% endblock %}
