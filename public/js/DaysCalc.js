@@ -56,11 +56,12 @@ function calculateBusinessDays() {
     }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById('request_form_fichier');
+    const fileInput = document.getElementById('request_form_file');
     if (fileInput) {
         fileInput.addEventListener('change', function() {
             const fileName = this.files.length > 0 ? this.files[0].name : 'Aucun fichier sélectionné';
             document.getElementById('file-name').textContent = fileName;
+            document.getElementById('file-name').style.color = '#000';
         });
     }
 });

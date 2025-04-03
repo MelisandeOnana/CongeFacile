@@ -36,19 +36,19 @@ class Request
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $comment = null;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $answerComment = null;
 
     #[ORM\Column]
     private ?Statut $answer = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $answerAt = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?string $receiptFile = null;
 
     public function getId(): ?int
