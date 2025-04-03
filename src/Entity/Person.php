@@ -26,7 +26,7 @@ class Person
     #[ORM\JoinColumn(nullable: true)]
     private ?Person $manager = null;
 
-    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'collaborators')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(message: 'Le département ne peut pas être vide.')]
     private ?Department $department = null;
@@ -91,7 +91,7 @@ class Person
         return $this->department;
     }
 
-    public function setDepartment(?Department $department): static
+    public function setDepartment(?Department $department): self
     {
         $this->department = $department;
 
