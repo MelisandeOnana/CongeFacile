@@ -20,7 +20,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request1->setStartAt(new \DateTimeImmutable('2025-01-06 08:00:00'));
         $request1->setEndAt(new \DateTimeImmutable('2025-01-08 18:00:00'));
         $request1->setCreatedAt(new \DateTimeImmutable('2025-01-05 10:30:19'));
-        $request1->setReceiptFile('');
+        $request1->setReceiptFile('2-1-justificatif.pdf');
         $request1->setComment('Je suis malade, je ne pourrai pas venir travailler.');
         $request1->setAnswerComment('Demande de congé approuvée.');
         $request1->setAnswer(1);
@@ -34,8 +34,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request2->setStartAt(new \DateTimeImmutable('2025-02-10 08:00:00'));
         $request2->setEndAt(new \DateTimeImmutable('2025-02-14 18:00:00'));
         $request2->setCreatedAt(new \DateTimeImmutable('2025-01-10 10:23:10'));
-        $request2->setReceiptFile('');
-        $request2->setComment('Je souhaite prendre des congés payés.');
         $request2->setAnswerComment('Demande de congé approuvée.');
         $request2->setAnswer(1);
         $request2->setAnswerAt(new \DateTimeImmutable('2025-02-01 14:53:00'));
@@ -48,7 +46,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request3->setStartAt(new \DateTimeImmutable('2025-03-17 08:00:00'));
         $request3->setEndAt(new \DateTimeImmutable('2025-03-19 18:00:00'));
         $request3->setCreatedAt(new \DateTimeImmutable('2025-03-10 19:43:10'));
-        $request3->setReceiptFile('');
         $request3->setComment('Je souhaite prendre des congés sans solde.');
         $request3->setAnswerComment('Demande de congé refusée.');
         $request3->setAnswer(2);
@@ -62,8 +59,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request4->setStartAt(new \DateTimeImmutable('2025-03-20 08:00:00'));
         $request4->setEndAt(new \DateTimeImmutable('2025-03-21 18:00:00'));
         $request4->setCreatedAt(new \DateTimeImmutable('2025-03-11 16:23:10'));
-        $request4->setReceiptFile('');
-        $request4->setComment('Je souhaite prendre des congés sans solde.');
         $request4->setAnswerComment('Demande de congé approuvée.');
         $request4->setAnswer(1);
         $request4->setAnswerAt(new \DateTimeImmutable('2025-03-12 10:02:00'));
@@ -76,7 +71,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request5->setStartAt(new \DateTimeImmutable('2025-04-01 08:00:00'));
         $request5->setEndAt(new \DateTimeImmutable('2025-08-08 18:00:00'));
         $request5->setCreatedAt(new \DateTimeImmutable('2025-02-15 08:56:10'));
-        $request5->setReceiptFile('');
         $request5->setComment('Je suis enceinte, je souhaite prendre un congé maternité.');
         $request5->setAnswerComment('Demande de congé approuvée.');
         $request5->setAnswer(1);
@@ -90,7 +84,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request6->setStartAt(new \DateTimeImmutable('2025-03-17 08:00:00'));
         $request6->setEndAt(new \DateTimeImmutable('2025-03-21 18:00:00'));
         $request6->setCreatedAt(new \DateTimeImmutable('2025-03-03 08:50:10'));
-        $request6->setReceiptFile('');
         $request6->setComment('Je souhaite prendre des congés payés.');
         $request6->setAnswerComment('Demande de congé approuvée.');
         $request6->setAnswer(1);
@@ -104,7 +97,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request7->setStartAt(new \DateTimeImmutable('2025-04-07 08:00:00'));
         $request7->setEndAt(new \DateTimeImmutable('2025-04-11 18:00:00'));
         $request7->setCreatedAt(new \DateTimeImmutable('2025-03-03 08:52:58'));
-        $request7->setReceiptFile('');
         $request7->setComment('Je souhaite prendre des congés payés.');
         $request7->setAnswerComment('Demande de congé refusée.');
         $request7->setAnswer(2);
@@ -118,7 +110,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request8->setStartAt(new \DateTimeImmutable('2025-06-16 08:00:00'));
         $request8->setEndAt(new \DateTimeImmutable('2025-06-27 18:00:00'));
         $request8->setCreatedAt(new \DateTimeImmutable('2025-03-30 18:28:09'));
-        $request8->setReceiptFile('');
         $request8->setComment('Je vais etre père, je souhaite prendre un congé paternité.');
         $request8->setAnswerComment('Demande de congé approuvée.');
         $request8->setAnswer(1);
@@ -132,8 +123,6 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request9->setStartAt(new \DateTimeImmutable('2025-07-21 08:00:00'));
         $request9->setEndAt(new \DateTimeImmutable('2025-08-08 18:00:00'));
         $request9->setCreatedAt(new \DateTimeImmutable('2025-04-02 09:40:37'));
-        $request9->setReceiptFile('');
-        $request9->setComment('Je souhaite prendre des congés payés.');
         $request9->setAnswerComment('Demande de congé approuvée.');
         $request9->setAnswer(1);
         $request9->setAnswerAt(new \DateTimeImmutable('2025-04-03 19:10:52'));
@@ -146,11 +135,8 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request10->setStartAt(new \DateTimeImmutable('2025-08-11 08:00:00'));
         $request10->setEndAt(new \DateTimeImmutable('2025-08-29 18:00:00'));
         $request10->setCreatedAt(new \DateTimeImmutable('2025-04-10 19:56:27'));
-        $request10->setReceiptFile('');
         $request10->setComment('Je souhaite prendre des congés payés.');
-        $request10->setAnswerComment('Demande de congé approuvée.');
-        $request10->setAnswer(1);
-        $request10->setAnswerAt(new \DateTimeImmutable('2025-04-11 09:02:49'));
+        $request10->setAnswer(3);
         $manager->persist($request10);
 
         // Flush all the entities to the database

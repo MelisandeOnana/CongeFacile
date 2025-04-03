@@ -44,8 +44,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         $user1 = new User();
         $user1->setEmail('paul.west@example.com');
         $user1->setPassword($this->passwordHasher->hashPassword($user1, 'password'));
-        $user1->setEnabled(true);
-        $user1->setCreatedAt(new \DateTimeImmutable());
+        $user1->setEnabled(false);
+        $user1->setCreatedAt(new \DateTimeImmutable('2024-12-01 15:02:10'));
         $user1->setRole('ROLE_COLLABORATOR');
         $user1->setPerson($this->getReference('person_west', Person::class));
         $manager->persist($user1);

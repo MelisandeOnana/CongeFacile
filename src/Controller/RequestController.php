@@ -150,21 +150,22 @@ class RequestController extends AbstractController
     #[Route('/request/new', name: 'request_new', methods: ['POST', 'GET'])]
     public function request_new(HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+        if (! $user instanceof User) {
+            throw new \Exception('L\'utilisateur n\'est pas connecté.');
+        }
+        $person = $user->getPerson();
+
         $theRequest = new Request();
+        $theRequest->setCollaborator($person);
+
         $form = $this->createForm(RequestForm::class, $theRequest, []);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
 
-            if (! $user instanceof User) {
-                throw new \Exception('L\'utilisateur n\'est pas connecté.');
-            }
-
-            $person = $user->getPerson();
-
-            if (null != $form['fichier']->getData()) {
-                $file = $form['fichier']->getData(); // On récupère le fichier téléchargé
+            if (null != $form['file']->getData()) {
+                $file = $form['file']->getData(); // On récupère le fichier téléchargé
                 $destination = $this->getParameter('kernel.project_dir') . '/public/files';
 
                 $personId = $person->getId();
@@ -174,31 +175,24 @@ class RequestController extends AbstractController
                 $idfile = $requestCount + 1;
 
                 // Générer un nom unique pour le fichier
-                $fileName = $personId . '-' . $idfile . ' ' . $file->getClientOriginalName();
+                $fileName = $personId . '-' . $idfile . '-' . $file->getClientOriginalName();
                 try {
                     $file->move($destination, $fileName);
+                    $theRequest->setReceiptFile($fileName);
                     $this->addFlash('success', 'Fichier téléchargé avec succès !');
                 } catch (\Exception $e) {
                     $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
                 }
-            } else {
-                $fileName = null;
+            } 
+
+            if (null == $form['comment']->getData()) {
+                $theRequest->setComment(null);
             }
 
             $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-            $answerAt = new \DateTimeImmutable('1970-01-01 00:00:00');
 
-            $theRequest->setReceiptFile($fileName);
-            $theRequest->setCollaborator($person);
             $theRequest->setCreatedAt($currentDateTime);
-            $theRequest->setAnswerComment('');
             $theRequest->setAnswer(Statut::EnCours->value);
-            $theRequest->setAnswerAt($answerAt);
-
-            // Vérifier si la demande a déjà une réponse
-            if ($theRequest->getAnswer() === Statut::EnCours->value) {
-                $theRequest->setAnswerAt($answerAt);
-            }
 
             $entityManager->persist($theRequest);
             try {

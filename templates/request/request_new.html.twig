@@ -43,7 +43,7 @@
                 {{ form_widget(form.file, { 'attr': { 'class': 'opacity-0 absolute inset-0 w-full h-full cursor-pointer' } }) }}
                 <div class="flex items-center p-[14px] w-[350px] h-[46px] border rounded-[6px] bg-white">
                     <img src="{{asset('images/file.png')}}" alt="Logo" class="w-[16px] h-[16px] mr-[15px]">
-                    <span class="text-[#9CA3AF]">Sélectionner un fichier</span>
+                    <span id="file-name" class="text-[#9CA3AF]">Sélectionner un fichier</span>
                 </div>
             </div>
             {% if form_errors(form.file) %}
