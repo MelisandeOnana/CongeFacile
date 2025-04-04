@@ -14,6 +14,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\RequestType;
 use App\Form\RequestTypeFormType;
+use App\Form\RequestTypeSearchType;
+
 use App\Form\DeleteType;
 
 #[IsGranted('ROLE_MANAGER')]
@@ -23,6 +25,9 @@ class RequestTypeController extends AbstractController
     public function index(RequestTypeRepository $requestTypeRepository, RequestRepository $requestRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $typesCounts = [];
+
+        $form = $this->createForm(RequestTypeSearchType::class);
+        $form->handleRequest($request);
 
         // Récupérer les valeurs des filtres depuis la requête
         $filterName = $request->query->get('name');
@@ -60,6 +65,7 @@ class RequestTypeController extends AbstractController
         return $this->render('admin/request_type/index.html.twig', [
             'requestTypes' => $TypesPagination,
             'typesCounts' => $typesCounts,
+            'form' => $form->createView(),
         ]);
     }
 

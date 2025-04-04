@@ -20,7 +20,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $managerPerson->setDepartment($this->getReference('department_symfony', Department::class));
         $managerPerson->setPosition($this->getReference('position_manager', Position::class));
         $managerPerson->setAlertOnAnswer(false);
-        $managerPerson->setAlertNewRequest(false);
+        $managerPerson->setAlertNewRequest(true);
         $managerPerson->setAlertBeforeVacation(false);
         $manager->persist($managerPerson);
         $this->addReference('person_smith', $managerPerson);
@@ -32,7 +32,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $employee->setDepartment($this->getReference('department_symfony', Department::class));
         $employee->setPosition($this->getReference('position_developpeur', Position::class));
         $employee->setManager($managerPerson);
-        $employee->setAlertOnAnswer(false);
+        $employee->setAlertOnAnswer(true);
         $employee->setAlertNewRequest(false);
         $employee->setAlertBeforeVacation(false);
         $manager->persist($employee);
@@ -46,7 +46,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $employee1->setManager($managerPerson);
         $employee1->setAlertOnAnswer(false);
         $employee1->setAlertNewRequest(false);
-        $employee1->setAlertBeforeVacation(false);
+        $employee1->setAlertBeforeVacation(true);
         $manager->persist($employee1);
         $this->addReference('person_west', $employee1);
 
@@ -68,9 +68,9 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $employee2->setDepartment($this->getReference('department_pôle_ux', Department::class));
         $employee2->setPosition($this->getReference('position_designeur', Position::class));
         $employee2->setManager($managerPerson2);
-        $employee2->setAlertOnAnswer(false);
+        $employee2->setAlertOnAnswer(true);
         $employee2->setAlertNewRequest(false);
-        $employee2->setAlertBeforeVacation(false);
+        $employee2->setAlertBeforeVacation(true);
         $manager->persist($employee2);
         $this->addReference('person_johnson', $employee2);
 

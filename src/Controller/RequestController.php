@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Enum\Statut;
 use App\Form\AnswerType;
 use App\Form\RequestForm;
+use App\Form\HistoricRequestSearchType;
 use App\Repository\PersonRepository;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
@@ -18,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class RequestController extends AbstractController
 {
@@ -38,6 +40,18 @@ class RequestController extends AbstractController
         }
 
         $person = $user->getPerson();
+        $requestTypes = $requestTypeRepository->findAll();
+
+        if ('ROLE_COLLABORATOR' == $user->getRole()) {
+            $collaborators = [];
+        } else {
+            $collaborators = $personRepository->getPersonByManager($person);
+        }
+
+        $form = $this->createForm(HistoricRequestSearchType::class, null, [
+            'types' => $requestTypes,
+            'collaborators' => $collaborators,
+        ]);
 
         // Récupérer les valeurs des filtres depuis la requête
         $filterType = $request->query->get('type');
@@ -45,8 +59,6 @@ class RequestController extends AbstractController
         $filterEnd = $request->query->get('end');
         $filterNumber = $request->query->get('days');
         $filterAnswer = $request->query->get('status');
-
-        $requestTypes = $requestTypeRepository->findAll();
 
         $criteria = Criteria::create();
 
@@ -68,9 +80,7 @@ class RequestController extends AbstractController
             $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
         }
-        if ($filterNumber) {
-            $criteria->andWhere(Criteria::expr()->eq('workingdays', $filterNumber));
-        }
+        
         if ($filterAnswer) {
             $criteria->andWhere(Criteria::expr()->eq('answer', $filterAnswer));
         }
@@ -93,6 +103,12 @@ class RequestController extends AbstractController
 
             $requests = $requestRepository->matching($criteria);
 
+            if ($filterNumber) {
+                $requests = $requests->filter(function ($request) use ($filterNumber) {
+                    return $request->getWorkingDays() == $filterNumber;
+                });
+            }
+
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
                 $request->query->getInt('page', 1), /* page number */
@@ -100,8 +116,8 @@ class RequestController extends AbstractController
             );
 
             return $this->render('request/request_historic.html.twig', [
+                'form' => $form,
                 'requests' => $pagination,
-                'requestTypes' => $requestTypes,
                 'filterType' => $filterType,
                 'filterDate' => $filterDate,
                 'filterStart' => $filterStart,
@@ -111,9 +127,6 @@ class RequestController extends AbstractController
             ]);
         } else {
             // PAGE MANAGER
-
-            // Récupérer les collaborateurs du manager
-            $collaborators = $personRepository->getPersonByManager($person);
 
             $criteria->andWhere(Criteria::expr()->in('collaborator', $collaborators));
 
@@ -128,6 +141,12 @@ class RequestController extends AbstractController
 
             $requests = $requestRepository->matching($criteria);
 
+            if ($filterNumber) {
+                $requests = $requests->filter(function ($request) use ($filterNumber) {
+                    return $request->getWorkingDays() == $filterNumber;
+                });
+            }
+
             $pagination = $paginator->paginate(
                 $requests, /* query NOT result */
                 $request->query->getInt('page', 1), /* page number */
@@ -135,9 +154,8 @@ class RequestController extends AbstractController
             );
 
             return $this->render('request/request_historic.html.twig', [
+                'form' => $form,
                 'requests' => $pagination,
-                'requestTypes' => $requestTypes,
-                'collaborators' => $collaborators,
                 'filterType' => $filterType,
                 'filterStart' => $filterStart,
                 'filterEnd' => $filterEnd,

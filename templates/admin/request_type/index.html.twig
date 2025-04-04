@@ -16,7 +16,7 @@
             {% endfor %}
         </div>
     {% endfor %}
-    <div class="max-w-[1000px]">
+    <div class="max-w-[1000px] mt-[-80px]">
         <table class="w-[937px] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mt-[65px]">
             <!-- En-tête des colonnes -->
             <thead class="bg-[#F9FAFB] font-[Inter] ">       
@@ -24,7 +24,7 @@
                 <tr class="text-left text-[#344054]">
                     <th class="px-4 pt-5 font-medium text-[14px]">
                         <div class="flex items-center">
-                            <span>Nom du type de demande</span>
+                            {{ form_label(form.name) }}
                             <div class="flex flex-col ml-[5px]">
                                 <span class="chevron-up">
                                     <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -41,7 +41,7 @@
                     </th>
                     <th class="px-4 pt-5 font-medium text-[14px]">
                         <div class="flex items-center">
-                            <span>Nb demandes associées</span>
+                            {{ form_label(form.number) }}
                             <div class="flex flex-col ml-[5px]">
                                 <span class="chevron-up">
                                     <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -61,18 +61,10 @@
                 <!-- Ligne des champs de recherche -->
                 <tr class="text-gray-700">
                     <th class="px-4 py-1 w-5/6">
-                        <input 
-                            type="text" 
-                            class="appearance-none text-sm font-medium mb-5 w-[558px] h-[44px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-                            value="{{ app.request.query.get('name') }}" 
-                            onchange="updateUrl('name', this.value)">
+                        {{ form_widget(form.name, { 'attr': { 'value': app.request.query.get('name') } }) }}
                         </th>
                     <th class="px-4 py-1 w-2/6">
-                        <input 
-                            type="text" 
-                            class="appearance-none text-sm font-medium mb-5 w-[188px] h-[44px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2" 
-                            value="{{ app.request.query.get('number') }}" 
-                            onchange="updateUrl('number', this.value)">
+                          {{ form_widget(form.number, { 'attr': { 'value': app.request.query.get('number') } }) }}
                     </th>
                     <th class="px-4 py-1 w-1/12">
                         {% if app.request.query.get('name') is not empty or app.request.query.get('number') is not empty %}
@@ -94,6 +86,11 @@
                         </td>
                     </tr>
                 {% endfor %}
+                {% if requestTypes is empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-gray-500">Aucun type trouvé.</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
         <div class="pagination flex justify-center mt-8">

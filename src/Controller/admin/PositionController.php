@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Form\PositionSearchType;
 use Exception;
 
 #[IsGranted('ROLE_MANAGER')]
@@ -24,6 +25,9 @@ class PositionController extends AbstractController
     public function index(PositionRepository $positionRepository, PersonRepository $personRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $positionCounts = [];
+
+        $form = $this->createForm(PositionSearchType::class);
+        $form->handleRequest($request);
 
         // Récupérer les valeurs des filtres depuis la requête
         $filterName = $request->query->get('name');
@@ -61,6 +65,7 @@ class PositionController extends AbstractController
         return $this->render('admin/position/index.html.twig', [
             'positions' => $PostionsPagination,
             'positionCounts' => $positionCounts,
+            'form' => $form->createView(),
         ]);
     }
 

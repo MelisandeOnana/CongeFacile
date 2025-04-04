@@ -28,6 +28,7 @@ class DepartmentController extends AbstractController
 
         $search = $form->get('search')->getData() ?? '';
 
+        // A DEPLACER OU UTILISER CRITERIA
         // Récupérer les départements avec ou sans recherche
         $query = $departmentRepository->createQueryBuilder('d')
             ->where('d.name LIKE :search')

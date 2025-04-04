@@ -29,6 +29,7 @@ class DepartmentSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'method' => 'GET',
+            'csrf_protection' => false,
         ]);
     }
 }
