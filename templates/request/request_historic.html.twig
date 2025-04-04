@@ -193,6 +193,11 @@
           </td>
         </tr>
       {% endfor %}
+      {% if requests is empty %}
+        <tr>
+          <td colspan="7" class="text-center py-4 text-gray-500">Aucune demande trouvée.</td>
+        </tr>
+      {% endif %}
     </tbody>
   </table>
 </div>
