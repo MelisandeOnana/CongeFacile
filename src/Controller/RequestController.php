@@ -8,6 +8,7 @@ use App\Enum\Statut;
 use App\Form\AnswerType;
 use App\Form\RequestForm;
 use App\Form\HistoricRequestSearchType;
+use App\Form\PendingRequestSearchType;
 use App\Repository\PersonRepository;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
@@ -331,8 +332,15 @@ class RequestController extends AbstractController
         if (! $user instanceof User) {
             throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
+
         $manager = $user->getPerson();
         $collaborators = $personRepository->getPersonByManager($manager);
+        $requestTypes = $requestTypeRepository->findAll();
+
+        $form = $this->createForm(PendingRequestSearchType::class, null, [
+            'types' => $requestTypes,
+            'collaborators' => $collaborators,
+        ]);
 
         // Récupérer les valeurs des filtres depuis la requête
         $filterType = $request->query->get('type');
@@ -342,10 +350,52 @@ class RequestController extends AbstractController
         $filterNumber = $request->query->get('days');
         $filterCollaborator = $request->query->get('collaborator');
 
-        // Utiliser la méthode du repository pour obtenir les requêtes filtrées
-        $requests = $requestRepository->findFilteredRequests($collaborators, $filterType, $filterDate, $filterStart, $filterEnd, $filterNumber, $filterCollaborator);
+        $criteria = Criteria::create();
 
-        $requestTypes = $requestTypeRepository->findAll();
+        if ($filterType) {
+            $filterTypeObject = $requestTypeRepository->find($filterType);
+            if ($filterTypeObject) {
+                $criteria->andWhere(Criteria::expr()->eq('requestType', $filterTypeObject));
+            }
+        }
+        if ($filterStart) {
+            $startOfDay = (new \DateTimeImmutable($filterStart))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterStart))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
+                    ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
+        }
+        if ($filterEnd) {
+            $startOfDay = (new \DateTimeImmutable($filterEnd))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterEnd))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
+                    ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
+        }
+        
+        $criteria->andWhere(Criteria::expr()->eq('answer', 3));
+
+        if ($filterDate) {
+            $startOfDay = (new \DateTimeImmutable($filterDate))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filterDate))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
+                    ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+        }
+
+        if ($filterCollaborator) {
+            $filterCollaboratorObject = $personRepository->find($filterCollaborator);
+            if ($filterCollaboratorObject) {
+                $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
+            }
+        }
+
+        $requests = $requestRepository->matching($criteria);
+
+        if ($filterNumber) {
+            $requests = $requests->filter(function ($request) use ($filterNumber) {
+                return $request->getWorkingDays() == $filterNumber;
+            });
+        }
+
+
 
         $pagination = $paginator->paginate(
             $requests, /* query NOT result */
@@ -355,13 +405,14 @@ class RequestController extends AbstractController
 
         return $this->render('request/request_pending.html.twig', [
             'requests' => $pagination,
-            'requestTypes' => $requestTypes,
-            'collaborators' => $collaborators,
+            'form' => $form,
             'filterType' => $filterType,
             'filterDate' => $filterDate,
             'filterStart' => $filterStart,
             'filterEnd' => $filterEnd,
             'filterNumber' => $filterNumber,
+            'filterNumber' => $filterNumber,
+            'filterCollaborator' => $filterCollaborator,
         ]);
     }
 
