@@ -4,6 +4,7 @@ namespace App\Controller\admin;
 
 use App\Entity\Person;
 use App\Entity\User;
+use App\Form\ManagerSearchType;
 use App\Form\ManagerType;
 use App\Repository\DepartmentRepository;
 use App\Repository\PersonRepository;
@@ -28,6 +29,9 @@ class ManagerController extends AbstractController
     public function index(DepartmentRepository $departmentRepository, PersonRepository $personRepository, PaginatorInterface $paginator, HttpRequest $request): Response
     {
         $departments = $departmentRepository->findAll();
+
+        $form = $this->createForm(ManagerSearchType::class);
+        $form->handleRequest($request);
 
         // Récupérer les valeurs des filtres depuis la requête
         $filterFirstName = $request->query->get('firstname');
@@ -66,6 +70,7 @@ class ManagerController extends AbstractController
         return $this->render('admin/manager/index.html.twig', [
             'managers' => $ManagersPagination,
             'departments' => $departments,
+            'form' => $form->createView(),
         ]);
     }
 
