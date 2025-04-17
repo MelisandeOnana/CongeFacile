@@ -43,17 +43,26 @@
             </div>
         </div>
         <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 relative">
-            <div class="relative">
-                {{ form_row(userForm.department) }}
-                <svg class="w-4 h-4 absolute top-[50%] right-4 sm:right-[22rem] pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
+            <div class="relative w-[350px]">
+                {{ form_label(userForm.department) }}
+                <div class="relative">
+                    {{ form_widget(userForm.department) }}
+                    <svg class="w-4 h-4 absolute top-1/2 right-3 transform -translate-y-1/2 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                {{ form_errors(userForm.department) }}
             </div>
-            <div class="relative">
-                {{ form_row(userForm.position) }}
-                <svg class="w-4 h-4 absolute top-[50%] right-4 sm:right-[22rem] pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
+            
+            <div class="relative w-[350px]">
+                {{ form_label(userForm.position) }}
+                <div class="relative">
+                    {{ form_widget(userForm.position) }}
+                    <svg class="w-4 h-4 absolute top-1/2 right-3 transform -translate-y-1/2 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                {{ form_errors(userForm.position) }}
             </div>
         </div>
         <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 relative">
