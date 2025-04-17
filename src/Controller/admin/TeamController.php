@@ -16,62 +16,48 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Form\TeamMemberSearchType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Department;
 
 #[IsGranted('ROLE_MANAGER')]
 class TeamController extends AbstractController
 {
     #[Route('/team', name: 'team_index')]
-    public function index(UserRepository $userRepository, PaginatorInterface $paginator, Request $request): Response
+    public function index(Request $request, UserRepository $userRepository, PaginatorInterface $paginator): Response
     {
-        $user = $this->getUser();
-
-        if (! $user instanceof User) {
-            throw new \Exception('L\'utilisateur n\'est pas connecté.');
+        $userManager = $this->getUser();
+        if (!$userManager instanceof User) {
+            return $this->redirectToRoute('login');
         }
 
-        $manager = $user->getPerson();
-        $department = $manager->getDepartment(); // Récupérer le département du manager
+        $personManager = $userManager->getPerson();
+        $department = $personManager->getDepartment();
 
-        $queryBuilder = $userRepository->findByManagerDepartment($manager, $department);
+        $form = $this->createForm(TeamMemberSearchType::class);
+        $form->handleRequest($request);
 
-        // Ajout des filtres
-        $filters = [
-            'lastName' => $request->query->get('filter_lastName'),
-            'firstName' => $request->query->get('filter_firstName'),
-            'email' => $request->query->get('filter_email'),
-            'position' => $request->query->get('filter_position'),
-            'vacationDays' => $request->query->get('filter_vacationDays'),
-        ];
+        $criteria = $form->isSubmitted() && $form->isValid() ? $form->getData() : [];
 
-        foreach ($filters as $key => $value) {
-            if ($value) {
-                $queryBuilder->andWhere("person.$key LIKE :$key")
-                             ->setParameter($key, '%' . $value . '%');
-            }
-        }
+        // Récupérer les membres de l'équipe
+        $query = $userRepository->findTeamMembersQuery($criteria, $personManager, $department);
 
-        $pagination = $paginator->paginate(
-            $queryBuilder,
-            $request->query->getInt('page', 1),
-            10
+        // Ajouter la pagination
+        $teamMembers = $paginator->paginate(
+            $query, // Query ou tableau
+            $request->query->getInt('page', 1), // Numéro de la page
+            10 // Nombre d'éléments par page
         );
 
-        $currentYear = (int)date('Y');
-        $vacationDays = [];
-        foreach ($pagination as $user) {
-            $vacationDays[$user->getId()] = $userRepository->getVacationDaysForYear($user, $currentYear);
-        }
-
-        if ($request->isXmlHttpRequest()) {
-            return $this->render('admin/team/_table.html.twig', [
-                'pagination' => $pagination,
-                'vacationDays' => $vacationDays,
-            ]);
+        // Calculer les jours de congé pour chaque membre
+        foreach ($teamMembers as $member) {
+            $totalVacationDays = $userRepository->getVacationDaysForYear($member, (int) date('Y'));
+            $member->totalVacationDays = $totalVacationDays; // Ajouter dynamiquement une propriété
         }
 
         return $this->render('admin/team/index.html.twig', [
-            'pagination' => $pagination,
-            'vacationDays' => $vacationDays,
+            'form' => $form->createView(),
+            'teamMembers' => $teamMembers, // Conserver l'objet de pagination
         ]);
     }
 
@@ -132,8 +118,6 @@ class TeamController extends AbstractController
             $user->setRole('ROLE_COLLABORATOR');
 
             $entityManager->persist($person); // Persister d'abord la personne
-            $entityManager->persist($user);   // Puis persister l'utilisateur
-
             try {
                 $entityManager->flush();
                 // Ajouter un message flash

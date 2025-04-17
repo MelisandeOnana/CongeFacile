@@ -78,6 +78,54 @@ class UserRepository extends ServiceEntityRepository
 
         return $totalDays;
     }
+
+    public function findTeamMembersQuery(array $criteria, $manager, $department)
+    {
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->join('u.person', 'p')
+            ->leftJoin('p.position', 'pos')
+            ->where('p.manager = :manager')
+            ->andWhere('p.department = :department')
+            ->setParameter('manager', $manager)
+            ->setParameter('department', $department);
+
+        if (!empty($criteria['lastName'])) {
+            $queryBuilder->andWhere('p.lastName LIKE :lastName')
+                ->setParameter('lastName', '%' . $criteria['lastName'] . '%');
+        }
+
+        if (!empty($criteria['firstName'])) {
+            $queryBuilder->andWhere('p.firstName LIKE :firstName')
+                ->setParameter('firstName', '%' . $criteria['firstName'] . '%');
+        }
+
+        if (!empty($criteria['email'])) {
+            $queryBuilder->andWhere('u.email LIKE :email')
+                ->setParameter('email', '%' . $criteria['email'] . '%');
+        }
+
+        if (!empty($criteria['position'])) {
+            $queryBuilder->andWhere('pos.name LIKE :position')
+                ->setParameter('position', '%' . $criteria['position'] . '%');
+        }
+
+        // Filtrer par totalVacationDays (en PHP après récupération des données)
+        $results = $queryBuilder->getQuery()->getResult();
+
+        if (!empty($criteria['totalVacationDays'])) {
+            $filteredResults = [];
+            foreach ($results as $user) {
+                $totalVacationDays = $this->getVacationDaysForYear($user, (int) date('Y'));
+                if ($totalVacationDays == $criteria['totalVacationDays']) {
+                    $filteredResults[] = $user;
+                }
+            }
+            return $filteredResults;
+        }
+
+        return $results;
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */
