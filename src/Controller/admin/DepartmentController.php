@@ -28,12 +28,8 @@ class DepartmentController extends AbstractController
 
         $search = $form->get('search')->getData() ?? '';
 
-        // A DEPLACER OU UTILISER CRITERIA
-        // Récupérer les départements avec ou sans recherche
-        $query = $departmentRepository->createQueryBuilder('d')
-            ->where('d.name LIKE :search')
-            ->setParameter('search', '%' . $search . '%')
-            ->getQuery();
+        // Récupération des départements avec ou sans recherche
+        $query = $departmentRepository->findBySearch($search);
 
         // Pagination : 10 départements par page
         $departments = $paginator->paginate(
@@ -52,11 +48,15 @@ class DepartmentController extends AbstractController
     #[Route('/departments/new', name: 'department_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Vérifie si l'utilisateur a le rôle de manager
         $department = new Department();
+        // Crée un nouveau département
         $form = $this->createForm(DepartmentType::class, $department);
         $form->handleRequest($request);
 
+        // Vérifie si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // Vérifie si un département avec le même nom existe déjà
             $entityManager->persist($department);
             $entityManager->flush();
 
@@ -73,24 +73,28 @@ class DepartmentController extends AbstractController
     #[Route('/departments/edit/{id}', name: 'department_edit')]
     public function edit(DepartmentRepository $departmentRepository, $id, HttpRequest $request, EntityManagerInterface $entityManager): Response
     {
+        // Vérifie si l'utilisateur a le rôle de manager
         $department = $departmentRepository->find($id);
     
+        // Vérifie si le département existe
         if (! $department) {
             throw $this->createNotFoundException('Le département n\'existe pas.');
         }
     
+        // Crée un formulaire pour éditer le département
         $formDepartment = $this->createForm(DepartmentType::class, $department);
         $formDepartment->handleRequest($request);
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
     
-        // Vérifiez si le formulaire de suppression a été soumis
+        // Vérifie si le formulaire de suppression a été soumis
         if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-            // Vérifiez si des collaborateurs ou managers sont liés au département
+            // Vérifie si des collaborateurs ou managers sont liés au département
             if ($department->getCollaborators()->count() > 0 || $department->getManagers()->count() > 0) {
                 $this->addFlash('error', 'Impossible de supprimer ce département car des collaborateurs ou managers y sont liés.');
             } else {
                 try {
+                    // Supprime le département
                     $entityManager->remove($department);
                     $entityManager->flush();
                     $this->addFlash('success', 'Le département a été supprimé avec succès.');
@@ -102,16 +106,19 @@ class DepartmentController extends AbstractController
             return $this->redirectToRoute('departments');
         }
     
-        // Vérifiez si le formulaire d'édition a été soumis
+        // Vérifie si le formulaire d'édition a été soumis
         if ($formDepartment->isSubmitted() && $formDepartment->isValid()) {
+            // Vérifie si un département avec le même nom existe déjà
             $existingDepartment = $departmentRepository->findOneBy(['name' => $department->getName()]);
             if ($existingDepartment && $existingDepartment->getId() !== $department->getId()) {
                 $this->addFlash('error', 'Un département avec ce nom existe déjà.');
     
                 return $this->redirectToRoute('department_edit', ['id' => $id]);
             } else {
+                // Met à jour le département
                 $entityManager->persist($department);
                 try {
+                    // Enregistre les modifications dans la base de données
                     $entityManager->flush();
                     $this->addFlash('success', 'Le département a été mis à jour avec succès.');
                 } catch (Exception $e) {
