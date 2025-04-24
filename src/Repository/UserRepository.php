@@ -6,9 +6,6 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<User>
- */
 class UserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,7 +13,13 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function findByEmail($email): ?User
+    /**
+     * Trouve un utilisateur par son email.
+     *
+     * @param string $email L'email de l'utilisateur.
+     * @return User|null Retourne l'utilisateur correspondant ou null s'il n'existe pas.
+     */
+    public function findByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u')
             ->select('u')
@@ -26,17 +29,32 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findByManagerDepartment($manager, $department)
+    /**
+     * Trouve les utilisateurs d'un département géré par un manager spécifique.
+     *
+     * @param User $manager Le manager responsable.
+     * @param string $department Le département à filtrer.
+     * @return array Retourne une liste d'utilisateurs.
+     */
+    public function findByManagerDepartment(User $manager, string $department): array
     {
         return $this->createQueryBuilder('user')
             ->join('user.person', 'person')
             ->where('person.manager = :manager')
             ->andWhere('person.department = :department')
             ->setParameter('manager', $manager)
-            ->setParameter('department', $department);
+            ->setParameter('department', $department)
+            ->getQuery()
+            ->getResult();
     }
 
-    public function findByManager($manager)
+    /**
+     * Trouve tous les utilisateurs gérés par un manager spécifique.
+     *
+     * @param User $manager Le manager responsable.
+     * @return array Retourne une liste d'utilisateurs.
+     */
+    public function findByManager(User $manager): array
     {
         return $this->createQueryBuilder('u')
             ->innerJoin('u.person', 'p')
@@ -46,6 +64,13 @@ class UserRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Calcule le nombre total de jours de congé pris par un utilisateur pour une année donnée.
+     *
+     * @param User $user L'utilisateur concerné.
+     * @param int $year L'année pour laquelle calculer les jours de congé.
+     * @return int Retourne le nombre total de jours de congé.
+     */
     public function getVacationDaysForYear(User $user, int $year): int
     {
         $startDate = new \DateTime("$year-01-01");
@@ -79,7 +104,15 @@ class UserRepository extends ServiceEntityRepository
         return $totalDays;
     }
 
-    public function findTeamMembersQuery(array $criteria, $manager, $department)
+    /**
+     * Recherche les membres d'une équipe en fonction de critères spécifiques.
+     *
+     * @param array $criteria Les critères de recherche (nom, prénom, email, etc.).
+     * @param User $manager Le manager responsable.
+     * @param string $department Le département à filtrer.
+     * @return array Retourne une liste d'utilisateurs correspondant aux critères.
+     */
+    public function findTeamMembersQuery(array $criteria, User $manager, string $department): array
     {
         $queryBuilder = $this->createQueryBuilder('u')
             ->join('u.person', 'p')
@@ -125,29 +158,4 @@ class UserRepository extends ServiceEntityRepository
 
         return $results;
     }
-
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }
