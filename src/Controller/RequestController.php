@@ -411,7 +411,6 @@ class RequestController extends AbstractController
             'filterStart' => $filterStart,
             'filterEnd' => $filterEnd,
             'filterNumber' => $filterNumber,
-            'filterNumber' => $filterNumber,
             'filterCollaborator' => $filterCollaborator,
         ]);
     }
