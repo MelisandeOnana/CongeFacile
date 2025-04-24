@@ -4,15 +4,21 @@
 
 {% block body %}
     {% if is_granted('ROLE_COLLABORATOR') %}
-        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">Ma demande de congé</h1>
+        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">
+            Ma demande de congé
+        </h1>
     {% elseif is_granted('ROLE_MANAGER') %}
-        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">Demande de {{request.collaborator.firstname}} {{request.collaborator.lastname}}</h1>
+        <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">
+            Demande de {{request.collaborator.firstname}} {{request.collaborator.lastname}}
+        </h1>
     {% endif %}
-    <h2 class="text-[#004C6CC7] font-semibold text-[18px] font-[Epilogue] mt-6 mb-6 text-center md:text-left">Demande du {{request.createdAt.format('d/m/Y')}}</h2>
+    <h2 class="text-[#004C6CC7] font-semibold text-[18px] font-[Epilogue] mt-6 mb-6 text-center md:text-left">
+        Demande du {{request.createdAt.format('d/m/Y')}}
+    </h2>
 
-    <div class="text-[18px] font-[Epilogue] space-y-4">
-        <p>Type de demande : {{request.requestType.name}}</p>
+    <div class="text-[16px] font-[Epilogue] font-normal space-y-4">
         <p>Période : {{request.startAt.format('d/m/Y H\\\hi')}} au {{request.endAt.format('d/m/Y H\\\hi')}}</p>
+        <p>Type de demande : {{request.requestType.name}}</p>
         <p>Nombre de jours : {{request.getWorkingDays}} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
     </div>
 
@@ -42,20 +48,20 @@
         {% endif %}
         {% if request.receiptFile %}
             <div class="mt-6 flex justify-center md:justify-start bg-[#004C6C14] w-full md:w-[250px] h-[40px] rounded-[6px]">
-                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto text-center text-[#475467] font-medium font-[Inter]">Télécharger le justificatif</a>
+                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto flex items-center text-center text-[#475467] font-medium font-[Inter]">
+                    Télécharger le justificatif
+                    <img src="{{ asset('images/download.svg') }}" alt="Icône de téléchargement" class="w-5 h-5 ml-2">
+                </a>
             </div>
         {% endif %}
         {% if request.answer.label() == "En cours" %}
-            <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[26px] mt-16 text-center md:text-left">Répondre à la demande</h1>
+            <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[26px] text-center md:text-left mt-[2em]">
+                Répondre à la demande
+            </h1>
             {{ form_start(form) }}
                 <div class="flex flex-col space-y-4">
                     {{ form_label(form.answerComment) }}
-                    {{ form_widget(form.answerComment, {
-                        'attr': {
-                            'class': 'border-[#DFE4EA] mt-2 w-full md:w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4',
-                            'placeholder': 'Saisissez votre commentaire ici...'
-                        }
-                    }) }}
+                    {{ form_widget(form.answerComment) }}
                 </div>
                 <div class="flex mt-8 justify-center md:justify-start">
                     {{ form_widget(form.reject) }}

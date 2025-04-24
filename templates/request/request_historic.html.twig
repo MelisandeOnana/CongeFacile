@@ -9,217 +9,225 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10 text-center md:text-left">
-  {% if is_granted('ROLE_MANAGER') %}
-    Historique des demandes
-  {% else %}
-    Historique de mes demandes
-  {% endif %}
-</h1>
-<div class="hidden md:block">
-{{ form_start(form) }}
-  <!-- Tableau visible uniquement au-dessus de 768px -->
-  <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md sm:table-fixed">
-    <!-- En-tête des colonnes -->
-    <thead class="bg-[#F9FAFB] font-[Inter] rounded-t-lg"> 
-      <!-- Ligne des noms des colonnes -->
-      <tr class="text-left text-[#344054]">
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {{ form_label(form.type) }}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {% if is_granted('ROLE_MANAGER') %}
-              {{ form_label(form.collaborator) }}
-            {% else %}
-              {{ form_label(form.requested) }}
-            {% endif %}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {{ form_label(form.start) }}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {{ form_label(form.end) }}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {{ form_label(form.days) }}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5 font-medium text-[14px]">
-          <div class="flex items-center">
-            {{ form_label(form.status) }}
-            <div class="flex flex-col ml-[5px]">
-              <span class="chevron-up">
-                <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="18 15 12 9 6 15"></polyline>
-                </svg>
-              </span>
-              <span class="chevron-down mt-[-5px]">
-                <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
-          </div>
-        </th>
-        <th class="px-4 pt-5"><!-- Vide --></th>
-      </tr>
-    <!-- Ligne des champs de recherche -->
-      <tr class="text-gray-700">
-        <th class="px-4 py-1 w-1/6">
-          {{ form_widget(form.type, { 'value': app.request.query.get('type') }) }}
-        </th>
-        <th class="px-4 py-1">
-          {% if is_granted('ROLE_MANAGER') %}
-             {{ form_widget(form.collaborator, { 'value': app.request.query.get('collaborator') }) }}
-             <div class="hidden">
-               {{ form_widget(form.requested) }}
-             </div>
-          {% else %}
-             {{ form_widget(form.requested, { 'attr': { 'value': app.request.query.get('requested') } }) }}
-             <div class="hidden">
-               {{ form_widget(form.collaborator) }}
-             </div>
-          {% endif %}
-        </th>
-        <th class="px-4 py-1">
-             {{ form_widget(form.start, { 'attr': { 'value': app.request.query.get('start') } }) }}
-        </th>
-        <th class="px-4 py-1">
-             {{ form_widget(form.end, { 'attr': { 'value': app.request.query.get('end') } }) }}
-        </th>
-        <th class="px-4 py-1 w-1/6">
-             {{ form_widget(form.days, { 'attr': { 'value': app.request.query.get('days') } }) }}
-        </th>
-        <th class="px-4 py-1 w-1/6">
-             {{ form_widget(form.status, { 'value': app.request.query.get('status')  }) }}
-        </th>
-        <th class="px-4 py-1 ">
-          {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty or app.request.query.get('collaborator') is not empty %}
-            <div class="mb-5">
-              <a href="{{ path('request_historic') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
-            </div>
-          {% endif %}
-        </th>
-      </tr>
-        {{ form_end(form) }}
-    </thead>
-    <!-- Corps du tableau -->
-    <tbody>
-      {% for request in requests %}
-        <tr class="border-b">
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
-          {% if is_granted('ROLE_MANAGER') %}
-            <td class="px-4 py-4 text-sm text-gray-700">{{ request.collaborator.firstName }} {{ request.collaborator.lastName }}</td>
-          {% else %}
-            <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
-          {% endif %}
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
-          <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
-          <td class="px-4 py-4 text-sm text-gray-700">
-            {{ request.answer.label() }}
-          </td>
-          <td class="px-4 py-4">
-            <a href="{{ path('request_show', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
-          </td>
-        </tr>
-      {% endfor %}
-      {% if requests is empty %}
-        <tr>
-          <td colspan="7" class="text-center py-4 text-gray-500">Aucune demande trouvée.</td>
-        </tr>
-      {% endif %}
-    </tbody>
-  </table>
-</div>
-
-<div class="block md:hidden">
-  <!-- Cartes visibles uniquement en dessous de 768px -->
-  {% for request in requests %}
-    <div class="bg-white border border-gray-300 rounded-lg shadow-md mb-4 p-4">
-      <p class="text-sm font-medium text-gray-700"><strong>Type de demande :</strong> {{ request.requestType.name }}</p>
-      {% if is_granted('ROLE_MANAGER') %}
-        <p class="text-sm font-medium text-gray-700"><strong>Collaborateur :</strong> {{ request.collaborator.firstName }} {{ request.collaborator.lastName }}</p>
-      {% else %}
-        <p class="text-sm font-medium text-gray-700"><strong>Demandée le :</strong> {{ request.createdAt|date('d/m/Y H\\\hi') }}</p>
-      {% endif %}
-      <p class="text-sm font-medium text-gray-700"><strong>Date de début :</strong> {{ request.startAt|date('d/m/Y H\\\hi') }}</p>
-      <p class="text-sm font-medium text-gray-700"><strong>Date de fin :</strong> {{ request.endAt|date('d/m/Y H\\\hi') }}</p>
-      <p class="text-sm font-medium text-gray-700"><strong>Nb jours :</strong> {{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
-      <p class="text-sm font-medium text-gray-700"><strong>Statut :</strong> {{ request.answer.label() }}</p>
-      <a href="{{ path('request_show', { 'id': request.id }) }}" class="block mt-2 bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+  <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] text-center md:text-left">
+    {% if is_granted('ROLE_MANAGER') %}
+      Historique des demandes
+    {% else %}
+      Historique de mes demandes
+    {% endif %}
+  </h1>
+  {% for label, messages in app.flashes %}
+    <div class="border border-green-700 w-[351px] text-green-700 bg-green-100 rounded-[6px] p-4">
+        {% for message in messages %}
+            <p class="font-bold">{{ message }}</p>
+        {% endfor %}
     </div>
   {% endfor %}
-</div>
+  <div class="hidden md:block">
+    {{ form_start(form, { 'attr': { 'class': 'mt-[15px]' } }) }}
+      <!-- Tableau visible uniquement au-dessus de 768px -->
+      <table class="min-w-full bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md sm:table-fixed">
+        <!-- En-tête des colonnes -->
+        <thead class="bg-[#F9FAFB] font-[Inter] rounded-t-lg"> 
+          <!-- Ligne des noms des colonnes -->
+          <tr class="text-left text-[#344054]">
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {{ form_label(form.type) }}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {% if is_granted('ROLE_MANAGER') %}
+                  {{ form_label(form.collaborator) }}
+                {% else %}
+                  {{ form_label(form.requested) }}
+                {% endif %}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {{ form_label(form.start) }}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {{ form_label(form.end) }}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {{ form_label(form.days) }}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5 font-medium text-[14px]">
+              <div class="flex items-center">
+                {{ form_label(form.status) }}
+                <div class="flex flex-col ml-[5px]">
+                  <span class="chevron-up">
+                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                  </span>
+                  <span class="chevron-down mt-[-5px]">
+                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </th>
+            <th class="px-4 pt-5"><!-- Vide --></th>
+          </tr>
+        <!-- Ligne des champs de recherche -->
+          <tr class="text-gray-700">
+            <th class="px-4 py-1 w-1/6">
+              {{ form_widget(form.type, { 'value': app.request.query.get('type') }) }}
+            </th>
+            <th class="px-4 py-1">
+              {% if is_granted('ROLE_MANAGER') %}
+                {{ form_widget(form.collaborator, { 'value': app.request.query.get('collaborator') }) }}
+                <div class="hidden">
+                  {{ form_widget(form.requested) }}
+                </div>
+              {% else %}
+                {{ form_widget(form.requested, { 'attr': { 'value': app.request.query.get('requested') } }) }}
+                <div class="hidden">
+                  {{ form_widget(form.collaborator) }}
+                </div>
+              {% endif %}
+            </th>
+            <th class="px-4 py-1">
+                {{ form_widget(form.start, { 'attr': { 'value': app.request.query.get('start') } }) }}
+            </th>
+            <th class="px-4 py-1">
+                {{ form_widget(form.end, { 'attr': { 'value': app.request.query.get('end') } }) }}
+            </th>
+            <th class="px-4 py-1 w-1/6">
+                {{ form_widget(form.days, { 'attr': { 'value': app.request.query.get('days') } }) }}
+            </th>
+            <th class="px-4 py-1 w-1/6">
+                {{ form_widget(form.status, { 'value': app.request.query.get('status')  }) }}
+            </th>
+            <th class="px-4 py-1 ">
+              {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty or app.request.query.get('collaborator') is not empty %}
+                <div class="mb-5">
+                  <a href="{{ path('request_historic') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+                </div>
+              {% endif %}
+            </th>
+          </tr>
+            {{ form_end(form) }}
+        </thead>
+        <!-- Corps du tableau -->
+        <tbody>
+          {% for request in requests %}
+            <tr class="border-b">
+              <td class="px-4 py-4 text-sm text-gray-700">{{ request.requestType.name }}</td>
+              {% if is_granted('ROLE_MANAGER') %}
+                <td class="px-4 py-4 text-sm text-gray-700">{{ request.collaborator.firstName }} {{ request.collaborator.lastName }}</td>
+              {% else %}
+                <td class="px-4 py-4 text-sm text-gray-700">{{ request.createdAt|date('d/m/Y H\\\hi') }}</td>
+              {% endif %}
+              <td class="px-4 py-4 text-sm text-gray-700">{{ request.startAt|date('d/m/Y H\\\hi') }}</td>
+              <td class="px-4 py-4 text-sm text-gray-700">{{ request.endAt|date('d/m/Y H\\\hi') }}</td>       
+              <td class="px-4 py-4 text-sm text-gray-700">{{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</td>
+              <td class="px-4 py-4 text-sm text-gray-700">
+                {{ request.answer.label() }}
+              </td>
+              <td class="px-4 py-4">
+                <a href="{{ path('request_show', { 'id': request.id }) }}" class="bg-gray-100 text-gray-700 font-medium py-3 px-6 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+              </td>
+            </tr>
+          {% endfor %}
+          {% if requests is empty %}
+            <tr>
+              <td colspan="7" class="text-center py-4 text-gray-500">Aucune demande trouvée.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    {{ form_end(form) }}
+  </div>
+
+  <div class="block md:hidden">
+    <!-- Cartes visibles uniquement en dessous de 768px -->
+    {% for request in requests %}
+      <div class="bg-white border border-gray-300 rounded-lg shadow-md mb-4 p-4">
+        <p class="text-sm font-medium text-gray-700"><strong>Type de demande :</strong> {{ request.requestType.name }}</p>
+        {% if is_granted('ROLE_MANAGER') %}
+          <p class="text-sm font-medium text-gray-700"><strong>Collaborateur :</strong> {{ request.collaborator.firstName }} {{ request.collaborator.lastName }}</p>
+        {% else %}
+          <p class="text-sm font-medium text-gray-700"><strong>Demandée le :</strong> {{ request.createdAt|date('d/m/Y H\\\hi') }}</p>
+        {% endif %}
+        <p class="text-sm font-medium text-gray-700"><strong>Date de début :</strong> {{ request.startAt|date('d/m/Y H\\\hi') }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Date de fin :</strong> {{ request.endAt|date('d/m/Y H\\\hi') }}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Nb jours :</strong> {{ request.getWorkingDays() }} jour{% if request.getWorkingDays() >= 2 %}s{% endif %}</p>
+        <p class="text-sm font-medium text-gray-700"><strong>Statut :</strong> {{ request.answer.label() }}</p>
+        <a href="{{ path('request_show', { 'id': request.id }) }}" class="block mt-2 bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded-md shadow-sm hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Détails</a>
+      </div>
+    {% endfor %}
+  </div>
 
   <div class="pagination flex justify-center mt-8">
     {% set paginationData = requests.getPaginationData() %}

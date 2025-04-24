@@ -16,9 +16,11 @@
         </div>
     {% endfor %}
 
-    {% for message in app.flashes('success') %}
-        <div class="bg-green-500 text-white p-2 mb-4 rounded">
-            {{ message }}
+    {% for label, messages in app.flashes %}
+        <div class="border border-green-700 w-[351px] text-green-700 bg-green-100 rounded-[6px] p-4">
+            {% for message in messages %}
+                <p class="font-bold">{{ message }}</p>
+            {% endfor %}
         </div>
     {% endfor %}
 

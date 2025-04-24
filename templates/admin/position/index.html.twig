@@ -10,9 +10,9 @@
         </a>
     </div>
     {% for label, messages in app.flashes %}
-        <div class=" mt-6 alert alert-{{ label }}">
+        <div class="border border-green-700 w-[351px] text-green-700 bg-green-100 rounded-[6px] p-4">
             {% for message in messages %}
-                <p class="font-bold" >{{ message }}</p>
+                <p class="font-bold">{{ message }}</p>
             {% endfor %}
         </div>
     {% endfor %}
