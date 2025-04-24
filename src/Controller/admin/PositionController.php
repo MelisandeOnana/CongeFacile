@@ -59,7 +59,7 @@ class PositionController extends AbstractController
         $PostionsPagination = $paginator->paginate(
             $filteredPositions, /* query NOT result */
             $request->query->getInt('page', 1), /* page number */
-            6 /* limit par page */
+            10 /* limit par page */
         );
 
         return $this->render('admin/position/index.html.twig', [

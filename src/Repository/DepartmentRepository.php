@@ -21,8 +21,7 @@ class DepartmentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('d')
             ->where('d.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->getQuery()
-            ->getResult();
+            ->getQuery(); // Retourne la Query pour la pagination
     }
     public function findAllOrderedByNewest(): array
     {
