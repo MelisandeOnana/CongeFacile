@@ -17,19 +17,30 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function getPersonByManager($manager)
+    /**
+     * Récupère les personnes associées à un manager donné.
+     *
+     * @param Person $manager
+     * @return Person[] Retourne un tableau d'objets Person
+     */
+    public function getPersonByManager(Person $manager): array
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.manager = :manager_id')
             ->setParameter('manager_id', $manager->getId())
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
+    /**
+     * Compte le nombre de personnes pour un poste donné.
+     *
+     * @param Position $position
+     * @return int Retourne le nombre de personnes
+     */
     public function countByPosition(Position $position): int
     {
-        return $this->createQueryBuilder('p')
+        return (int) $this->createQueryBuilder('p')
             ->select('COUNT(p.id)')
             ->where('p.position = :position')
             ->setParameter('position', $position)
@@ -48,8 +59,7 @@ class PersonRepository extends ServiceEntityRepository
     //            ->orderBy('p.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
-    //            ->getResult()
-    //        ;
+    //            ->getResult();
     //    }
 
     //    public function findOneBySomeField($value): ?Person
@@ -58,7 +68,6 @@ class PersonRepository extends ServiceEntityRepository
     //            ->andWhere('p.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
+    //            ->getOneOrNullResult();
     //    }
 }

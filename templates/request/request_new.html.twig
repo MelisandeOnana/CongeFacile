@@ -6,63 +6,74 @@
     <h1 class="text-[#1B3168] font-[Epilogue] font-semibold text-[28px] text-center md:text-left">
         Effectuer une nouvelle demande
     </h1>
-    {{ form_start(form) }}
+    {{ form_start(form, { 'attr': { 'class': 'mt-[15px]' } }) }}
+        {% if form_errors(form.startAt) or form_errors(form.endAt) or form_errors(form.requestType) %}
+            <div class="mb-3 text-red-700 border border-red-700 rounded-[6px] p-4 bg-red-100 inline-block">
+                {{ form_errors(form.startAt) }}
+                {{ form_errors(form.endAt) }}
+                {{ form_errors(form.requestType) }}
+            </div>
+        {% endif %}
 
-    {% if form_errors(form.startAt) or form_errors(form.endAt) or form_errors(form.requestType) %}
-    <div class="mt-8 text-red-700 border border-red-700 rounded-[6px] p-4 bg-red-100 inline-block">
-        {{ form_errors(form.startAt) }}
-        {{ form_errors(form.endAt) }}
-        {{ form_errors(form.requestType) }}
-    </div>
-    {% endif %}
-
-    <div class="mt-8">
-        {{ form_label(form.requestType) }}
-        {{ form_widget(form.requestType) }}
-    </div>
-    <div class="mt-8 flex flex-col md:flex-row md:space-x-4">
-        <div>
-            {{ form_label(form.startAt) }}
-            {{ form_widget(form.startAt) }}
-        </div>
-        <div class="mt-4 md:mt-0">
-            {{ form_label(form.endAt) }}
-            {{ form_widget(form.endAt) }}
-        </div>
-    </div>
-    <div class="flex flex-col mt-8">
-        <div>
-            <label class="block mb-2 text-[#6B7280] font-[Inter]" for="result">Nombre de jours ouvrés :</label>
-            <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
-        </div>
-    </div>
-    <div class="flex flex-col mt-8">
-        <div class="relative">
-            {{ form_label(form.file) }}
+        <div class="relative w-[350px]">
+            {{ form_label(form.requestType) }}
             <div class="relative">
-                {{ form_widget(form.file, { 'attr': { 'class': 'opacity-0 absolute inset-0 w-full h-full cursor-pointer' } }) }}
-                <div class="flex items-center p-[14px] w-[350px] h-[46px] border rounded-[6px] bg-white">
-                    <img src="{{asset('images/file.png')}}" alt="Logo" class="w-[16px] h-[16px] mr-[15px]">
-                    <span id="file-name" class="text-[#9CA3AF]">Sélectionner un fichier</span>
+                {{ form_widget(form.requestType) }}
+                <svg class="w-4 h-4 absolute top-1/2 right-3 transform -translate-y-1/2 pointer-events-none text-[#004C6C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+            {{ form_errors(form.requestType) }}
+        </div>
+        <div class="mt-8 flex flex-col md:flex-row md:space-x-4">
+            <div>
+                {{ form_label(form.startAt) }}
+                {{ form_widget(form.startAt) }}
+            </div>
+            <div class="mt-4 md:mt-0">
+                {{ form_label(form.endAt) }}
+                {{ form_widget(form.endAt) }}
+            </div>
+        </div>
+        <div class="flex flex-col mt-8">
+            <div>
+                <label class="block mb-2 text-[#6B7280] font-[Inter]" for="result">Nombre de jours ouvrés :</label>
+                <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
+            </div>
+        </div>
+        <div class="flex flex-col mt-8">
+            <div class="relative">
+                {{ form_label(form.file) }}
+                <div class="relative">
+                    {{ form_widget(form.file) }}
+                    <div class="flex items-center p-[14px] w-[350px] h-[46px] border rounded-[6px] bg-white">
+                        <img src="{{asset('images/file.png')}}" alt="Logo" class="w-[16px] h-[16px] mr-[15px]">
+                        <span id="file-name" class="text-[#9CA3AF]">Sélectionner un fichier</span>
+                    </div>
                 </div>
+                {% if form_errors(form.file) %}
+                <div class="mt-2 text-red-700">
+                    {{ form_errors(form.file) }}
+                </div>
+                {% endif %}
             </div>
-            {% if form_errors(form.file) %}
-            <div class="mt-2 text-red-700">
-                {{ form_errors(form.file) }}
+        </div>
+        <div class="flex flex-col mt-8">
+            <div class="w-full sd:w-[350px]">
+                {{ form_row(form.comment) }}
             </div>
-            {% endif %}
         </div>
-    </div>
-    <div class="flex flex-col mt-8">
-        <div class="w-full sd:w-[350px]">
-            {{ form_row(form.comment) }}
-        </div>
-    </div>
-    <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-full md:w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
-        Soumettre ma demande*
-    </button>
-    <p class="text-[#000000] text-sm mt-2 text-center">
-        *En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.
-    </p>
+        <button type="submit" class="bg-[#004C6C] text-white rounded-[6px] w-full md:w-[248px] h-[50px] font-medium text-[16px] font-[Inter] mt-6">
+            Soumettre ma demande*
+        </button>
+        <p class="text-[#000000] text-sm mt-[1.5rem]">
+            *En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.
+        </p>
     {{ form_end(form) }}
+    <script>
+        // Ajoutez ce script dans votre template Twig
+        document.getElementById('days').addEventListener('change', function () {
+            document.querySelector('input[name="request_form[workingDays]"]').value = this.value;
+        });
+    </script>
 {% endblock %}

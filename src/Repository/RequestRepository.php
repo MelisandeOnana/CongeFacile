@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Request;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -11,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RequestRepository extends ServiceEntityRepository
 {
-    private $personRepository;
+    private PersonRepository $personRepository;
 
     public function __construct(ManagerRegistry $registry, PersonRepository $personRepository)
     {
@@ -19,7 +20,13 @@ class RequestRepository extends ServiceEntityRepository
         $this->personRepository = $personRepository;
     }
 
-    public function findRequestsWithDate(\DateTime $date)
+    /**
+     * Trouve les requêtes pour une date donnée.
+     *
+     * @param \DateTime $date
+     * @return Request[] Retourne un tableau d'objets Request
+     */
+    public function findRequestsWithDate(\DateTime $date): array
     {
         $startOfDay = (clone $date)->setTime(0, 0, 0);
         $endOfDay = (clone $date)->setTime(23, 59, 59);
@@ -33,11 +40,17 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function countPendingRequestsByManager($manager)
+    /**
+     * Compte les requêtes en attente pour un manager donné.
+     *
+     * @param Person $manager
+     * @return int Retourne le nombre de requêtes
+     */
+    public function countPendingRequestsByManager(Person $manager): int
     {
         $persons = $this->personRepository->getPersonByManager($manager);
 
-        return $this->createQueryBuilder('r')
+        return (int) $this->createQueryBuilder('r')
             ->select('count(r.id)')
             ->where('r.collaborator IN (:persons)')
             ->andWhere('r.answer = :status')
@@ -47,12 +60,18 @@ class RequestRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function countRequestsByRequestType($requestType)
+    /**
+     * Compte les requêtes par type de requête.
+     *
+     * @param string $requestType
+     * @return int Retourne le nombre de requêtes
+     */
+    public function countRequestsByRequestType(string $requestType): int
     {
         $startOfYear = (new \DateTime())->setDate((int)date('Y'), 1, 1)->setTime(0, 0, 0);
         $endOfYear = (new \DateTime())->setDate((int)date('Y'), 12, 31)->setTime(23, 59, 59);
 
-        return $this->createQueryBuilder('r')
+        return (int) $this->createQueryBuilder('r')
             ->select('count(r.id)')
             ->where('r.requestType = :requestType')
             ->andWhere('r.startAt >= :startOfYear')
@@ -64,7 +83,13 @@ class RequestRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findRequestsByMonthOfAnswer(\DateTime $date)
+    /**
+     * Trouve les requêtes par mois de réponse.
+     *
+     * @param \DateTime $date
+     * @return Request[] Retourne un tableau d'objets Request
+     */
+    public function findRequestsByMonthOfAnswer(\DateTime $date): array
     {
         $startOfMonth = (clone $date)->setDate((int)$date->format('Y'), (int)$date->format('m'), 1)->setTime(0, 0, 0);
         $endOfMonth = (clone $date)->setDate((int)$date->format('Y'), (int)$date->format('m'), (int)$date->format('t'))->setTime(23, 59, 59);
@@ -78,8 +103,27 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findFilteredRequests($collaborators, $filterType, $filterDate, $filterStart, $filterEnd, $filterNumber, $filterCollaborator)
-    {
+    /**
+     * Trouve les requêtes filtrées selon plusieurs critères.
+     *
+     * @param array $collaborators
+     * @param string|null $filterType
+     * @param string|null $filterDate
+     * @param string|null $filterStart
+     * @param string|null $filterEnd
+     * @param int|null $filterNumber
+     * @param Person|null $filterCollaborator
+     * @return Request[] Retourne un tableau d'objets Request
+     */
+    public function findFilteredRequests(
+        array $collaborators,
+        ?string $filterType,
+        ?string $filterDate,
+        ?string $filterStart,
+        ?string $filterEnd,
+        ?int $filterNumber,
+        ?Person $filterCollaborator
+    ): array {
         $qb = $this->createQueryBuilder('r')
             ->where('r.collaborator IN (:collaborators)')
             ->andWhere('r.answer = :status')
@@ -130,7 +174,14 @@ class RequestRepository extends ServiceEntityRepository
                   ->getResult();
     }
 
-    public function findRequestsGroupedByMonth(\DateTime $startDate, \DateTime $endDate)
+    /**
+     * Regroupe les requêtes par mois.
+     *
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @return array Retourne un tableau contenant les mois et le nombre de requêtes
+     */
+    public function findRequestsGroupedByMonth(\DateTime $startDate, \DateTime $endDate): array
     {
         return $this->createQueryBuilder('r')
             ->select('SUBSTRING(r.answerAt, 1, 7) as month, COUNT(r.id) as requestCount')
@@ -142,29 +193,4 @@ class RequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    //    /**
-    //     * @return Request[] Returns an array of Request objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Request
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

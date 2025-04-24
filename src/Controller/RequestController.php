@@ -195,13 +195,6 @@ class RequestController extends AbstractController
 
                 // Générer un nom unique pour le fichier
                 $fileName = $personId . '-' . $idfile . '-' . $file->getClientOriginalName();
-                try {
-                    $file->move($destination, $fileName);
-                    $theRequest->setReceiptFile($fileName);
-                    $this->addFlash('success', 'Fichier téléchargé avec succès !');
-                } catch (\Exception $e) {
-                    $this->addFlash('error', 'Erreur lors du téléchargement du fichier.');
-                }
             } 
 
             if (null == $form['comment']->getData()) {
@@ -216,25 +209,9 @@ class RequestController extends AbstractController
             $entityManager->persist($theRequest);
             try {
                 $entityManager->flush();
-                $this->addFlash('success', 'Requête créé avec succès.');
+                $this->addFlash('success', 'Votre demande a été soumise avec succès.');
             } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la création de la requête.');
-            }
-
-            // Envoi d'un email au manager
-
-            $manager = $person->getManager();
-            $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
-            $emailManager = $managerUser->getEmail();
-            $alert = $manager->getAlertNewRequest();
-
-            if (true == $alert) {
-                $to = $emailManager;
-                $subject = 'CongéFacile : Nouvelle demande de congé déposée';
-                $message = '' . $person->getFirstName() . ' ' . $person->getLastName() . ' à déposé une demande de congé.<br>
-                Merci de vous connecter à votre espace pour valider ou refuser la demande.';
-
-                $this->mailerService->sendEmail($to, $subject, $message);
+                $this->addFlash('error', 'Une erreur est survenue lors de la création de la demande.');
             }
 
             return $this->redirectToRoute('request_historic', [], Response::HTTP_SEE_OTHER);
@@ -293,7 +270,8 @@ class RequestController extends AbstractController
             }
 
             // Envoi d'un email au collaborateur
-
+            
+            // On récupère l'email du collaborateur
             $collaborator = $request->getCollaborator();
             $collaboratorUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $collaborator]);
             $email = $collaboratorUser->getEmail();
@@ -422,23 +400,30 @@ class RequestController extends AbstractController
         $requestTypes = $requestTypeRepository->findAll();
         $countRequest = [];
 
+        // On compte le nombre de demandes par type de demande
         foreach ($requestTypes as $type) {
-            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type);
+            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type->getName());
         }
 
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
 
+        // On initialise le tableau pour stocker les pourcentages d'acceptation
         $acceptancePercentage = [];
 
+        // On parcourt les mois de l'année
         for ($number = 1; $number <= 12; ++$number) {
+            // On crée un objet DateTime pour le mois en cours
             $month = new \DateTime();
             $month->setDate((int)date('Y'), $number, 1);
 
+            // On récupère les demandes du mois en cours
             $requests = $requestRepository->findRequestsByMonthOfAnswer($month);//revoir
 
+            // On initialise les compteurs d'acceptation et de refus
             $acceptance = 0;
             $refusal = 0;
 
+            // On parcourt les demandes et on compte les acceptations et refus
             foreach ($requests as $request) {
                 if ('Accepté' == $request->getAnswer()->label()) {
                     ++$acceptance;
@@ -447,9 +432,12 @@ class RequestController extends AbstractController
                 }
             }
 
+            // On calcule le pourcentage d'acceptation
             if (0 == $acceptance && 0 == $refusal) {
+                // Si aucune demande n'a été faite, on met le pourcentage à null
                 $acceptancePercentage[$number] = null;
             } else {
+                // On évite la division par zéro
                 $percent = $acceptance * 100 / ($acceptance + $refusal);
                 $acceptancePercentage[$number] = $percent;
             }
@@ -458,11 +446,14 @@ class RequestController extends AbstractController
         $startDate = new \DateTime('first day of January this year');
         $endDate = new \DateTime('last day of December this year');
 
+        // On récupère les demandes groupées par mois
         $requestsGroupedByMonth = $requestRepository->findRequestsGroupedByMonth($startDate, $endDate);
 
+        // On initialise les compteurs d'acceptation et de refus
         $acceptance = 0;
         $refusal = 0;
 
+        // On parcourt les demandes et on compte les acceptations et refus
         foreach ($requestsGroupedByMonth as $result) {
             // On peut traiter les résultats ici
             // Par exemple, pour chaque mois, on peut compter les acceptations et les refus

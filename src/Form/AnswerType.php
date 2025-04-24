@@ -19,9 +19,8 @@ class AnswerType extends AbstractType
                 'label' => 'Saisir un commentaire',
                 'label_attr' => ['class' => 'text-[16px] mt-5 font-[Epilogue]'],
                 'attr' => [
-                    'class' => 'border-[#DFE4EA] mt-2 w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4',
-                    'placeholder' => '',
-                    'value' => '',
+                    'class' => 'border-[#DFE4EA] mt-2 w-full md:w-[730px] h-[111px] border-2 rounded-[6px] px-5 py-4',
+                    'placeholder' => 'Saisissez votre commentaire ici...'
                 ],
             ])
             ->add('reject', SubmitType::class, [

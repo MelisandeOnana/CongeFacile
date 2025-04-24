@@ -44,7 +44,7 @@ class TeamController extends AbstractController
         $criteria = $form->isSubmitted() && $form->isValid() ? $form->getData() : [];
 
         // Récupération des membres de l'équipe
-        $query = $userRepository->findTeamMembersQuery($criteria, $personManager, $department);
+        $query = $userRepository->findTeamMembersQuery($criteria, $userManager, $department);
 
         // // Pagination : 10 collaborateurs par page
         $teamMembers = $paginator->paginate(

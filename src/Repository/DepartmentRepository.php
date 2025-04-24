@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Department;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @extends ServiceEntityRepository<Department>
@@ -16,17 +17,29 @@ class DepartmentRepository extends ServiceEntityRepository
         parent::__construct($registry, Department::class);
     }
 
-    public function findBySearch(string $search)
+    /**
+     * Recherche des départements par nom.
+     *
+     * @param string $search
+     * @return Query Retourne une Query pour la pagination
+     */
+    public function findBySearch(string $search): Query
     {
         return $this->createQueryBuilder('d')
             ->where('d.name LIKE :search')
             ->setParameter('search', '%' . $search . '%')
-            ->getQuery(); // Retourne la Query pour la pagination
+            ->getQuery();
     }
+
+    /**
+     * Récupère tous les départements triés par ID décroissant.
+     *
+     * @return Department[] Retourne un tableau d'objets Department
+     */
     public function findAllOrderedByNewest(): array
     {
         return $this->createQueryBuilder('d')
-            ->orderBy('d.id', 'DESC') // Trie par ID décroissant
+            ->orderBy('d.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

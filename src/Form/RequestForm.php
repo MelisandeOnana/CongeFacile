@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -26,7 +27,7 @@ class RequestForm extends AbstractType
             'placeholder' => 'Sélectionner un type',
             'label' => 'Type de demande - champ obligatoire',
             'required' => true,
-            'attr' => ['class' => 'appearance-none w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4 text-[#9CA3AF]'],
+            'attr' => ['class' => 'appearance-none w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
         ])
         ->add('startAt', DateTimeType::class, [
@@ -52,7 +53,7 @@ class RequestForm extends AbstractType
         ->add('file', FileType::class, [
             'label' => 'Justificatif si applicable',
             'attr' => [
-                'class' => 'w-[350px] h-[46px] border rounded-[6px]',
+                'class' => 'w-[350px] h-[46px] border rounded-[6px] opacity-0 absolute inset-0 cursor-pointer',
             ],
             'mapped' => false,
             'required' => false,
