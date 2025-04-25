@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 final class PositionFixtures extends Fixture
 {
-    private const POSITION_DEVELOPPEUR = 'Developpeur';
+    private const POSITION_DEVELOPPEUR = 'Développeur';
     private const POSITION_MANAGER = 'Manager';
     private const POSITION_COMMERCIAL = 'Commercial';
     private const POSITION_DESIGNEUR = 'Designeur';
@@ -29,7 +29,8 @@ final class PositionFixtures extends Fixture
             $position->setName($positionName);
             $manager->persist($position);
 
-            $this->addReference('position_' . strtolower(str_replace(' ', '_', $positionName)), $position);
+            // Utiliser les constantes de PersonFixtures pour les références
+            $this->addReference('position_' . strtolower(str_replace(['é', ' '], ['e', '_'], $positionName)), $position);
         }
 
         $manager->flush();

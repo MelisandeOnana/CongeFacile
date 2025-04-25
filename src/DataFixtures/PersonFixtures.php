@@ -11,17 +11,16 @@ use Doctrine\Persistence\ObjectManager;
 
 final class PersonFixtures extends Fixture implements DependentFixtureInterface
 {
-    private const DEPARTMENT_SYMFONY = 'department_symfony';
-    private const DEPARTMENT_POLE_UX = 'department_pole_ux';
-    private const DEPARTMENT_MARKETING = 'department_marketing';
-    private const DEPARTMENT_CMS = 'department_cms';
+    private const DEPARTMENT_SYMFONY = 'Symfony';
+    private const DEPARTMENT_POLE_UX = 'Pôle_ux';
+    private const DEPARTMENT_MARKETING = 'Marketing';
+    private const DEPARTMENT_CMS = 'CMS';
 
     private const POSITION_MANAGER = 'position_manager';
-    private const POSITION_DEVELOPPEUR = 'position_developpeur';
+    private const POSITION_DEVELOPPEUR = 'position_developpeur'; // Supprimer l'accent
     private const POSITION_DESIGNEUR = 'position_designeur';
     private const POSITION_COMMERCIAL = 'position_commercial';
     private const POSITION_DEVOPS = 'position_devops';
-
     public function load(ObjectManager $manager): void
     {
         // Création d'un manager 1

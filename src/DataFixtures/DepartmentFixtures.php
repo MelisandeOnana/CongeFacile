@@ -8,10 +8,10 @@ use Doctrine\Persistence\ObjectManager;
 
 final class DepartmentFixtures extends Fixture
 {
-    private const DEPARTMENT_SYMFONY = 'department_symfony';
-    private const DEPARTMENT_POLE_UX = 'department_pole_ux';
-    private const DEPARTMENT_MARKETING = 'department_marketing';
-    private const DEPARTMENT_CMS = 'department_cms';
+    private const DEPARTMENT_SYMFONY = 'Symfony';
+    private const DEPARTMENT_POLE_UX = 'Pôle_ux';
+    private const DEPARTMENT_MARKETING = 'Marketing';
+    private const DEPARTMENT_CMS = 'CMS';
 
     public function load(ObjectManager $manager): void
     {
