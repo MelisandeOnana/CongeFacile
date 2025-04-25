@@ -185,16 +185,32 @@ class RequestController extends AbstractController
 
             if (null != $form['file']->getData()) {
                 $file = $form['file']->getData(); // On récupère le fichier téléchargé
-                $destination = $this->getParameter('kernel.project_dir') . '/public/files';
 
                 $personId = $person->getId();
+                $firstName = $person->getFirstName(); // Assure que la méthode `getFirstName()` existe
+                $lastName = $person->getLastName();   // Assure que la méthode `getLastName()` existe
 
-                // Compter le nombre de demandes déjà crée par la personne pour créer un id unique pour le fichier
-                $requestCount = $entityManager->getRepository(Request::class)->count(['collaborator' => $person]);
-                $idfile = $requestCount + 1;
+                // On récupère le département de la personne
+                $department = $person->getDepartment()->getName(); // Assure que la méthode `getDepartment()` existe et retourne un objet avec `getName()`
 
-                // Générer un nom unique pour le fichier
-                $fileName = $personId . '-' . $idfile . '-' . $file->getClientOriginalName();
+                // Création d'un répertoire pour le département, nom et prénom
+                $destination = $this->getParameter('kernel.project_dir') . '/public/files/department/' . $department . '/' . $firstName . '_' . $lastName;
+                if (!is_dir($destination)) {
+                    mkdir($destination, 0777, true);
+                }
+
+                // Génération d'un identifiant unique pour le fichier
+                $uniqueId = uniqid();
+
+                // Ajout de la date au nom du fichier
+                $date = (new \DateTime())->format('Y-m-d');
+
+                // Renommer le fichier avec un format personnalisé
+                $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION); // Récupère l'extension du fichier
+                $fileName = $firstName . '_' . $lastName . '_' . $department . '_' . $date . '_' . $uniqueId . '.' . $fileExtension;
+
+                // Déplacement du fichier dans le répertoire
+                $file->move($destination, $fileName);
             } 
 
             if (null == $form['comment']->getData()) {
