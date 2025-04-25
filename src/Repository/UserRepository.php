@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Department;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -112,7 +113,7 @@ class UserRepository extends ServiceEntityRepository
      * @param string $department Le département à filtrer.
      * @return array Retourne une liste d'utilisateurs correspondant aux critères.
      */
-    public function findTeamMembersQuery(array $criteria, User $manager, string $department): array
+    public function findTeamMembersQuery(array $criteria, User $manager, Department $department): array
     {
         $queryBuilder = $this->createQueryBuilder('u')
             ->join('u.person', 'p')
@@ -120,7 +121,7 @@ class UserRepository extends ServiceEntityRepository
             ->where('p.manager = :manager')
             ->andWhere('p.department = :department')
             ->setParameter('manager', $manager)
-            ->setParameter('department', $department);
+            ->setParameter('department', $department); // Utilisation de l'objet Department directement
 
         if (!empty($criteria['lastName'])) {
             $queryBuilder->andWhere('p.lastName LIKE :lastName')
@@ -142,7 +143,6 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('position', '%' . $criteria['position'] . '%');
         }
 
-        // Filtrer par totalVacationDays (en PHP après récupération des données)
         $results = $queryBuilder->getQuery()->getResult();
 
         if (!empty($criteria['totalVacationDays'])) {

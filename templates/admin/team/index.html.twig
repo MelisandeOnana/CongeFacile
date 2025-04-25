@@ -4,9 +4,13 @@
 
 {% block body %}
     <div class="flex flex-col md:flex-row items-center">
-        <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue] mb-4 md:mb-0">Mon équipe</h1>
+        <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue] mb-4 md:mb-0">
+            Mon équipe
+        </h1>
         <button class="w-[228px] h-[41px] rounded-[6px] bg-[#004C6C] text-[white] md:ml-[25px]">
-            <a href="{{ path('team_new') }}">Ajouter un collaborateur</a>
+            <a href="{{ path('team_new') }}">
+                Ajouter un collaborateur
+            </a>
         </button>
     </div>
 
@@ -23,37 +27,117 @@
             <!-- En-tête des colonnes -->
             <thead class="bg-[#F9FAFB] font-[Inter]">
                 <tr class="text-left text-[#344054]">
-                    <th class="px-4 pt-5 font-medium text-[14px]">{{ form_label(form.lastName) }}</th>
-                    <th class="px-4 pt-5 font-medium text-[14px]">{{ form_label(form.firstName) }}</th>
-                    <th class="px-4 pt-5 font-medium text-[14px]">{{ form_label(form.email) }}</th>
-                    <th class="px-4 pt-5 font-medium text-[14px]">{{ form_label(form.position) }}</th>
-                    <th class="px-4 pt-5 font-medium text-[14px]">{{ form_label(form.totalVacationDays) }}</th>
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            {{ form_label(form.lastName) }}
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            {{ form_label(form.firstName) }}
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            {{ form_label(form.email) }}
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            {{ form_label(form.position) }}
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
+                    <th class="px-4 pt-5 font-medium text-[14px]">
+                        <div class="flex items-center">
+                            {{ form_label(form.totalVacationDays) }}
+                            <div class="flex flex-col ml-[5px]">
+                                <span class="chevron-up">
+                                    <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </span>
+                                <span class="chevron-down mt-[-5px]">
+                                    <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </span>
+                            </div>
+                        </div>
+                    </th>
                     <th class="px-4 pt-5 font-medium text-[14px]"></th>
                 </tr>
                 <!-- Ligne de formulaire pour les champs de recherche -->
                 {{ form_start(form, { 'attr': { 'class': 'w-full', 'id': 'search-form' } }) }}
-                <tr>
-                    <td class="px-4 py-2">
-                        {{ form_widget(form.lastName) }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ form_widget(form.firstName) }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ form_widget(form.email) }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ form_widget(form.position) }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ form_widget(form.totalVacationDays) }}
-                    </td>
-                    <td colspan="5" class="text-center py-2">
-                        <button type="submit" id="search-button" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hidden">
-                            Rechercher
-                        </button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td class="px-4 py-2">
+                            {{ form_widget(form.lastName) }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ form_widget(form.firstName) }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ form_widget(form.email) }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ form_widget(form.position) }}
+                        </td>
+                        <td class="px-4 py-2">
+                            {{ form_widget(form.totalVacationDays) }}
+                        </td>
+                        <td colspan="5" class="text-center py-2">
+                            <button type="submit" id="search-button" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hidden">
+                                Rechercher
+                            </button>
+                        </td>
+                    </tr>
                 {{ form_end(form) }}
             </thead>
             <!-- Corps du tableau -->
