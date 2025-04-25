@@ -8,10 +8,10 @@ use Doctrine\Persistence\ObjectManager;
 
 final class DepartmentFixtures extends Fixture
 {
-    private const DEPARTMENT_SYMFONY = 'Symfony';
-    private const DEPARTMENT_CMS = 'CMS';
-    private const DEPARTMENT_POLE_UX = 'Pôle UX';
-    private const DEPARTMENT_MARKETING = 'Marketing';
+    private const DEPARTMENT_SYMFONY = 'department_symfony';
+    private const DEPARTMENT_POLE_UX = 'department_pole_ux';
+    private const DEPARTMENT_MARKETING = 'department_marketing';
+    private const DEPARTMENT_CMS = 'department_cms';
 
     public function load(ObjectManager $manager): void
     {
@@ -27,7 +27,8 @@ final class DepartmentFixtures extends Fixture
             $department->setName($deptName);
             $manager->persist($department);
 
-            $this->addReference('department_' . strtolower(str_replace(' ', '_', $deptName)), $department);
+            // Ajout de la référence pour chaque département
+            $this->addReference($deptName, $department);
         }
 
         $manager->flush();
