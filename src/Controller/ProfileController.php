@@ -67,7 +67,9 @@ class ProfileController extends AbstractController
                 // Réinitialiser le mot de passe
                 $newPassword = $resetPasswordForm->get('newPassword')->getData();
                 $confirmPassword = $resetPasswordForm->get('confirmPassword')->getData();
-                if ($newPassword !== $confirmPassword) {
+                if ($newPassword === $currentPassword) {
+                    $this->addFlash('error', 'Le nouveau mot de passe doit être différent de l\'ancien.');
+                } elseif ($newPassword !== $confirmPassword) {
                     $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
                 } else {
                     try {

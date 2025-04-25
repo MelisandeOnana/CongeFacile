@@ -37,8 +37,15 @@
         </div>
         <div class="flex flex-col mt-8">
             <div>
-                <label class="block mb-2 text-[#6B7280] font-[Inter]" for="result">Nombre de jours ouvrés :</label>
-                <input class="bg-[#F3F4F6] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" type="text" id="days" readonly>
+                <label class="block mb-2 text-[#6B7280] font-[Inter]" for="result">
+                    Nombre de jours ouvrés :
+                </label>
+                <input 
+                    class="bg-[#F3F4F6] text-[#6B7280] w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6" 
+                    type="text" 
+                    id="days" 
+                    readonly 
+                    value="{{ form.vars.value.workingDays|default(app.request.get('request_form')['workingDays']|default('')) }}">
             </div>
         </div>
         <div class="flex flex-col mt-8">
@@ -52,9 +59,9 @@
                     </div>
                 </div>
                 {% if form_errors(form.file) %}
-                <div class="mt-2 text-red-700">
-                    {{ form_errors(form.file) }}
-                </div>
+                    <div class="mt-2 text-red-700">
+                        {{ form_errors(form.file) }}
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -70,10 +77,4 @@
             *En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.
         </p>
     {{ form_end(form) }}
-    <script>
-        // Ajoutez ce script dans votre template Twig
-        document.getElementById('days').addEventListener('change', function () {
-            document.querySelector('input[name="request_form[workingDays]"]').value = this.value;
-        });
-    </script>
 {% endblock %}
