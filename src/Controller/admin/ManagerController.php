@@ -167,8 +167,12 @@ class ManagerController extends AbstractController
             $existingManager = $personRepository->findOneBy(['department' => $department]);
             if ($existingManager) {
                 $this->addFlash('error', 'Le département sélectionné est déjà attribué.');
-
-                return $this->redirectToRoute('manager_new'); // Rediriger vers la page de création avec le message d'erreur
+                
+                return $this->render('admin/manager/manager_new.html.twig', [
+                    'userForm' => $userForm,
+                    'manager'=> $manager,
+                    'person'=>$person
+                ]);
             }
 
             // Définir la position par défaut pour un manager
@@ -205,6 +209,8 @@ class ManagerController extends AbstractController
 
         return $this->render('admin/manager/manager_new.html.twig', [
             'userForm' => $userForm,
+            'manager'=> $manager,
+            'person'=>$person
         ]);
     }
 }
