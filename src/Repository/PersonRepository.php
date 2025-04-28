@@ -48,6 +48,18 @@ class PersonRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function findManagerByDepartmentId(int $departmentId): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.position', 'pos')
+            ->where('p.department = :departmentId')
+            ->andWhere('pos.name = :positionName')
+            ->setParameter('departmentId', $departmentId)
+            ->setParameter('positionName', 'Manager')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Person[] Returns an array of Person objects
     //     */
