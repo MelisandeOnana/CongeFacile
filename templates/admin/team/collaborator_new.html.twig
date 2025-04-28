@@ -25,7 +25,6 @@
         const departmentId = this.value;
 
         // On reset proprement
-        managerSelect.innerHTML = '<option value="">Choisir un manager</option>';
         managerSelect.disabled = true;
 
         if (!departmentId) {
@@ -48,7 +47,7 @@
                 });
 
                 // Activer seulement s'il y a des managers
-                managerSelect.disabled = false;
+                managerSelect.disabled = true;
 
                 // Sélectionner automatiquement le premier manager
                 managerSelect.value = data[0].id;
