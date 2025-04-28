@@ -89,8 +89,11 @@ class DepartmentController extends AbstractController
     
         // Vérifie si le formulaire de suppression a été soumis
         if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-            // Vérifie si des collaborateurs ou managers sont liés au département
-            if ($department->getCollaborators()->count() > 0 || $department->getManagers()->count() > 0) {
+            // Récupère les collaborateurs liés au département
+            $collaborators = $department->getCollaborators();
+
+            // Vérifie si des collaborateurs sont liés au département
+            if (!$collaborators->isEmpty()) {
                 $this->addFlash('error', 'Impossible de supprimer ce département car des collaborateurs ou managers y sont liés.');
             } else {
                 try {
@@ -107,12 +110,12 @@ class DepartmentController extends AbstractController
         }
     
         // Vérifie si le formulaire d'édition a été soumis
-        if ($formDepartment->isSubmitted() && $formDepartment->isValid()) {
+        if ($formDepartment->isSubmitted() && $formDepartment->isValid() && $request->request->has('formDepartment')) {
             // Vérifie si un département avec le même nom existe déjà
             $existingDepartment = $departmentRepository->findOneBy(['name' => $department->getName()]);
             if ($existingDepartment && $existingDepartment->getId() !== $department->getId()) {
                 $this->addFlash('error', 'Un département avec ce nom existe déjà.');
-    
+
                 return $this->redirectToRoute('department_edit', ['id' => $id]);
             } else {
                 // Met à jour le département
@@ -124,7 +127,7 @@ class DepartmentController extends AbstractController
                 } catch (Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du département.');
                 }
-    
+
                 return $this->redirectToRoute('departments');
             }
         }

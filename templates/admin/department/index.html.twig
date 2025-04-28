@@ -4,20 +4,20 @@
 
 {% block body %}
     <div class="flex">
-        <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-10">Directions/Services</h1>
+        <h1 class="font-semibold text-[#1B3168] text-[28px] font-[Epilogue] mb-[0.5rem]">Directions/Services</h1>
         <a href="{{ path('department_new') }}" class="text-[16px] justify-center py-[9px] px-12 shadow-sm text-sm font-medium rounded-md text-white bg-[#004C6C] hover:bg-[#1B3168] h-10 ml-8">
             Ajouter une direction/service
         </a>
     </div>
     
     {% for message in app.flashes('error') %}
-        <div class="bg-red-500 text-white p-2 mb-4 rounded">
+        <div class="bg-red-500 text-white p-2 mb-4 rounded w-[640px]">
             {{ message }}
         </div>
     {% endfor %}
 
     {% for label, messages in app.flashes %}
-        <div class="border border-green-700 w-[351px] text-green-700 bg-green-100 rounded-[6px] p-4">
+        <div class="border border-green-700 w-[360px] text-green-700 bg-green-100 rounded-[6px] p-4 mb-[0.5rem]">
             {% for message in messages %}
                 <p class="font-bold">{{ message }}</p>
             {% endfor %}
