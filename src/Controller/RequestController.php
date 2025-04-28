@@ -297,15 +297,15 @@ class RequestController extends AbstractController
 
                 $this->mailerService->sendEmail($to, $subject, $message);
             }
-        }
 
-        if ('ROLE_COLLABORATOR' == $user->getRole()) {
-            if ($request->getCollaborator()->getId() !== $person->getId()) {
-                return $this->redirectToRoute('request_historic');
-            }
-        } else {
-            if ($request->getCollaborator()->getManager()->getId() !== $person->getId()) {
-                return $this->redirectToRoute('request_historic');
+            if ('ROLE_COLLABORATOR' == $user->getRole()) {
+                if ($request->getCollaborator()->getId() !== $person->getId()) {
+                    return $this->redirectToRoute('request_historic');
+                }
+            } else {
+                if ($request->getCollaborator()->getManager()->getId() !== $person->getId()) {
+                    return $this->redirectToRoute('request_historic');
+                }
             }
         }
 
@@ -325,7 +325,8 @@ class RequestController extends AbstractController
         }
 
         $manager = $user->getPerson();
-        $collaborators = $personRepository->getPersonByManager($manager);
+        $managerDepartmentId = $manager->getDepartment()->getId();
+        $collaborators = $personRepository->getPersonByDepartmentId($managerDepartmentId);
         $requestTypes = $requestTypeRepository->findAll();
 
         $form = $this->createForm(PendingRequestSearchType::class, null, [
@@ -376,6 +377,8 @@ class RequestController extends AbstractController
             if ($filterCollaboratorObject) {
                 $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
             }
+        }else{
+            $criteria->andWhere(Criteria::expr()->in('collaborator', $collaborators));
         }
 
         $requests = $requestRepository->matching($criteria);
