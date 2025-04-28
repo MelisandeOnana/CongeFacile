@@ -215,7 +215,6 @@ class TeamController extends AbstractController
             }
 
             // Défini une valeur par défaut pour le champ created_at
-            $user->setManager($personManager);
             $user->setPerson($person);
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
