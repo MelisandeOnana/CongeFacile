@@ -145,11 +145,11 @@ class UserRepository extends ServiceEntityRepository
 
         $results = $queryBuilder->getQuery()->getResult();
 
-        if (!empty($criteria['totalVacationDays'])) {
+        if (isset($criteria['totalVacationDays'])) {
             $filteredResults = [];
             foreach ($results as $user) {
                 $totalVacationDays = $this->getVacationDaysForYear($user, (int) date('Y'));
-                if ($totalVacationDays == $criteria['totalVacationDays']) {
+                if ($totalVacationDays == (int) $criteria['totalVacationDays']) {
                     $filteredResults[] = $user;
                 }
             }
