@@ -17,8 +17,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\TeamMemberSearchType;
+use App\Repository\PersonRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\Department;
 
 #[IsGranted('ROLE_MANAGER')]
 class TeamController extends AbstractController
@@ -216,7 +216,6 @@ class TeamController extends AbstractController
 
             // Défini une valeur par défaut pour le champ created_at
             $user->setManager($personManager);
-            $user->getPerson()->setDepartment($personManager->getDepartment());
             $user->setPerson($person);
             $entityManager->persist($person); // Persister d'abord la personne
             $entityManager->persist($user);   // Puis persister l'utilisateur
@@ -237,5 +236,28 @@ class TeamController extends AbstractController
             'user' => $user,
             'formDelete' => $formDelete,
         ]);
+    }
+
+    #[Route('/managers/by-department', name: 'managers_by_department')]
+    public function getManagersByDepartment(Request $request, PersonRepository $userRepository): JsonResponse
+    {
+        $departmentId = $request->query->get('department');
+
+        if (!$departmentId) {
+            return new JsonResponse([], 400);
+        }
+
+        $managers = $userRepository->findManagerByDepartmentId($departmentId);
+
+        $data = [];
+
+        foreach ($managers as $manager) {
+            $data[] = [
+                'id' => $manager->getId(),
+                'name' => $manager->getFirstname() . ' ' . $manager->getLastname(),
+            ];
+        }
+
+        return new JsonResponse($data);
     }
 }

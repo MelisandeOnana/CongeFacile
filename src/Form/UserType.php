@@ -90,7 +90,6 @@ class UserType extends AbstractType
                 'attr' => [
                     'id' => 'manager',
                     'class' => 'bg-[#F3F4F6] appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                    'disabled' => 'disabled',
                 ],
             ])
             ->add('newPassword', PasswordType::class, [
