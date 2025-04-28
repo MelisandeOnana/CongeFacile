@@ -73,17 +73,11 @@ class TeamController extends AbstractController
         if (! $userManager instanceof User) {
             return $this->redirectToRoute('login');
         }
-        // Récupération de la personne et du département du manager
-        $personManager = $userManager->getPerson();
 
         // Vérifie si le manager a un département
         $person = new Person();
         $user = new User();
         $user->setPerson($person);
-
-        // Crée un nouveau membre de l'équipe
-        $user->setManager($personManager);
-        $user->getPerson()->setDepartment($personManager->getDepartment());
 
         // Crée le formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user);
@@ -123,14 +117,12 @@ class TeamController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
-            // Défini le rôle de l'utilisateur
-            $user->setManager($personManager);
-            $user->getPerson()->setDepartment($personManager->getDepartment());
             $user->setPerson($person);
             $user->setRole('ROLE_COLLABORATOR');
 
             // Défini le manager de la personne
-            $entityManager->persist($person); // Persister d'abord la personne
+            $entityManager->persist($person);
+            $entityManager->persist($user); // Persister d'abord la personne
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');

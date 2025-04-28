@@ -16,6 +16,49 @@
             });
         });
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const departmentSelect = document.getElementById('user_department');
+    const managerSelect = document.getElementById('user_manager');
+
+    departmentSelect.addEventListener('change', function () {
+        const departmentId = this.value;
+
+        // On reset proprement
+        managerSelect.innerHTML = '<option value="">Choisir un manager</option>';
+        managerSelect.disabled = true;
+
+        if (!departmentId) {
+            return;
+        }
+
+        fetch(`/managers/by-department?department=${departmentId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    // Pas de manager trouvé pour ce département
+                    return;
+                }
+
+                data.forEach(function(manager) {
+                    const option = document.createElement('option');
+                    option.value = manager.id;
+                    option.textContent = manager.name;
+                    managerSelect.appendChild(option);
+                });
+
+                // Activer seulement s'il y a des managers
+                managerSelect.disabled = false;
+
+                // Sélectionner automatiquement le premier manager
+                managerSelect.value = data[0].id;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+        });
+    });
+    </script>
     <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Ajouter un nouveau membre</h1>
 
     {{ form_start(userForm) }}
