@@ -418,7 +418,7 @@ class RequestController extends AbstractController
 
         // On compte le nombre de demandes par type de demande
         foreach ($requestTypes as $type) {
-            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type->getName());
+            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type);
         }
 
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
@@ -464,21 +464,6 @@ class RequestController extends AbstractController
 
         // On récupère les demandes groupées par mois
         $requestsGroupedByMonth = $requestRepository->findRequestsGroupedByMonth($startDate, $endDate);
-
-        // On initialise les compteurs d'acceptation et de refus
-        $acceptance = 0;
-        $refusal = 0;
-
-        // On parcourt les demandes et on compte les acceptations et refus
-        foreach ($requestsGroupedByMonth as $result) {
-            // On peut traiter les résultats ici
-            // Par exemple, pour chaque mois, on peut compter les acceptations et les refus
-            
-            $month = $result['month'];
-            //dd($month);
-            $requestCount = $result['requestCount'];
-            // Traitement des résultats selon les besoins
-        }
 
         return $this->render('request/request_statistics.html.twig', [
             'requestTypes' => $requestTypes,
