@@ -2,18 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Request;
 use App\Entity\RequestType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\File;
 
 class RequestForm extends AbstractType
@@ -29,6 +24,9 @@ class RequestForm extends AbstractType
             'required' => true,
             'attr' => ['class' => 'appearance-none w-[350px] h-[46px] border rounded-[6px] pl-4 pr-4'],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
+            'constraints' => [
+                new Assert\NotNull(['message' => 'Le type de demande est obligatoire.']),
+            ],
         ])
         ->add('startAt', DateTimeType::class, [
             'label' => 'Date de début - champ obligatoire',
@@ -39,6 +37,13 @@ class RequestForm extends AbstractType
                 'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6',
             ],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
+            'constraints' => [
+                new Assert\NotNull(['message' => 'La date de début est obligatoire.']),
+                new Assert\GreaterThanOrEqual([
+                    'value' => 'today',
+                    'message' => 'La date de début doit être postérieure ou égale à aujourd\'hui.',
+                ]),
+            ],
         ])
         ->add('endAt', DateTimeType::class, [
             'label' => 'Date de fin - champ obligatoire',
@@ -49,6 +54,13 @@ class RequestForm extends AbstractType
                 'class' => 'w-[350px] h-[46px] border rounded-[6px] pl-6 pr-6',
             ],
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
+            'constraints' => [
+                new Assert\NotNull(['message' => 'La date de fin est obligatoire.']),
+                new Assert\Expression([
+                    'expression' => 'this.getStartAt() < this.getEndAt()',
+                    'message' => 'La date de fin doit être postérieure à la date de début.',
+                ]),
+            ],
         ])
         ->add('file', FileType::class, [
             'label' => 'Justificatif si applicable',
@@ -67,6 +79,8 @@ class RequestForm extends AbstractType
                         'image/gif',
                     ],
                     'mimeTypesMessage' => 'Veuillez télécharger un fichier PDF ou une image valide (PNG, JPEG, GIF).',
+                    'maxSize' => '5M',
+                    'maxSizeMessage' => 'Le fichier ne doit pas dépasser 5 Mo.',
                 ]),
             ],
         ])
@@ -79,41 +93,12 @@ class RequestForm extends AbstractType
             'required' => false,
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
             'empty_data' => '',
-        ])
-        ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-            $data = $event->getData();
-
-            $startAt = $data->getStartAt();
-            $endAt = $data->getEndAt();
-            $type = $data->getRequestType();
-
-            if ($startAt >= $endAt) {
-                $form->get('startAt')->addError(new FormError('La date de début doit être antérieure à la date de fin.'));
-            }
-
-            $today = new \DateTime('now');
-
-            if ($startAt < $today) {
-                $form->get('startAt')->addError(new FormError("La date et l'heure de début doit être postérieure à aujourd'hui"));
-            }
-
-            if (null == $type) {
-                $form->get('requestType')->addError(new FormError('Le type de demande est obligatoire'));
-            }
-            if (null == $startAt) {
-                $form->get('startAt')->addError(new FormError('La date de début est obligatoire'));
-            }
-            if (null == $endAt) {
-                $form->get('endAt')->addError(new FormError('La date de fin est obligatoire'));
-            }
-        });
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => Request::class,
+            'constraints' => [
+                new Assert\Length([
+                    'max' => 500,
+                    'maxMessage' => 'Le commentaire ne peut pas dépasser 500 caractères.',
+                ]),
+            ],
         ]);
     }
 }

@@ -13,8 +13,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ManagerType extends AbstractType
 {
@@ -22,19 +21,15 @@ class ManagerType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email  - champ obligatoire',
+                'label' => 'Adresse email - champ obligatoire',
                 'required' => true,
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB] pl-10',
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez saisir une adresse email.',
-                    ]),
-                    new Email([
-                        'message' => 'L\'adresse email "{{ value }}" n\'est pas une adresse valide.',
-                    ]),
+                    new Assert\NotBlank(['message' => 'Veuillez saisir une adresse email.']),
+                    new Assert\Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas une adresse valide.']),
                 ],
             ])
             ->add('person', PersonType::class, [
@@ -51,6 +46,9 @@ class ManagerType extends AbstractType
                     'id' => 'department',
                     'class' => 'appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Veuillez sélectionner un département.']),
+                ],
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
@@ -60,6 +58,13 @@ class ManagerType extends AbstractType
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Veuillez saisir un mot de passe.']),
+                    new Assert\Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit contenir au moins 8 caractères.',
+                    ]),
+                ],
             ])
             ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirmation de mot de passe',
@@ -68,6 +73,9 @@ class ManagerType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Veuillez confirmer le mot de passe.']),
                 ],
             ]);
 
@@ -82,9 +90,7 @@ class ManagerType extends AbstractType
 
             // Assurez-vous que le département est défini
             $department = $form->get('department')->getData();
-            if ($department) {
-                $data->getPerson()->setDepartment($department);
-            } else {
+            if (!$department) {
                 $form->get('department')->addError(new FormError('Le département ne peut pas être vide.'));
             }
         });
