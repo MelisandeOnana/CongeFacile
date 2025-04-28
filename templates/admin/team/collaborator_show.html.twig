@@ -28,7 +28,8 @@
     const departmentSelect = document.getElementById('user_department');
     const managerSelect = document.getElementById('user_manager');
 
-    departmentSelect.addEventListener('change', function () {
+    departmentSelect.addEventListener('change', function () 
+    function initialiserSelect(){
         const departmentId = this.value;
 
         // On reset proprement
@@ -54,8 +55,9 @@
                 });
 
                 // Activer seulement s'il y a des managers
-                managerSelect.disabled = false;
+                managerSelect.disabled = true;
 
+                
                 // Sélectionner automatiquement le premier manager
                 managerSelect.value = data[0].id;
             })
