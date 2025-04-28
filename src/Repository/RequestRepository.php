@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Request;
 use App\Entity\Person;
+use App\Entity\RequestType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -63,10 +64,10 @@ class RequestRepository extends ServiceEntityRepository
     /**
      * Compte les requêtes par type de requête.
      *
-     * @param string $requestType
-     * @return int Retourne le nombre de requêtes
-     */
-    public function countRequestsByRequestType(string $requestType): int
+    * @param RequestType $requestType
+    * @return int Retourne le nombre de requêtes
+    */
+    public function countRequestsByRequestType(RequestType $requestType): int
     {
         $startOfYear = (new \DateTime())->setDate((int)date('Y'), 1, 1)->setTime(0, 0, 0);
         $endOfYear = (new \DateTime())->setDate((int)date('Y'), 12, 31)->setTime(23, 59, 59);

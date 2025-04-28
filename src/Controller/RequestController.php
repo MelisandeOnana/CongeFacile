@@ -186,15 +186,11 @@ class RequestController extends AbstractController
             if (null != $form['file']->getData()) {
                 $file = $form['file']->getData(); // On récupère le fichier téléchargé
 
-                $personId = $person->getId();
-                $firstName = $person->getFirstName(); // Assure que la méthode `getFirstName()` existe
-                $lastName = $person->getLastName();   // Assure que la méthode `getLastName()` existe
+                $firstName = strtolower($person->getFirstName()); // Assure que la méthode `getFirstName()` existe
+                $lastName = strtolower($person->getLastName());   // Assure que la méthode `getLastName()` existe
 
-                // On récupère le département de la personne
-                $department = $person->getDepartment()->getName(); // Assure que la méthode `getDepartment()` existe et retourne un objet avec `getName()`
-
-                // Création d'un répertoire pour le département, nom et prénom
-                $destination = $this->getParameter('kernel.project_dir') . '/public/files/department/' . $department . '/' . $firstName . '_' . $lastName;
+                // Création d'un répertoire pour le nom et prénom
+                $destination = $this->getParameter('kernel.project_dir') . '/public/files/' . $firstName . '_' . $lastName;
                 if (!is_dir($destination)) {
                     mkdir($destination, 0777, true);
                 }
@@ -207,10 +203,13 @@ class RequestController extends AbstractController
 
                 // Renommer le fichier avec un format personnalisé
                 $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION); // Récupère l'extension du fichier
-                $fileName = $firstName . '_' . $lastName . '_' . $department . '_' . $date . '_' . $uniqueId . '.' . $fileExtension;
+                $fileName = $firstName . '_' . $lastName . '_' . $date . '_' . $uniqueId . '.' . $fileExtension;
 
                 // Déplacement du fichier dans le répertoire
                 $file->move($destination, $fileName);
+
+                // Enregistrement du nom du fichier dans l'entité
+                $theRequest->setReceiptFile($fileName);
             } 
 
             if (null == $form['comment']->getData()) {
@@ -284,8 +283,6 @@ class RequestController extends AbstractController
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'enregistrement de la réponse.');
             }
-
-            // Envoi d'un email au collaborateur
             
             // On récupère l'email du collaborateur
             $collaborator = $request->getCollaborator();
@@ -418,7 +415,7 @@ class RequestController extends AbstractController
 
         // On compte le nombre de demandes par type de demande
         foreach ($requestTypes as $type) {
-            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type->getName());
+            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type);
         }
 
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
@@ -464,21 +461,6 @@ class RequestController extends AbstractController
 
         // On récupère les demandes groupées par mois
         $requestsGroupedByMonth = $requestRepository->findRequestsGroupedByMonth($startDate, $endDate);
-
-        // On initialise les compteurs d'acceptation et de refus
-        $acceptance = 0;
-        $refusal = 0;
-
-        // On parcourt les demandes et on compte les acceptations et refus
-        foreach ($requestsGroupedByMonth as $result) {
-            // On peut traiter les résultats ici
-            // Par exemple, pour chaque mois, on peut compter les acceptations et les refus
-            
-            $month = $result['month'];
-            //dd($month);
-            $requestCount = $result['requestCount'];
-            // Traitement des résultats selon les besoins
-        }
 
         return $this->render('request/request_statistics.html.twig', [
             'requestTypes' => $requestTypes,

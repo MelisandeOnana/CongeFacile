@@ -31,7 +31,10 @@
         </p>
         {% if request.receiptFile %}
             <div class="mt-6 flex justify-center md:justify-start bg-[#004C6C14] w-full md:w-[250px] h-[40px] rounded-[6px]">
-                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto text-center text-[#475467] font-medium font-[Inter]">Télécharger le justificatif</a>
+                <a href="{{ asset('files/' ~ request.collaborator.firstname ~ '_' ~ request.collaborator.lastname ~ '/' ~ request.receiptfile) }}" download class="m-auto flex items-center text-center text-[#475467] font-medium font-[Inter]">
+                    Télécharger le justificatif
+                    <img src="{{ asset('images/download.svg') }}" alt="Icône de téléchargement" class="w-5 h-5 ml-2">
+                </a>
             </div>
         {% endif %}
         {% if request.answerComment %}
@@ -48,7 +51,7 @@
         {% endif %}
         {% if request.receiptFile %}
             <div class="mt-6 flex justify-center md:justify-start bg-[#004C6C14] w-full md:w-[250px] h-[40px] rounded-[6px]">
-                <a href="{{ asset('files/' ~ request.receiptfile) }}" download class="m-auto flex items-center text-center text-[#475467] font-medium font-[Inter]">
+                <a href="{{ asset('files/' ~ request.collaborator.firstname ~ '_' ~ request.collaborator.lastname ~ '/' ~ request.receiptfile) }}" download class="m-auto flex items-center text-center text-[#475467] font-medium font-[Inter]">
                     Télécharger le justificatif
                     <img src="{{ asset('images/download.svg') }}" alt="Icône de téléchargement" class="w-5 h-5 ml-2">
                 </a>
