@@ -10,138 +10,138 @@
         <!-- Ligne des noms des colonnes -->
         <tr class="text-left text-[#344054]">
           <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Type de demande</span>
+            <div class="flex items-center">
+                {{ form_label(form.type) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Demandée le</span>
+            </div>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+                {{ form_label(form.requested) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Collaborateur</span>
+            </div>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+                {{ form_label(form.collaborator) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Date de début</span>
+            </div>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+                {{ form_label(form.start) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Date de fin</span>
+            </div>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+                {{ form_label(form.end) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5 font-medium text-[14px]">
-              <div class="flex items-center">
-                <span>Nb jours</span>
+            </div>
+          </th>
+          <th class="px-4 pt-5 font-medium text-[14px]">
+            <div class="flex items-center">
+                {{ form_label(form.days) }}
                 <div class="flex flex-col ml-[5px]">
-                  <span class="chevron-up">
-                  <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="18 15 12 9 6 15"></polyline>
-                  </svg>
-                  </span>
-                  <span class="chevron-down mt-[-5px]">
-                  <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </svg>
-                  </span>
+                    <span class="chevron-up">
+                        <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </span>
+                    <span class="chevron-down mt-[-5px]">
+                        <svg class="chevron-down" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
                 </div>
-              </div>
-            </th>
-            <th class="px-4 pt-5"><!-- Vide --></th>
+            </div>
+          </th>
+          <th class="px-4 pt-5"><!-- Vide --></th>
         </tr>
         <!-- Ligne des champs de recherche -->
         {{ form_start(form) }}
-        <tr class="text-gray-700">
-          <th class="px-4 py-1 w-1/6">
-            {{ form_widget(form.type, { 'value': app.request.query.get('type') }) }}
-          </th>
-          <th class="px-4 py-1">
-            {{ form_widget(form.requested, { 'attr': { 'value': app.request.query.get('requested') } }) }}
-          </th>
-          <th class="px-4 py-1">
-              {{ form_widget(form.collaborator, { 'attr': { 'value': app.request.query.get('collaborator') } }) }}
-          </th>
-          <th class="px-4 py-1">
-              {{ form_widget(form.start, { 'attr': { 'value': app.request.query.get('start') } }) }}
-          </th>
-          <th class="px-4 py-1">
-              {{ form_widget(form.end, { 'attr': { 'value': app.request.query.get('end') } }) }}
-          </th>
-          <th class="px-4 py-1 w-1/6">
-              {{ form_widget(form.days, { 'attr': { 'value': app.request.query.get('days') } }) }}
-          </th>
-          <th class="px-4 py-1 ">
-            {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty or app.request.query.get('collaborator') is not empty %}
-              <div class="mb-5">
-                <a href="{{ path('request_pending') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
-              </div>
-            {% endif %}
-          </th>
-        </tr>
+          <tr class="text-gray-700">
+            <th class="px-4 py-1 w-1/6">
+              {{ form_widget(form.type, { 'value': app.request.query.get('type') }) }}
+            </th>
+            <th class="px-4 py-1">
+              {{ form_widget(form.requested, { 'attr': { 'value': app.request.query.get('requested') } }) }}
+            </th>
+            <th class="px-4 py-1">
+                {{ form_widget(form.collaborator, { 'attr': { 'value': app.request.query.get('collaborator') } }) }}
+            </th>
+            <th class="px-4 py-1">
+                {{ form_widget(form.start, { 'attr': { 'value': app.request.query.get('start') } }) }}
+            </th>
+            <th class="px-4 py-1">
+                {{ form_widget(form.end, { 'attr': { 'value': app.request.query.get('end') } }) }}
+            </th>
+            <th class="px-4 py-1 w-1/6">
+                {{ form_widget(form.days, { 'attr': { 'value': app.request.query.get('days') } }) }}
+            </th>
+            <th class="px-4 py-1 ">
+              {% if app.request.query.get('type') is not empty or app.request.query.get('requested') is not empty or app.request.query.get('start') is not empty or app.request.query.get('end') is not empty or app.request.query.get('days') is not empty or app.request.query.get('status') is not empty or app.request.query.get('collaborator') is not empty %}
+                <div class="mb-5">
+                  <a href="{{ path('request_pending') }}" class="bg-white border border-gray-300 text-gray-500 font-medium py-3 px-4 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">X</a>
+                </div>
+              {% endif %}
+            </th>
+          </tr>
         {{ form_end(form) }}
       </thead>
       <!-- Corps du tableau -->

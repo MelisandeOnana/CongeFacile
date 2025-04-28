@@ -30,7 +30,7 @@ class PendingRequestSearchType extends AbstractType
             ],
         ])
         ->add('requested', DateType::class, [
-            'label' => 'Date de création',
+            'label' => 'Demandée le',
             'required' => false,
             'attr' => [
             'type' => 'date',
