@@ -418,7 +418,7 @@ class RequestController extends AbstractController
 
         // On compte le nombre de demandes par type de demande
         foreach ($requestTypes as $type) {
-            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestType($type);
+            $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestTypeAndYear($type);
         }
 
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
