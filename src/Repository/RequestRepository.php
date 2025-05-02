@@ -67,7 +67,7 @@ class RequestRepository extends ServiceEntityRepository
     * @param RequestType $requestType
     * @return int Retourne le nombre de requêtes
     */
-    public function countRequestsByRequestType(RequestType $requestType): int
+    public function countRequestsByRequestTypeAndYear(RequestType $requestType): int
     {
         $startOfYear = (new \DateTime())->setDate((int)date('Y'), 1, 1)->setTime(0, 0, 0);
         $endOfYear = (new \DateTime())->setDate((int)date('Y'), 12, 31)->setTime(23, 59, 59);
@@ -80,6 +80,22 @@ class RequestRepository extends ServiceEntityRepository
             ->setParameter('requestType', $requestType)
             ->setParameter('startOfYear', $startOfYear)
             ->setParameter('endOfYear', $endOfYear)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Compte les requêtes par type de requête.
+     *
+    * @param RequestType $requestType
+    * @return int Retourne le nombre de requêtes
+    */
+    public function countRequestsByRequestType(RequestType $requestType): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->where('r.requestType = :requestType')
+            ->setParameter('requestType', $requestType)
             ->getQuery()
             ->getSingleScalarResult();
     }

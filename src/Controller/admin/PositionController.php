@@ -80,9 +80,11 @@ class PositionController extends AbstractController
 
         $positionCount = $personRepository->countByPosition($position);
 
+        $delete = $request->query->get('delete');
         $formPosition = $this->createForm(PositionType::class, $position);
         $formPosition->handleRequest($request);
         $formDelete = $this->createForm(DeleteType::class);
+        $formDelete->handleRequest($request);
 
         if ($formPosition->isSubmitted() && $formPosition->isValid()) {
             $existingPosition = $positionRepository->findOneBy(['name' => $position->getName()]);
@@ -94,7 +96,7 @@ class PositionController extends AbstractController
                 $entityManager->persist($position);
                 try {
                     $entityManager->flush();
-                    $this->addFlash('success', 'Le poste a été créé avec succès.');
+                        $this->addFlash('success', 'Le poste a été modifié avec succès.');
                 } catch (Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
                 }
@@ -102,6 +104,21 @@ class PositionController extends AbstractController
                 return $this->redirectToRoute('positions');
             }
         }
+
+        if ($delete == 'true') {
+            if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+                if ($positionCount > 0) {
+                    $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
+                    return $this->redirectToRoute('position_edit', ['id' => $id]);
+                } else {
+                    $entityManager->remove($position);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le poste a été supprimé avec succès.');
+                    return $this->redirectToRoute('positions');
+                }
+            }
+        }
+
 
         return $this->render('admin/position/position_edit.html.twig', [
             'position' => $position,

@@ -96,8 +96,8 @@ class RequestTypeController extends AbstractController
         ]);
     }
 
-    #[Route('/request-type/{id}/edit', name: 'request_type_edit')]
-    public function edit(RequestType $requestType, HttpRequest $request, EntityManagerInterface $entityManager): Response
+    #[Route('/request-type/edit/{id}', name: 'request_type_edit')]
+    public function edit(RequestType $requestType, HttpRequest $request, EntityManagerInterface $entityManager, RequestRepository $requestRepository, $id): Response
     {
         $form = $this->createForm(RequestTypeFormType::class, $requestType);
 
@@ -105,18 +105,30 @@ class RequestTypeController extends AbstractController
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
 
+        $requestTypeCount = $requestRepository->countRequestsByRequestType($requestType);
+
         // Gestion de la suppression
         if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-            $entityManager->remove($requestType);
-            $entityManager->flush();
+            if ($requestTypeCount > 0) {
+                $this->addFlash('error', 'Impossible de supprimer ce type de demande car il est associé à des demandes.');
+                return $this->redirectToRoute('request_type_edit', ['id' => $id]);
+            } else {
+                $entityManager->remove($requestType);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+                $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
 
-            return $this->redirectToRoute('request_types');
+                return $this->redirectToRoute('request_types');
+            }
         }
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $existingRequestType = $entityManager->getRepository(RequestType::class)->findOneBy(['name' => $requestType->getName()]);
+            if ($existingRequestType) {
+                $this->addFlash('error', 'Un type de demande avec ce nom existe déjà.');
+                return $this->redirectToRoute('request_type_edit', ['id' => $id]);
+            }
             $entityManager->flush();
 
             $this->addFlash('success', 'Le type de demande a été modifié avec succès.');

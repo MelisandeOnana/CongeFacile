@@ -93,8 +93,9 @@ class DepartmentController extends AbstractController
             $collaborators = $department->getCollaborators();
 
             // Vérifie si des collaborateurs sont liés au département
-            if (!$collaborators->isEmpty()) {
-                $this->addFlash('error', 'Impossible de supprimer ce département car des collaborateurs ou managers y sont liés.');
+            if (count($collaborators) > 0) {
+                $this->addFlash('error', 'Impossible de supprimer ce département car il est associé à des collaborateurs.');
+                return $this->redirectToRoute('department_edit', ['id' => $id]);
             } else {
                 try {
                     // Supprime le département
@@ -104,13 +105,12 @@ class DepartmentController extends AbstractController
                 } catch (Exception $e) {
                     $this->addFlash('error', 'Une erreur est survenue lors de la suppression du département.');
                 }
+                return $this->redirectToRoute('departments');
             }
-
-            return $this->redirectToRoute('departments');
         }
     
         // Vérifie si le formulaire d'édition a été soumis
-        if ($formDepartment->isSubmitted() && $formDepartment->isValid() && $request->request->has('formDepartment')) {
+        if ($formDepartment->isSubmitted() && $formDepartment->isValid()) {
             // Vérifie si un département avec le même nom existe déjà
             $existingDepartment = $departmentRepository->findOneBy(['name' => $department->getName()]);
             if ($existingDepartment && $existingDepartment->getId() !== $department->getId()) {
@@ -120,13 +120,8 @@ class DepartmentController extends AbstractController
             } else {
                 // Met à jour le département
                 $entityManager->persist($department);
-                try {
-                    // Enregistre les modifications dans la base de données
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Le département a été mis à jour avec succès.');
-                } catch (Exception $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du département.');
-                }
+                $entityManager->flush();
+                $this->addFlash('success', 'Le département a été mis à jour avec succès.');
 
                 return $this->redirectToRoute('departments');
             }
