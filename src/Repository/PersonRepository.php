@@ -62,7 +62,7 @@ class PersonRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->innerJoin('p.position', 'pos')
             ->where('p.department = :departmentId')
-            ->andWhere('pos.name = :positionName')
+            ->andWhere('pos.name = :positionName') // Vérifie que la position est "Manager"
             ->setParameter('departmentId', $departmentId)
             ->setParameter('positionName', 'Manager')
             ->getQuery()

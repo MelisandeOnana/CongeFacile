@@ -90,14 +90,8 @@ class UserType extends AbstractType
                 'placeholder' => '',
                 'attr' => [
                     'id' => 'manager',
-                    'readonly' => true,
-                    'disabled' => true,
+                    'readonly' => true, // Empêche la modification tout en incluant le champ dans les données envoyées
                     'class' => 'bg-[#F3F4F6] appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez sélectionner un manager.',
-                    ]),
                 ],
             ])
             ->add('newPassword', PasswordType::class, [
@@ -132,6 +126,13 @@ class UserType extends AbstractType
                     ]),
                 ],
             ]);
+
+        if ($options['include_enabled']) {
+            $builder->add('enabled', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Activer le compte',
+            ]);
+        }
 
         // Validation des mots de passe
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {

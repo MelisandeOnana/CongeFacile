@@ -3,7 +3,7 @@
 {% block title %}Mon équipe{% endblock %}
 
 {% block body %}
-    <div class="flex flex-col md:flex-row items-center">
+    <div class="flex flex-col md:flex-row items-center mb-[15px]">
         <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue] mb-4 md:mb-0">
             Mon équipe
         </h1>
@@ -15,7 +15,7 @@
     </div>
 
     {% for label, messages in app.flashes %}
-        <div class="border border-green-700 w-[351px] text-green-700 bg-green-100 rounded-[6px] p-4">
+        <div class="border border-green-700 w-[395px] text-green-700 bg-green-100 rounded-[6px] p-4">
             {% for message in messages %}
                 <p class="font-bold">{{ message }}</p>
             {% endfor %}
