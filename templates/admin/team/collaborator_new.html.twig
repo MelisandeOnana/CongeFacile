@@ -1,4 +1,3 @@
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter un membre{% endblock %}
@@ -8,6 +7,13 @@
 
     {{ form_start(userForm) }}
 
+        <div class="flex flex-row items-center pt-4 pb-4">
+            <p class="pr-4 text-[#111928] font-medium font-[Inter] text-[14px]">Activer le profil : </p>
+            <div class="toggle-switch">
+                {{ form_widget(userForm.enabled, {'attr': {'class': 'hidden'}}) }}
+                <span class="slider" onclick="document.getElementById('{{ userForm.enabled.vars.id }}').click()"></span>
+            </div>
+        </div>
         <div class="relative">
             {{ form_row(userForm.email) }}
             <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute left-4 top-[45px]" viewBox="0 0 682.667 682.667">
@@ -76,7 +82,7 @@
         </div>
         <div class="mt-4 flex">
             <a href="{{ path('team_index') }}" class="bg-gray-700 text-white px-4 py-2 rounded">Retour</a>
-            <button type="submit" class="bg-[#004C6C] text-white px-4 py-2 rounded ml-[25px]">Ajouter</button>
+            <button id="submit-button" type="submit" class="bg-[#004C6C] text-white px-4 py-2 rounded ml-[25px]">Ajouter</button>
         </div>
 
     {{ form_end(userForm) }}

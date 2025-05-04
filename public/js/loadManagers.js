@@ -26,7 +26,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     managerSelect.appendChild(option);
                 });
 
-                // Ne pas activer ou modifier le champ manager
+                // Activer seulement s'il y a des managers
+                //managerSelect.disabled = false;
+
+                // Sélectionner automatiquement le premier manager
+                //managerSelect.value = data[0].id;
             })
             .catch(error => {
                 console.error('Erreur:', error);

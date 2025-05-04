@@ -16,6 +16,7 @@
         <script src="{{ asset('js/scripts.js') }}"></script>
         <script src="{{ asset('js/DaysCalc.js') }}"></script>
         <script src="{{ asset('js/loadManagers.js') }}"></script>
+        <script src="{{ asset('js/disableSubmitButton.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {% endblock %}
 </head>
@@ -30,7 +31,7 @@
             {% include 'default/navbar/navbar.html.twig' %}
         {% endblock %}
         
-        <div class="flex-1 p-[2rem]">
+        <div class="flex-1 ml-[3rem] mt-[30px]">
             {% block body %}
             {% endblock %}
         </div>

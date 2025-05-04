@@ -74,18 +74,32 @@ class TeamController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
+        // Récupération de la personne et du département du manager
         $person = new Person();
         $user = new User();
+        $user->setEnabled(false); // Par défaut, le profil n'est pas activé
+        $user->setCreatedAt(new \DateTimeImmutable()); // Date actuelle
         $user->setPerson($person);
 
         // Crée le formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user, [
             'include_enabled' => true, // Inclure le champ "enabled"
+            'require_password' => true,
         ]);
+        // Vérifie si l'utilisateur a un département
         $userForm->handleRequest($request);
 
         // Vérifie si le formulaire a été soumis et est valide
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            // Vérifie si l'email existe déjà
+            $email = $userForm->get('email')->getData();
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if ($existingUser) {
+                $this->addFlash('error', 'Un utilisateur avec cet email existe déjà.');
+                return $this->redirectToRoute('team_new');
+            }
+
             // Défini des valeurs par défaut pour les champs requis
             $person->setAlertOnAnswer(false);
             $person->setAlertNewRequest(false);
@@ -93,9 +107,11 @@ class TeamController extends AbstractController
 
             // Défini une valeur par défaut pour le champ position_id
             $position = $userForm->get('position')->getData();
+            // Vérifie si une position est sélectionnée
             if ($position) {
                 $person->setPosition($position);
             } else {
+                // Si aucune position n'est sélectionnée, définir une valeur par défaut
                 $defaultPosition = $entityManager->getRepository(Position::class)->find(1);
                 $person->setPosition($defaultPosition);
             }
@@ -115,6 +131,7 @@ class TeamController extends AbstractController
                     'manager' => null, // Trouve une personne qui est un manager (relation ManyToOne)
                 ]);
 
+                // Vérifie si un manager est trouvé
                 if ($manager) {
                     $person->setManager($manager);
                 }
@@ -130,9 +147,11 @@ class TeamController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
+            // Défini le rôle de l'utilisateur
             $user->setPerson($person);
             $user->setRole('ROLE_COLLABORATOR');
 
+            // Vérifie si l'email existe déjà
             $entityManager->persist($person);
             $entityManager->persist($user);
 
@@ -175,7 +194,9 @@ class TeamController extends AbstractController
         // Création du formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user, [
             'include_enabled' => true, // Inclure le champ "enabled"
+            'require_password' => false, // Ne pas exiger de mot de passe pour la mise à jour
         ]);
+        // Vérifie si l'utilisateur a un département
         $userForm->handleRequest($request);
         $delete = $request->query->get('delete');
         $formDelete = $this->createForm(DeleteType::class);
@@ -183,12 +204,14 @@ class TeamController extends AbstractController
 
         // Vérifie si le formulaire de suppression a été soumis
         if ('true' == $delete) {
-            // Vérifie si le formulaire de suppression a été soumis et est valide
             if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-                // Vérifie si des congés sont liés à l'utilisateur  
+                // Supprimer l'utilisateur et la personne
                 $entityManager->remove($person);
                 $entityManager->remove($user);
                 $entityManager->flush();
+
+                // Ajouter un message flash de succès
+                $this->addFlash('success', 'Le membre a été supprimé avec succès.');
 
                 return $this->redirectToRoute('team_index');
             }
@@ -196,23 +219,27 @@ class TeamController extends AbstractController
 
         // Vérifie si le formulaire a été soumis et est valide
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            // Défini une valeur par défaut pour le champ position_id
+            // Mise à jour de la position
             $position = $userForm->get('position')->getData();
             if ($position) {
-                // Défini la position sélectionnée
                 $person->setPosition($position);
             } else {
-                // Défini une valeur par défaut si nécessaire
-                $defaultPosition = $entityManager->getRepository(Position::class)->find(1); // Récupérer ou définir une valeur par défaut
+                // Si aucune position n'est sélectionnée, définir une valeur par défaut
+                $defaultPosition = $entityManager->getRepository(Position::class)->find(1);
                 $person->setPosition($defaultPosition);
             }
 
-            // Défini une valeur par défaut pour le champ enabled
-            $user->setEnabled($userForm->get('enabled')->getData());
+            // Mise à jour du champ enabled
+            $isEnabled = $userForm->get('enabled')->getData();
+            $user->setEnabled($isEnabled);
 
-            // Hashage du mot de passe
+            // Si le profil est réactivé, mettre à jour la colonne updated_at
+            if ($isEnabled) {
+                $user->setUpdatedAt(new \DateTimeImmutable());
+            }
+
+            // Hashage du mot de passe si un nouveau mot de passe est fourni
             $newPassword = $userForm->get('newPassword')->getData();
-            // Vérifie si le mot de passe est vide
             if ($newPassword) {
                 $hashedPassword = $passwordHasher->hashPassword(
                     $user,
@@ -221,11 +248,12 @@ class TeamController extends AbstractController
                 $user->setPassword($hashedPassword);
             }
 
-            // Défini une valeur par défaut pour le champ created_at
+            // Persister les modifications
             $user->setPerson($person);
-            $entityManager->persist($person); // Persister d'abord la personne
-            $entityManager->persist($user);   // Puis persister l'utilisateur
+            $entityManager->persist($person);
+            $entityManager->persist($user);
 
+            // Enregistrer les modifications dans la base de données
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
@@ -249,14 +277,18 @@ class TeamController extends AbstractController
     {
         $departmentId = $request->query->get('department');
 
+        // Vérifie si le département est fourni
         if (!$departmentId) {
             return new JsonResponse([], 400);
         }
 
+        // Récupération des managers par département
         $managers = $userRepository->findManagerByDepartmentId($departmentId);
 
+        // Vérifie si des managers sont trouvés
         $data = [];
 
+        // Si aucun manager n'est trouvé, renvoie une réponse vide
         foreach ($managers as $manager) {
             $data[] = [
                 'id' => $manager->getId(),
