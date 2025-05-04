@@ -33,8 +33,8 @@ class ManagerSearchType extends AbstractType
         ])
         ->add('department', EntityType::class, [
             'class' => Department::class,
+            'label' => 'Service rattaché',
             'choice_label' => 'name',
-            'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
             'placeholder' => 'Choisir un département',
             'attr' => [
                 'id' => 'department',
