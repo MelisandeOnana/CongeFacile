@@ -3,85 +3,48 @@
 {% block title %}Informations du compte{% endblock %}
 
 {% block body %}
-    <!-- retire l'option manager de position  pour evite la creation de manager -->
-    <!-- retire champs requis pour nouveau mot de passe -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let select = document.getElementById("user_position");
-            let options = select.querySelectorAll('option');
-
-            options.forEach(option => {
-                if (option.textContent.trim() === "Manager") {
-                    option.remove();
-                }
-            });
-        });
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("user_newPassword").removeAttribute("required");
-        });
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("user_confirmPassword").removeAttribute("required");
-        });
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const departmentSelect = document.getElementById('user_department');
-    const managerSelect = document.getElementById('user_manager');
-
-    departmentSelect.addEventListener('change', function (){ 
-        const departmentId = this.value;
-
-        // On reset proprement
-        managerSelect.disabled = true;
-
-        if (!departmentId) {
-            return;
-        }
-
-        fetch(`/managers/by-department?department=${departmentId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length === 0) {
-                    // Pas de manager trouvé pour ce département
-                    return;
-                }
-
-                data.forEach(function(manager) {
-                    const option = document.createElement('option');
-                    option.value = manager.id;
-                    option.textContent = manager.name;
-                    managerSelect.appendChild(option);
-                });
-
-                // Activer seulement s'il y a des managers
-                managerSelect.disabled = true;
-
-                
-                // Sélectionner automatiquement le premier manager
-                managerSelect.value = data[0].id;
-            })
-            .catch(error => {
-                console.error('Erreur:', error);
-            });
-    });
-});
-</script>
-    
     {% if app.request.query.get('delete') == 'true' %}
-        {% include 'default/confirmation/delete.html.twig' %}
+        <div class="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
+            {% include 'default/confirmation/delete.html.twig' %}
+        </div>
     {% endif %}
 
-    <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">{{member.firstName}} {{member.lastName}}</h1>
-
-    {{ form_start(userForm) }}
-
-        <div class="flex flex-row pt-4 pb-4">
-            <div class="toggle-switch">
-                {{ form_widget(userForm.enabled, {'attr': {'class': 'hidden', 'checked': user.enabled == 1}}) }}
-                <span class="slider" onclick="document.getElementById('{{ userForm.enabled.vars.id }}').click()"></span>
-            </div>
-            <p class="pl-6">Profil actif depuis {{ user.createdAt|date('d/m/Y') }}</p>
+    {% for label, messages in app.flashes %}
+        <div class="border border-green-700 w-[395px] text-green-700 bg-green-100 rounded-[6px] p-4 mb-4">
+            {% for message in messages %}
+                <p class="font-bold">{{ message }}</p>
+            {% endfor %}
         </div>
+    {% endfor %}
+
+    <div class="{% if app.request.query.get('delete') == 'true' %}blur-sm pointer-events-none{% endif %}">
+        <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">{{ member.firstName }} {{ member.lastName }}</h1>
+
+        {{ form_start(userForm) }}
+
+        {% if userForm.enabled is defined %}
+            <div class="flex flex-row pt-4 pb-4">
+                <div class="toggle-switch">
+                    {{ form_widget(userForm.enabled, {'attr': {'class': 'hidden', 'checked': user.enabled == 1}}) }}
+                    <span class="slider" onclick="document.getElementById('{{ userForm.enabled.vars.id }}').click()"></span>
+                </div>
+                <p class="pl-6 text-[#111928] font-medium font-[Inter] text-[14px]">
+                    {% if user.enabled %}
+                        Profil actif depuis 
+                        {% if user.updatedAt %}
+                            {{ user.updatedAt|date('d/m/Y') }}
+                        {% else %}
+                            {{ user.createdAt|date('d/m/Y') }}
+                        {% endif %}
+                    {% else %}
+                        Profil inactif
+                        {% if user.updatedAt %}
+                            depuis le {{ user.updatedAt|date('d/m/Y') }}
+                        {% endif %}
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
 
         <div class="relative">
             {{ form_row(userForm.email) }}
@@ -142,6 +105,6 @@
             <a href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'delete': 'true', 'id': user.person.id})) }} " class="btn flex items-center justify-center w-[216px] h-[40px] rounded-[6px] text-[16px] text-white bg-[#E10E0E]">Supprimer le compte</a>
             <button type="submit" class="bg-[#004C6C] text-white px-4 py-2 rounded ml-[25px] w-[154px] h-[40px]">Mettre à jour</button>
         </div>
-    {{ form_end(userForm) }}
-
+        {{ form_end(userForm) }}
+    </div>
 {% endblock %}

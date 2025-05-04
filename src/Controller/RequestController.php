@@ -421,6 +421,8 @@ class RequestController extends AbstractController
             $countRequest[$type->getName()] = $requestRepository->countRequestsByRequestTypeAndYear($type);
         }
 
+        $countRequest = array_values($countRequest);
+
         // 2ème graphique : Pourcentage d'acceptation des demandes sur l'année
 
         // On initialise le tableau pour stocker les pourcentages d'acceptation
@@ -458,6 +460,8 @@ class RequestController extends AbstractController
                 $acceptancePercentage[$number] = $percent;
             }
         }
+
+        $acceptancePercentage = array_values($acceptancePercentage);
 
         $startDate = new \DateTime('first day of January this year');
         $endDate = new \DateTime('last day of December this year');

@@ -17,14 +17,14 @@
         </div>
     {% endfor %}
     <div class="max-w-[1000px]">
-        <table class="w-[883px] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mt-[65px]">
+        <table class="w-[883px] bg-white border border-gray-300 rounded-lg overflow-hidden shadow-md mb-4">
             <!-- En-tête des colonnes -->
             <thead class="bg-[#F9FAFB] font-[Inter] ">    
                 <!-- Ligne des noms des colonnes -->
                 <tr class="text-left text-[#344054]">
                     <th class="px-4 pt-5 font-medium text-[14px]">
                         <div class="flex items-center">
-                            <span>Nom de famille</span>
+                            {{ form_label(form.lastname) }}
                             <div class="flex flex-col ml-[5px]">
                                 <span class="chevron-up">
                                     <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -41,7 +41,7 @@
                     </th>
                     <th class="px-4 pt-5 font-medium text-[14px]">
                         <div class="flex items-center">
-                            <span>Prénom</span>
+                            {{ form_label(form.firstname) }}
                             <div class="flex flex-col ml-[5px]">
                                 <span class="chevron-up">
                                     <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -58,7 +58,7 @@
                     </th>
                     <th class="px-4 pt-5 font-medium text-[14px]">
                         <div class="flex items-center">
-                            <span>Service rattaché</span>
+                            {{ form_label(form.department) }}
                             <div class="flex flex-col ml-[5px]">
                                 <span class="chevron-up">
                                     <svg class="chevron-up" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="#6C7A93" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,7 +75,6 @@
                     </th>
                     <th class="px-4 pt-5"><!-- Vide --></th>
                 </tr>
-                <!-- Ligne des champs de recherche -->
                 <!-- Ligne des champs de recherche -->
                 <tr class="text-gray-700">
                     <th class=" pr-[1rem] py-1 w-2/6">

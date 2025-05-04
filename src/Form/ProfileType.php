@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Department;
 use App\Entity\Person;
 use App\Entity\Position;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,6 +16,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProfileType extends AbstractType
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $department = $options['department'] ?? null;
@@ -72,11 +80,15 @@ class ProfileType extends AbstractType
                 ->add('manager', EntityType::class, [
                     'class' => Person::class,
                     'query_builder' => function (EntityRepository $er) use ($department) {
+                        $managerPosition = $this->entityManager
+                            ->getRepository(Position::class)
+                            ->findOneBy(['name' => 'Manager']);
+
                         return $er->createQueryBuilder('p')
                             ->where('p.department = :department')
                             ->andWhere('p.position = :managerPosition')
                             ->setParameter('department', $department)
-                            ->setParameter('managerPosition', $er->getEntityManager()->getRepository(Position::class)->findOneBy(['name' => 'Manager']));
+                            ->setParameter('managerPosition', $managerPosition);
                     },
                     'choice_label' => function (Person $person) {
                         return $person->getFirstName() . ' ' . $person->getLastName();

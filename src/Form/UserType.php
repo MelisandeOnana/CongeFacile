@@ -90,25 +90,20 @@ class UserType extends AbstractType
                 'placeholder' => '',
                 'attr' => [
                     'id' => 'manager',
-                    'readonly' => true,
-                    'disabled' => true,
+                    'readonly' => true, // Empêche la modification tout en incluant le champ dans les données envoyées
                     'class' => 'bg-[#F3F4F6] appearance-none mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez sélectionner un manager.',
-                    ]),
+                    'disabled' => true, // Désactive le champ pour éviter la modification
                 ],
             ])
             ->add('newPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
-                'required' => true,
+                'required' => $options['require_password'], // Utilise l'option pour rendre le champ obligatoire ou non
                 'mapped' => false,
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ],
-                'constraints' => [
+                'constraints' => $options['require_password'] ? [
                     new Assert\NotBlank([
                         'message' => 'Veuillez saisir un mot de passe.',
                     ]),
@@ -116,29 +111,39 @@ class UserType extends AbstractType
                         'min' => 8,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
                     ]),
-                ],
+                ] : [],
             ])
             ->add('confirmPassword', PasswordType::class, [
                 'label' => 'Confirmation de mot de passe',
                 'label_attr' => ['class' => 'mb-[10px] block text-sm font-medium text-[#111928]'],
-                'required' => true,
+                'required' => $options['require_password'], // Utilise l'option pour rendre le champ obligatoire ou non
                 'mapped' => false,
                 'attr' => [
                     'class' => 'mb-[15px] block w-[350px] h-[46px] px-3 py-2 rounded-[6px] border-[1px] border-[#E5E7EB]',
                 ],
-                'constraints' => [
+                'constraints' => $options['require_password'] ? [
                     new Assert\NotBlank([
                         'message' => 'Veuillez confirmer le mot de passe.',
                     ]),
-                ],
+                ] : [],
             ]);
+
+        if ($options['include_enabled']) {
+            $builder->add('enabled', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Activer le compte',
+            ]);
+        }
 
         // Validation des mots de passe
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
-
-            // Vérifiez si les mots de passe correspondent
-            if ($form->get('newPassword')->getData() !== $form->get('confirmPassword')->getData()) {
+        
+            $newPassword = $form->get('newPassword')->getData();
+            $confirmPassword = $form->get('confirmPassword')->getData();
+        
+            // Vérifiez si les deux champs sont remplis avant de valider leur correspondance
+            if ($newPassword && $confirmPassword && $newPassword !== $confirmPassword) {
                 $form->get('confirmPassword')->addError(new FormError('Les mots de passe ne correspondent pas.'));
             }
         });
@@ -150,6 +155,7 @@ class UserType extends AbstractType
             'data_class' => User::class,
             'include_enabled' => false,
             'include_manager' => false,
+            'require_password' => true,
         ]);
     }
 }

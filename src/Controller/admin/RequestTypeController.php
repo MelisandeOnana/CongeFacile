@@ -125,7 +125,7 @@ class RequestTypeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $existingRequestType = $entityManager->getRepository(RequestType::class)->findOneBy(['name' => $requestType->getName()]);
-            if ($existingRequestType) {
+            if ($existingRequestType && $existingRequestType->getId() !== $requestType->getId()) {
                 $this->addFlash('error', 'Un type de demande avec ce nom existe déjà.');
                 return $this->redirectToRoute('request_type_edit', ['id' => $id]);
             }
