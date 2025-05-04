@@ -11,6 +11,7 @@ class RequestType
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    // @phpstan-ignore-next-line
     private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]

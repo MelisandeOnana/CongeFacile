@@ -4,10 +4,8 @@ namespace App\Validator;
 
 use Symfony\Component\Validator\Constraint;
 
-/**
- * @Annotation
- */
+#[\Attribute]
 class PasswordMatch extends Constraint
 {
-    public $message = 'Les mots de passe ne correspondent pas.';
+    public string $message = 'Les mots de passe ne correspondent pas.';
 }

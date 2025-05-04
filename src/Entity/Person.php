@@ -12,6 +12,7 @@ class Person
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    // @phpstan-ignore-next-line
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -37,13 +38,13 @@ class Person
     private ?Position $position = null;
 
     #[ORM\Column]
-    private ?bool $alertOnAnswer = false;
+    private bool $alertOnAnswer = false;
 
     #[ORM\Column]
-    private ?bool $alertNewRequest = false;
+    private bool $alertNewRequest = false;
 
     #[ORM\Column]
-    private ?bool $alertBeforeVacation = false;
+    private bool $alertBeforeVacation = false;
 
     public function getId(): ?int
     {

@@ -34,10 +34,10 @@ class UserRepository extends ServiceEntityRepository
      * Trouve les utilisateurs d'un département géré par un manager spécifique.
      *
      * @param User $manager Le manager responsable.
-     * @param string $department Le département à filtrer.
+     * @param Department $department Le département à filtrer.
      * @return array Retourne une liste d'utilisateurs.
      */
-    public function findByManagerDepartment(User $manager, string $department): array
+    public function findByManagerDepartment(User $manager, Department $department): array
     {
         return $this->createQueryBuilder('user')
             ->join('user.person', 'person')
@@ -110,7 +110,7 @@ class UserRepository extends ServiceEntityRepository
      *
      * @param array $criteria Les critères de recherche (nom, prénom, email, etc.).
      * @param User $manager Le manager responsable.
-     * @param string $department Le département à filtrer.
+     * @param Department $department Le département à filtrer.
      * @return array Retourne une liste d'utilisateurs correspondant aux critères.
      */
     public function findTeamMembersQuery(array $criteria, User $manager, Department $department): array
@@ -121,8 +121,9 @@ class UserRepository extends ServiceEntityRepository
             ->where('p.manager = :manager')
             ->andWhere('p.department = :department')
             ->setParameter('manager', $manager)
-            ->setParameter('department', $department); // Utilisation de l'objet Department directement
+            ->setParameter('department', $department);
 
+        // Ajout des critères dynamiques
         if (!empty($criteria['lastName'])) {
             $queryBuilder->andWhere('p.lastName LIKE :lastName')
                 ->setParameter('lastName', '%' . $criteria['lastName'] . '%');
@@ -138,24 +139,6 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('email', '%' . $criteria['email'] . '%');
         }
 
-        if (!empty($criteria['position'])) {
-            $queryBuilder->andWhere('pos.name LIKE :position')
-                ->setParameter('position', '%' . $criteria['position'] . '%');
-        }
-
-        $results = $queryBuilder->getQuery()->getResult();
-
-        if (isset($criteria['totalVacationDays'])) {
-            $filteredResults = [];
-            foreach ($results as $user) {
-                $totalVacationDays = $this->getVacationDaysForYear($user, (int) date('Y'));
-                if ($totalVacationDays == (int) $criteria['totalVacationDays']) {
-                    $filteredResults[] = $user;
-                }
-            }
-            return $filteredResults;
-        }
-
-        return $results;
+        return $queryBuilder->getQuery()->getResult();
     }
 }

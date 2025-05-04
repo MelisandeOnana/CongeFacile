@@ -13,6 +13,7 @@ class Request
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    // @phpstan-ignore-next-line
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: RequestType::class)]
@@ -194,8 +195,8 @@ class Request
         $tempEnd = clone $end;
 
         // Réinitialiser l'heure à 00:00:00 pour le calcul des jours
-        $tempStart->setTime(0, 0, 0);
-        $tempEnd->setTime(0, 0, 0);
+        $tempStart = $tempStart->setTime(0, 0, 0);
+        $tempEnd = $tempEnd->setTime(0, 0, 0);
 
         $interval = $tempStart->diff($tempEnd);
         $days = $interval->days + 1;
