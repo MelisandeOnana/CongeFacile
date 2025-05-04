@@ -12,113 +12,18 @@
     <div class="flex justify-center md:justify-start">
         <canvas id="doughnutChart" class="mt-10 h-auto max-h-[500px] w-full max-w-[90%] sm:max-w-[600px] md:max-w-[600px] lg:max-w-[800px]"></canvas>
     </div>
-    <script>
-        var ctx = document.getElementById('doughnutChart').getContext('2d');
-        var doughnutChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    {% for type in requestTypes %}
-                        '{{ type.name }}',
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: 'Nombre de demandes',
-                    data: [
-                        {% for number in countRequest %}
-                            {{ number }},
-                        {% endfor %}
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)',
-                        'rgba(255, 64, 201, 0.5)',
-                    ],
-                    borderColor: [
-                        'rgb(255, 255, 255)',
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                aspectRatio: 2, // Augmente la taille du graphique
-                plugins: {
-                    legend: {
-                        position: 'bottom', // Place la légende en bas
-                        labels: {
-                            padding: 20, // Ajoute de l'espace autour des éléments
-                            font: {
-                                size: 14 // Augmente la taille de la police
-                            }
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                let value = context.raw || 0;
-                                return `${label}: ${value}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+
     <h2 class="text-[#004C6C] font-[Epilogue] text-[18px] mt-10 font-semibold text-center md:text-left">
-        Pourcentage d’acceptation des demandes sur l’année
+        Pourcentage d'acceptation des demandes par mois
     </h2>
     <div class="flex justify-center md:justify-start">
-        <canvas id="LineChart" class="mt-8 max-w-[90%] md:max-w-[700px]"></canvas>
+        <canvas id="lineChart" class="mt-10 h-auto max-h-[500px] w-full max-w-[90%] sm:max-w-[600px] md:max-w-[600px] lg:max-w-[800px]"></canvas>
     </div>
-    <script>
-        var ctx = document.getElementById('LineChart').getContext('2d');
-        var lineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-                datasets: [{
-                    label: 'Pourcentage d’acceptation',
-                    data: [
-                        {% for percentage in acceptancePercentage %}
-                            {{ percentage }},
-                        {% endfor %}
-                    ],
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.2
-                }]
-            },
-            options: {
-                responsive: true,
-                aspectRatio: 3,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: function(value, index, values) {
-                                return index % 2 === 0 ? value + '%' : '';
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            padding: 20
-                        }
-                    }
-                }
-            }
-        });
-    </script>
+
+    <!-- Ajouter un élément caché pour transmettre les données -->
+    <div id="chart-data"
+         data-request-types="{{ requestTypes|map(type => type.name)|json_encode }}"
+         data-count-request="{{ countRequest|json_encode }}"
+         data-acceptance-percentage="{{ acceptancePercentage|json_encode }}">
+    </div>
 {% endblock %}
