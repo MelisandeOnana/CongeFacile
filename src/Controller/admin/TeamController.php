@@ -59,6 +59,25 @@ class TeamController extends AbstractController
             $member->totalVacationDays = $totalVacationDays; // Ajoute dynamiquement une propriété
         }
 
+
+        // Filtrer les membres de l'équipe en fonction du critère 'GetVacationDay'
+        if (isset($criteria['totalVacationDays'])) {
+            $FilterTotalVacationDays = $criteria['totalVacationDays'];
+            $filteredMembers = [];
+            foreach ($teamMembers as $member) {
+                if ($member->totalVacationDays == $FilterTotalVacationDays) {
+                    $filteredMembers[] = $member;
+                }
+            }
+            $teamMembers = $paginator->paginate(
+                $filteredMembers,
+                $request->query->getInt('page', 1),
+                10
+            );
+            
+    
+        }
+
         return $this->render('admin/team/index.html.twig', [
             'form' => $form->createView(),
             'teamMembers' => $teamMembers, // Conservation de l'objet de pagination

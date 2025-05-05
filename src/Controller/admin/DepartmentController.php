@@ -80,10 +80,7 @@ class DepartmentController extends AbstractController
         if (! $department) {
             throw $this->createNotFoundException('Le département n\'existe pas.');
         }
-    
-        // Crée un formulaire pour éditer le département
-        $formDepartment = $this->createForm(DepartmentType::class, $department);
-        $formDepartment->handleRequest($request);
+
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
     
@@ -108,7 +105,10 @@ class DepartmentController extends AbstractController
                 return $this->redirectToRoute('departments');
             }
         }
-    
+        
+        $formDepartment = $this->createForm(DepartmentType::class, $department);
+        $formDepartment->handleRequest($request);
+
         // Vérifie si le formulaire d'édition a été soumis
         if ($formDepartment->isSubmitted() && $formDepartment->isValid()) {
             // Vérifie si un département avec le même nom existe déjà
