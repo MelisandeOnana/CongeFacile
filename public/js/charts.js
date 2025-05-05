@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 label: 'Pourcentage d\'acceptation',
                 data: acceptancePercentage,
                 borderColor: 'rgba(75, 192, 192, 1)', // Couleur de la ligne
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de remplissage
+                backgroundColor: 'rgba(255, 255, 255, 0.2)', // Couleur de fond
                 borderWidth: 2,
                 tension: 0.4,
                 fill: true,

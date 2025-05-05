@@ -9,7 +9,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class HistoricRequestSearchType extends AbstractType
 {
@@ -40,60 +39,60 @@ class HistoricRequestSearchType extends AbstractType
             ],
         ])
         ->add('start', DateType::class, [
-        'label' => 'Date de début',
-        'required' => false,
-        'attr' => [
-            'type' => 'date',
-            'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
-            'onchange' => "updateUrl('start', this.value)",
-            
-        ],
+            'label' => 'Date de début',
+            'required' => false,
+            'attr' => [
+                'type' => 'date',
+                'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
+                'onchange' => "updateUrl('start', this.value)",
+                
+            ],
         ])
         ->add('end', DateType::class, [
-        'label' => 'Date de fin',
-        'required' => false,
-        'attr' => [
-            'type' => 'date',
-            'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
-            'onchange' => "updateUrl('end', this.value)",
+            'label' => 'Date de fin',
+            'required' => false,
+            'attr' => [
+                'type' => 'date',
+                'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
+                'onchange' => "updateUrl('end', this.value)",
 
-        ],
+            ],
         ])
         ->add('status', ChoiceType::class, [
-        'label' => 'Statut',
-        'choices' => [
-            'En cours' => '3',
-            'Accepté' => '1',
-            'Refusé' => '2',
-        ],
-        'required' => false,
-        'placeholder' => 'Sélectionnez un statut',
-        'attr' => [
-            'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
-            'onchange' => "updateUrl('status', this.value)",
-        ],
+            'label' => 'Statut',
+            'choices' => [
+                'En cours' => '3',
+                'Accepté' => '1',
+                'Refusé' => '2',
+            ],
+            'required' => false,
+            'placeholder' => 'Sélectionnez un statut',
+            'attr' => [
+                'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
+                'onchange' => "updateUrl('status', this.value)",
+            ],
         ])
         ->add('type', ChoiceType::class, [
-        'label' => 'Type de demande',
-        'choices' => array_combine(
-            array_map(fn($type) => $type->getName(), $options['types']),
-            array_map(fn($type) => $type->getId(), $options['types'])
-        ),
-        'required' => false,
-        'placeholder' => 'Sélectionnez un type de demande',
-        'attr' => [
-            'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
-            'onchange' => "updateUrl('type', this.value)",
-        ],
+            'label' => 'Type de demande',
+            'choices' => array_combine(
+                array_map(fn($type) => $type->getName(), $options['types']),
+                array_map(fn($type) => $type->getId(), $options['types'])
+            ),
+            'required' => false,
+            'placeholder' => 'Sélectionnez un type de demande',
+            'attr' => [
+                'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
+                'onchange' => "updateUrl('type', this.value)",
+            ],
         ])
         ->add('days', SearchType::class, [
-        'label' => 'Nb jours',
-        'required' => false,
-        'attr' => [
-            'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
-            'onchange' => "updateUrl('days', this.value)",
-        
-        ],
+            'label' => 'Nb jours',
+            'required' => false,
+            'attr' => [
+                'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
+                'onchange' => "updateUrl('days', this.value)",
+            
+            ],
         ]);
 
     }
