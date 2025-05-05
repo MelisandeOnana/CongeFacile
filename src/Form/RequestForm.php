@@ -58,7 +58,10 @@ class RequestForm extends AbstractType
             'label_attr' => ['class' => 'block mb-2 text-[#212B36] font-[Inter]'],
             'constraints' => [
                 new Assert\NotNull(['message' => 'La date de fin est obligatoire.']),
-                new Callback([$this, 'validateDates']),
+                new Assert\Expression([
+                    'expression' => 'this.getStartAt() < this.getEndAt()',
+                    'message' => 'La date de fin doit être postérieure à la date de début.',
+                ]),
             ],
         ])
         ->add('file', FileType::class, [

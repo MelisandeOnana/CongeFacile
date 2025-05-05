@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
-#[UniqueEntity('name', message: 'Ce nom de département existe déjà.')]
 class Department
 {
     #[ORM\Id]

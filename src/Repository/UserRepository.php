@@ -139,6 +139,12 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('email', '%' . $criteria['email'] . '%');
         }
 
+        if (!empty($criteria['position'])) {
+            $queryBuilder->andWhere('pos.name LIKE :position')
+                ->setParameter('position', '%' . $criteria['position'] . '%');
+        }
+
+
         return $queryBuilder->getQuery()->getResult();
     }
 }
