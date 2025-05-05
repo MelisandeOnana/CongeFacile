@@ -12,7 +12,7 @@
         {% for label, messages in app.flashes %}
             <div class=" mt-6 alert alert-{{ label }}">
                 {% for message in messages %}
-                    <p class="font-bold" >{{ message }}</p>
+                    <p class="font-bold text-red-500" >{{ message }}</p>
                 {% endfor %}
             </div>
         {% endfor %}
