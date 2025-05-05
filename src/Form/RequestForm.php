@@ -57,7 +57,7 @@ class RequestForm extends AbstractType
             'constraints' => [
                 new Assert\NotNull(['message' => 'La date de fin est obligatoire.']),
                 new Assert\Expression([
-                    'expression' => 'this.getStartAt() < this.getEndAt()',
+                    'expression' => 'value > this.getParent().get("startAt").getData()',
                     'message' => 'La date de fin doit être postérieure à la date de début.',
                 ]),
             ],
