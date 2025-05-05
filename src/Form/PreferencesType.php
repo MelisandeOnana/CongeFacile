@@ -6,25 +6,21 @@ use App\Entity\Person;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class PreferencesType extends AbstractType
 {
-    private $tokenStorage;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->tokenStorage = $tokenStorage;
-        //security (isGranted)
+            $this->authorizationChecker = $authorizationChecker;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $user = $this->tokenStorage->getToken()->getUser();
-        $roles = $user->getRoles();
-
-        if (in_array('ROLE_MANAGER', $roles)) {
+        if ($this->authorizationChecker->isGranted('ROLE_MANAGER')) {
             $builder
             ->add('alertNewRequest', CheckboxType::class, [
                 'label' => 'Être alerté par email lorsqu’une demande arrive',
