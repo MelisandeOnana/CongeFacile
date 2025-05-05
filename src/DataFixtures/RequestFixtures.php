@@ -53,6 +53,16 @@ final class RequestFixtures extends Fixture implements DependentFixtureInterface
         $request2->setAnswerAt(new \DateTimeImmutable('2025-02-01 14:53:00'));
         $manager->persist($request2);
 
+        $request22 = new Request();
+        $request22->setRequestType($this->getReference(self::TYPE_CONGE_PAYE, RequestType::class));
+        $request22->setCollaborator($this->getReference(self::PERSON_DOE, Person::class));
+        $request22->setStartAt(new \DateTimeImmutable('2025-06-17 08:00:00'));
+        $request22->setEndAt(new \DateTimeImmutable('2025-06-21 18:00:00'));
+        $request22->setCreatedAt(new \DateTimeImmutable('2025-05-04 10:23:10'));
+        $request22->setComment('Je souhaite prendre des congés payés.');
+        $request22->setAnswer(3); 
+        $manager->persist($request22);
+
     // Création d'une demande de congé pour Paul West
     $request3 = new Request();
     $request3->setRequestType($this->getReference(self::TYPE_CONGE_SANS_SOLDE, RequestType::class));

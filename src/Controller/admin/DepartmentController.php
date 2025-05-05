@@ -46,7 +46,7 @@ class DepartmentController extends AbstractController
     
 
     #[Route('/departments/new', name: 'department_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, DepartmentRepository $departmentRepository): Response
     {
         // Vérifie si l'utilisateur a le rôle de manager
         $department = new Department();
@@ -57,12 +57,19 @@ class DepartmentController extends AbstractController
         // Vérifie si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
             // Vérifie si un département avec le même nom existe déjà
-            $entityManager->persist($department);
-            $entityManager->flush();
+            $existingDepartment = $departmentRepository->findOneBy(['name' => $department->getName()]);
+            if ($existingDepartment) {
+                $this->addFlash('error', 'Un département avec ce nom existe déjà.');
 
-            $this->addFlash('success', 'Le département a été créé avec succès.');
+                return $this->redirectToRoute('department_new');
+            } else {
+                // Crée le département
+                $entityManager->persist($department);
+                $entityManager->flush();
+                $this->addFlash('success', 'Le département a été créé avec succès.');
 
-            return $this->redirectToRoute('departments');
+                return $this->redirectToRoute('departments');
+            }
         }
 
         return $this->render('admin/department/department_new.html.twig', [
