@@ -106,23 +106,16 @@ class ProfileController extends AbstractController
             throw new \Exception('L\'utilisateur n\'est pas connecté.');
         }
         $person = $user->getPerson();
-        $roles = $user->getRoles();
-        $alertNewRequest = $person->getAlertNewRequest();
-        $alertOnAnswer = $person->getAlertOnAnswer();
-        $alertBeforeVacation = $person->getAlertBeforeVacation();
 
+        $form->setData($person);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             try {
-                if (in_array('ROLE_MANAGER', $roles)) {
-                    $person->setAlertNewRequest($form->get('alertNewRequest')->getData());
-                } else {
-                    $person->setAlertOnAnswer($form->get('alertOnAnswer')->getData());
-                    $person->setAlertBeforeVacation($form->get('alertBeforeVacation')->getData());
-                }
 
-                $entityManager->persist($person);
+                $entityManager->persist($user);
                 $entityManager->flush();
+                // Mettre à jour les préférences de l'utilisateur
+
 
                 $this->addFlash('success', 'Vos préférences ont été mises à jour.');
             } catch (\Exception $e) {
@@ -135,9 +128,6 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/preferences.html.twig', [
             'form' => $form->createView(),
-            'alertNewRequest' => $alertNewRequest,
-            'alertOnAnswer' => $alertOnAnswer,
-            'alertBeforeVacation' => $alertBeforeVacation,
         ]);
     }
 }

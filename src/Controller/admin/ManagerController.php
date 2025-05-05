@@ -87,7 +87,7 @@ class ManagerController extends AbstractController
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
-        $userForm = $this->createForm(ManagerType::class, $manager);
+        $userForm = $this->createForm(ManagerType::class, $manager,['require_password' => false]);
 
         $criteria->andWhere(Criteria::expr()->isNull('manager'));
         $criteria->andWhere(Criteria::expr()->neq('id', $manager->getId()));

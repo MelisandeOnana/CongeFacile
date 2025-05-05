@@ -18,6 +18,7 @@ class TeamMemberSearchType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher par nom...',
                     'class' => 'w-[126px] h-[44px] border-gray-300 border-[1px] rounded px-4 py-2 text-sm',
+                    'onchange' => 'this.form.submit()',
                 ],
             ])
             ->add('firstName', SearchType::class, [
@@ -26,6 +27,7 @@ class TeamMemberSearchType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher par prénom...',
                     'class' => 'w-[126px] h-[44px] border-gray-300  border-[1px] rounded px-4 py-2 text-sm',
+                    'onchange' => 'this.form.submit()',
                 ],
             ])
             ->add('email', SearchType::class, [
@@ -34,6 +36,7 @@ class TeamMemberSearchType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher par email...',
                     'class' => 'w-[200px] h-[44px] border-gray-300  border-[1px] rounded px-4 py-2 text-sm',
+                    'onchange' => 'this.form.submit()',
                 ],
             ])
             ->add('position', SearchType::class, [
@@ -42,6 +45,7 @@ class TeamMemberSearchType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher par poste...',
                     'class' => 'w-[189px] h-[44px] border-gray-300  border-[1px] rounded px-4 py-2 text-sm',
+                    'onchange' => 'this.form.submit()',
                 ],
             ])
             ->add('totalVacationDays', SearchType::class, [
@@ -50,6 +54,7 @@ class TeamMemberSearchType extends AbstractType
                 'attr' => [
                     'placeholder' => 'Rechercher par nb congés...',
                     'class' => 'w-[240px] h-[44px] border-gray-300 border-[1px] rounded px-4 py-2 text-sm',
+                    'onchange' => 'this.form.submit()',
                 ],
             ]);
     }
