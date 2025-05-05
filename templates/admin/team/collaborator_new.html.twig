@@ -3,6 +3,18 @@
 {% block title %}Ajouter un membre{% endblock %}
 
 {% block body %}
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let select = document.getElementById("user_position");
+        let options = select.querySelectorAll('option');
+
+        options.forEach(option => {
+            if (option.textContent.trim() === "Manager") {
+                option.remove();
+            }
+        });
+    });
+    </script>
     <h1 class="text-[28px] font-semibold text-[#1B3168] font-[Epilogue]">Ajouter un nouveau membre</h1>
 
     {{ form_start(userForm) }}
