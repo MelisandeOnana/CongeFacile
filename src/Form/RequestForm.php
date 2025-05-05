@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RequestForm extends AbstractType
 {
@@ -57,7 +59,7 @@ class RequestForm extends AbstractType
             'constraints' => [
                 new Assert\NotNull(['message' => 'La date de fin est obligatoire.']),
                 new Assert\Expression([
-                    'expression' => 'value > this.getParent().get("startAt").getData()',
+                    'expression' => 'this.getStartAt() < this.getEndAt()',
                     'message' => 'La date de fin doit être postérieure à la date de début.',
                 ]),
             ],
@@ -100,5 +102,18 @@ class RequestForm extends AbstractType
                 ]),
             ],
         ]);
+    }
+
+    // Méthode de validation personnalisée
+    public function validateDates($value, ExecutionContextInterface $context)
+    {
+        $form = $context->getRoot(); // Récupère le formulaire parent
+        $startAt = $form->get('startAt')->getData();
+        $endAt = $value;
+
+        if ($startAt && $endAt && $startAt >= $endAt) {
+            $context->buildViolation('La date de fin doit être postérieure à la date de début.')
+                ->addViolation();
+        }
     }
 }
