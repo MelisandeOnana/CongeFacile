@@ -222,6 +222,21 @@ class RequestController extends AbstractController
             $theRequest->setAnswer(Statut::EnCours->value);
 
             $entityManager->persist($theRequest);
+
+            $manager = $person->getManager(); 
+            $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
+            $emailManager = $managerUser->getEmail();
+            $alert = $manager->getAlertNewRequest();
+
+            if ($alert == true) {
+                $to = $emailManager;
+                $subject = "CongéFacile : Nouvelle demande de congé déposée";
+                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." à déposé une demande de congé.<br>
+                Merci de vous connecter à votre espace pour valider ou refuser la demande.";
+
+                $this->mailerService->sendEmail($to, $subject, $message);
+            }
+
             try {
                 $entityManager->flush();
                 $this->addFlash('success', 'Votre demande a été soumise avec succès.');
