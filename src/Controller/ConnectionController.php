@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\MailerService;
+use App\Service\PasswordResetService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,7 +72,7 @@ class ConnectionController extends AbstractController
     }
 
     #[Route('/forgotpassword', name: 'forgot_password', methods: ['GET'])]
-    public function forgot_password(Request $request, UserRepository $repository): Response
+    public function forgot_password(Request $request, UserRepository $repository, PasswordResetService $passwordResetService): Response
     {
         $result = '';
         $email = $request->query->get('email');
@@ -79,35 +80,12 @@ class ConnectionController extends AbstractController
         if ($email) {
             $user = $repository->findByEmail(htmlspecialchars($email));
             if ($user) {
-                $result = $this->sendPasswordResetRequest($user, $email);
+                $result = $passwordResetService->sendPasswordResetRequest($user, $email);
             } else {
                 $result = 'Email incorrect';
             }
         }
 
         return $this->render('security/forgot_password.html.twig', ['result' => $result]);
-    }
-
-    private function sendPasswordResetRequest($user, $email): string
-    {
-        $to = $this->params->get('mailer_contact_email');
-        $subject = sprintf(
-            'CongéFacile : %s %s demande un changement de mot de passe.',
-            $user->getPerson()->getFirstName(),
-            $user->getPerson()->getLastName()
-        );
-        $message = sprintf(
-            '%s %s demande un changement de mot de passe.<br>Adresse email de la personne : %s.<br><br>Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.',
-            $user->getPerson()->getFirstName(),
-            $user->getPerson()->getLastName(),
-            $email
-        );
-
-        try {
-            $this->mailerService->sendEmail($to, $subject, $message);
-            return 'Demande envoyée';
-        } catch (\Exception $e) {
-            return 'Demande non envoyée';
-        }
     }
 }

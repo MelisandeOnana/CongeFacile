@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Request;
 use App\Entity\User;
-use App\Enum\Statut;
 use App\Form\AnswerType;
 use App\Form\RequestForm;
 use App\Form\HistoricRequestSearchType;
@@ -13,6 +12,7 @@ use App\Repository\PersonRepository;
 use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
 use App\Service\MailerService;
+use App\Service\RequestService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -167,7 +167,7 @@ class RequestController extends AbstractController
     }
 
     #[Route('/request/new', name: 'request_new', methods: ['POST', 'GET'])]
-    public function request_new(HttpRequest $request, EntityManagerInterface $entityManager): Response
+    public function request_new(HttpRequest $request, EntityManagerInterface $entityManager, RequestService $requestService): Response
     {
         $user = $this->getUser();
         if (! $user instanceof User) {
@@ -178,67 +178,21 @@ class RequestController extends AbstractController
         $theRequest = new Request();
         $theRequest->setCollaborator($person);
 
-        $form = $this->createForm(RequestForm::class, $theRequest, []);
+        $form = $this->createForm(RequestForm::class, $theRequest);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            if (null != $form['file']->getData()) {
-                $file = $form['file']->getData(); // On récupère le fichier téléchargé
-
-                $firstName = strtolower($person->getFirstName()); // Assure que la méthode `getFirstName()` existe
-                $lastName = strtolower($person->getLastName());   // Assure que la méthode `getLastName()` existe
-
-                // Création d'un répertoire pour le nom et prénom
-                $destination = $this->getParameter('kernel.project_dir') . '/public/files/' . $firstName . '_' . $lastName;
-                if (!is_dir($destination)) {
-                    mkdir($destination, 0777, true);
-                }
-
-                // Génération d'un identifiant unique pour le fichier
-                $uniqueId = uniqid();
-
-                // Ajout de la date au nom du fichier
-                $date = (new \DateTime())->format('Y-m-d');
-
-                // Renommer le fichier avec un format personnalisé
-                $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION); // Récupère l'extension du fichier
-                $fileName = $firstName . '_' . $lastName . '_' . $date . '_' . $uniqueId . '.' . $fileExtension;
-
-                // Déplacement du fichier dans le répertoire
-                $file->move($destination, $fileName);
-
-                // Enregistrement du nom du fichier dans l'entité
+            $file = $form['file']->getData();
+            if ($file) {
+                $fileName = $requestService->handleFileUpload($file, $person);
                 $theRequest->setReceiptFile($fileName);
-            } 
-
-            if (null == $form['comment']->getData()) {
-                $theRequest->setComment(null);
             }
 
-            $currentDateTime = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
-
-            $theRequest->setCreatedAt($currentDateTime);
-            $theRequest->setAnswer(Statut::EnCours->value);
-
-            $entityManager->persist($theRequest);
-
-            $manager = $person->getManager(); 
-            $managerUser = $entityManager->getRepository(User::class)->findOneBy(['person' => $manager]);
-            $emailManager = $managerUser->getEmail();
-            $alert = $manager->getAlertNewRequest();
-
-            if ($alert == true) {
-                $to = $emailManager;
-                $subject = "CongéFacile : Nouvelle demande de congé déposée";
-                $message = "".$user->getPerson()->getFirstName()." ".$user->getPerson()->getLastName()." à déposé une demande de congé.<br>
-                Merci de vous connecter à votre espace pour valider ou refuser la demande.";
-
-                $this->mailerService->sendEmail($to, $subject, $message);
-            }
+            $requestService->createRequest($theRequest, $person, $form);
+            $requestService->notifyManagerIfNeeded($person, $theRequest);
 
             try {
-                $entityManager->flush();
+                $requestService->save();
                 $this->addFlash('success', 'Votre demande a été soumise avec succès.');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la création de la demande.');
