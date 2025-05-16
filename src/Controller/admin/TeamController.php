@@ -209,6 +209,15 @@ class TeamController extends AbstractController
 
         // Vérifie si l'utilisateur appartient au même département que le manager
         $person = $user->getPerson();
+        if (
+            !$person ||
+            !$personManager ||
+            !$person->getDepartment() ||
+            !$personManager->getDepartment() ||
+            $person->getDepartment()->getId() !== $personManager->getDepartment()->getId()
+        ) {
+            throw $this->createAccessDeniedException('Vous ne pouvez modifier que les membres de votre équipe.');
+        }
 
         // Création du formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user, [
