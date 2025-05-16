@@ -126,6 +126,25 @@ class TeamController extends AbstractController
 
             // Défini une valeur par défaut pour le champ position_id
             $position = $userForm->get('position')->getData();
+            $department = $userForm->get('department')->getData();
+
+            // Vérification : empêcher plusieurs managers dans le même département
+            if ($position && $position->getName() === 'Manager' && $department) {
+                $existingManager = $entityManager->getRepository(Person::class)->findOneBy([
+                    'department' => $department,
+                    'position' => $position,
+                ]);
+                if ($existingManager) {
+                    $this->addFlash('error', 'Il y a déjà un manager pour ce département.');
+                    return $this->redirectToRoute('team_new');
+                }
+                // Aucun manager trouvé, on attribue le rôle manager
+                $user->setRole('ROLE_MANAGER');
+            } else {
+                // Sinon, collaborateur
+                $user->setRole('ROLE_COLLABORATOR');
+            }
+
             // Vérifie si une position est sélectionnée
             if ($position) {
                 $person->setPosition($position);
@@ -168,7 +187,6 @@ class TeamController extends AbstractController
 
             // Défini le rôle de l'utilisateur
             $user->setPerson($person);
-            $user->setRole('ROLE_COLLABORATOR');
 
             // Vérifie si l'email existe déjà
             $entityManager->persist($person);

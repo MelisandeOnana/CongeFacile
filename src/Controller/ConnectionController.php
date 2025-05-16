@@ -73,36 +73,41 @@ class ConnectionController extends AbstractController
     #[Route('/forgotpassword', name: 'forgot_password', methods: ['GET'])]
     public function forgot_password(Request $request, UserRepository $repository): Response
     {
+        $result = '';
         $email = $request->query->get('email');
 
         if ($email) {
-            $email = htmlspecialchars($email);
-            $user = $repository->findByEmail($email);
-
+            $user = $repository->findByEmail(htmlspecialchars($email));
             if ($user) {
-                $to = $this->params->get('mailer_contact_email');
-                $subject = sprintf(
-                    'CongéFacile : %s %s demande un changement de mot de passe.',
-                    $user->getPerson()->getFirstName(),
-                    $user->getPerson()->getLastName()
-                );
-                $message = $user->getPerson()->getFirstName() . ' ' . $user->getPerson()->getLastName() . ' demande un changement de mot de passe.<br>
-                Adresse email de la personne : ' . $email . '.<br><br>
-                Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.';
-
-                try {
-                    $this->mailerService->sendEmail($to, $subject, $message);
-                    $result = 'Demande envoyée';
-                } catch (\Exception $e) {
-                    $result = 'Demande non envoyée';
-                }
+                $result = $this->sendPasswordResetRequest($user, $email);
             } else {
                 $result = 'Email incorrect';
             }
-
-            return $this->render('security/forgot_password.html.twig', ['result' => $result]);
         }
 
-        return $this->render('security/forgot_password.html.twig', ['result' => '']);
+        return $this->render('security/forgot_password.html.twig', ['result' => $result]);
+    }
+
+    private function sendPasswordResetRequest($user, $email): string
+    {
+        $to = $this->params->get('mailer_contact_email');
+        $subject = sprintf(
+            'CongéFacile : %s %s demande un changement de mot de passe.',
+            $user->getPerson()->getFirstName(),
+            $user->getPerson()->getLastName()
+        );
+        $message = sprintf(
+            '%s %s demande un changement de mot de passe.<br>Adresse email de la personne : %s.<br><br>Après changement, merci de notifier l’utilisateur de son nouveau mot de passe.',
+            $user->getPerson()->getFirstName(),
+            $user->getPerson()->getLastName(),
+            $email
+        );
+
+        try {
+            $this->mailerService->sendEmail($to, $subject, $message);
+            return 'Demande envoyée';
+        } catch (\Exception $e) {
+            return 'Demande non envoyée';
+        }
     }
 }

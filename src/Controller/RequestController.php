@@ -491,4 +491,63 @@ class RequestController extends AbstractController
             'requestsGroupedByMonth' => $requestsGroupedByMonth,
         ]);
     }
+
+    private function buildCriteria(array $filters, $requestTypeRepository, $personRepository = null, $collaborators = null, $user = null, $person = null)
+    {
+        $criteria = Criteria::create();
+
+        if (!empty($filters['type'])) {
+            $type = $requestTypeRepository->find($filters['type']);
+            if ($type) {
+                $criteria->andWhere(Criteria::expr()->eq('requestType', $type));
+            }
+        }
+        if (!empty($filters['start'])) {
+            $startOfDay = (new \DateTimeImmutable($filters['start']))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filters['start']))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('startAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('startAt', $endOfDay));
+        }
+        if (!empty($filters['end'])) {
+            $startOfDay = (new \DateTimeImmutable($filters['end']))->setTime(0, 0, 0);
+            $endOfDay = (new \DateTimeImmutable($filters['end']))->setTime(23, 59, 59);
+            $criteria->andWhere(Criteria::expr()->gte('endAt', $startOfDay))
+                     ->andWhere(Criteria::expr()->lte('endAt', $endOfDay));
+        }
+        if (!empty($filters['status'])) {
+            $criteria->andWhere(Criteria::expr()->eq('answer', $filters['status']));
+        }
+
+        $criteria->orderBy(['createdAt' => 'DESC']);
+
+        if ($user && 'ROLE_COLLABORATOR' == $user->getRole()) {
+            // PAGE COLLABORATEUR
+
+            if ($person) {
+                $criteria->andWhere(Criteria::expr()->eq('collaborator', $person));
+            }
+
+            if (!empty($filters['requested'])) {
+                $startOfDay = (new \DateTimeImmutable($filters['requested']))->setTime(0, 0, 0);
+                $endOfDay = (new \DateTimeImmutable($filters['requested']))->setTime(23, 59, 59);
+                $criteria->andWhere(Criteria::expr()->gte('createdAt', $startOfDay))
+                        ->andWhere(Criteria::expr()->lte('createdAt', $endOfDay));
+            }
+        } else {
+            // PAGE MANAGER
+
+            if ($collaborators) {
+                $criteria->andWhere(Criteria::expr()->in('collaborator', $collaborators));
+            }
+
+            if (!empty($filters['collaborator'])) {
+                $filterCollaboratorObject = $personRepository->find($filters['collaborator']);
+                if ($filterCollaboratorObject) {
+                    $criteria->andWhere(Criteria::expr()->eq('collaborator', $filterCollaboratorObject));
+                }
+            }
+        }
+
+        return $criteria;
+    }
 }
