@@ -19,6 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\TeamMemberSearchType;
 use App\Repository\PersonRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Service\TeamService;
 
 #[IsGranted('ROLE_MANAGER')]
 class TeamController extends AbstractController
@@ -85,97 +86,55 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/new', name: 'team_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, PersonRepository $personRepository): Response
+    public function new(Request $request, TeamService $teamService, PersonRepository $personRepository): Response
     {
-        // Vérifie si l'utilisateur a le rôle de manager
         $userManager = $this->getUser();
         if (! $userManager instanceof User) {
             return $this->redirectToRoute('login');
         }
 
-        // Récupération de la personne et du département du manager
         $person = new Person();
         $user = new User();
-        $user->setEnabled(false); // Par défaut, le profil n'est pas activé
-        $user->setCreatedAt(new \DateTimeImmutable()); // Date actuelle
+        $user->setEnabled(false);
+        $user->setCreatedAt(new \DateTimeImmutable());
         $user->setPerson($person);
 
-        // Crée le formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user, [
-            'include_enabled' => true, // Inclure le champ "enabled"
+            'include_enabled' => true,
             'require_password' => true,
         ]);
-        // Vérifie si l'utilisateur a un département
         $userForm->handleRequest($request);
 
-        // Vérifie si le formulaire a été soumis et est valide
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            // Vérifie si l'email existe déjà
             $email = $userForm->get('email')->getData();
-            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-
-            if ($existingUser) {
+            if (!$teamService->isEmailUnique($email)) {
                 $this->addFlash('error', 'Un utilisateur avec cet email existe déjà.');
                 return $this->redirectToRoute('team_new');
             }
 
-            // Défini des valeurs par défaut pour les champs requis
-            $person->setAlertOnAnswer(false);
-            $person->setAlertNewRequest(false);
-            $person->setAlertBeforeVacation(false);
+            $teamService->setDefaultAlerts($person);
 
-            // Défini une valeur par défaut pour le champ position_id
             $position = $userForm->get('position')->getData();
-            // Vérifie si une position est sélectionnée
-            if ($position) {
-                $person->setPosition($position);
-            } else {
-                // Si aucune position n'est sélectionnée, définir une valeur par défaut
-                $defaultPosition = $entityManager->getRepository(Position::class)->find(1);
-                $person->setPosition($defaultPosition);
-            }
-
-            // Défini une valeur par défaut pour le champ enabled
-            $user->setEnabled(true);
-
-            // Défini une valeur par défaut pour le champ created_at
-            $user->setCreatedAt(new \DateTimeImmutable());
-
-            // Récupère le département sélectionné
             $department = $userForm->get('department')->getData();
-            if ($department) {
-                // Récupère le manager associé au département
-                $manager = $personRepository->findOneBy([
-                    'department' => $department,
-                    'manager' => null, // Trouve une personne qui est un manager (relation ManyToOne)
-                ]);
 
-                // Vérifie si un manager est trouvé
-                if ($manager) {
-                    $person->setManager($manager);
+            if ($position && $position->getName() === 'Manager' && $department) {
+                if (!$teamService->isManagerUnique($department, $position)) {
+                    $this->addFlash('error', 'Il y a déjà un manager pour ce département.');
+                    return $this->redirectToRoute('team_new');
                 }
             }
 
-            // Hashage du mot de passe
+            $teamService->setUserRole($user, $position, $department);
+            $teamService->setDefaultPosition($person, $position);
+            $user->setEnabled(true);
+            $user->setCreatedAt(new \DateTimeImmutable());
+            $teamService->setManager($person, $department);
+
             $newPassword = $userForm->get('newPassword')->getData();
-            if ($newPassword) {
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $newPassword
-                );
-                $user->setPassword($hashedPassword);
-            }
-
-            // Défini le rôle de l'utilisateur
-            $user->setPerson($person);
-            $user->setRole('ROLE_COLLABORATOR');
-
-            // Vérifie si l'email existe déjà
-            $entityManager->persist($person);
-            $entityManager->persist($user);
+            $teamService->hashPassword($user, $newPassword);
 
             try {
-                $entityManager->flush();
+                $teamService->saveUserAndPerson($user, $person);
                 $this->addFlash('success', 'Le nouveau membre a été ajouté avec succès.');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de l\'ajout du nouveau membre.');
@@ -190,91 +149,63 @@ class TeamController extends AbstractController
     }
 
     #[Route('/team/details/{id}', name: 'team_details')]
-    public function memberUpdate(Request $request, int $id, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    public function memberUpdate(Request $request, int $id, UserRepository $userRepository, TeamService $teamService): Response
     {
-        // Vérifie si l'utilisateur a le rôle de manager
         $userManager = $this->getUser();
         if (! $userManager instanceof User) {
             return $this->redirectToRoute('login');
         }
-        // Récupération de la personne et du département du manager
         $personManager = $userManager->getPerson();
-        // Vérifie si le manager a un département
         $user = $userRepository->find($id);
 
-        // Vérifie si l'utilisateur existe
         if (! $user) {
             throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
-        // Vérifie si l'utilisateur appartient au même département que le manager
         $person = $user->getPerson();
+        if (
+            !$person ||
+            !$personManager ||
+            !$person->getDepartment() ||
+            !$personManager->getDepartment() ||
+            $person->getDepartment()->getId() !== $personManager->getDepartment()->getId()
+        ) {
+            throw $this->createAccessDeniedException('Vous ne pouvez modifier que les membres de votre équipe.');
+        }
 
-        // Création du formulaire avec l'utilisateur récupéré
         $userForm = $this->createForm(UserType::class, $user, [
-            'include_enabled' => true, // Inclure le champ "enabled"
-            'require_password' => false, // Ne pas exiger de mot de passe pour la mise à jour
+            'include_enabled' => true,
+            'require_password' => false,
         ]);
-        // Vérifie si l'utilisateur a un département
         $userForm->handleRequest($request);
         $delete = $request->query->get('delete');
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
 
-        // Vérifie si le formulaire de suppression a été soumis
         if ('true' == $delete) {
             if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-                // Supprimer l'utilisateur et la personne
-                $entityManager->remove($person);
-                $entityManager->remove($user);
-                $entityManager->flush();
-
-                // Ajouter un message flash de succès
+                $teamService->removeUserAndPerson($user, $person);
                 $this->addFlash('success', 'Le membre a été supprimé avec succès.');
-
                 return $this->redirectToRoute('team_index');
             }
         }
 
-        // Vérifie si le formulaire a été soumis et est valide
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            // Mise à jour de la position
             $position = $userForm->get('position')->getData();
-            if ($position) {
-                $person->setPosition($position);
-            } else {
-                // Si aucune position n'est sélectionnée, définir une valeur par défaut
-                $defaultPosition = $entityManager->getRepository(Position::class)->find(1);
-                $person->setPosition($defaultPosition);
-            }
+            $teamService->setDefaultPosition($person, $position);
 
-            // Mise à jour du champ enabled
             $isEnabled = $userForm->get('enabled')->getData();
             $user->setEnabled($isEnabled);
 
-            // Si le profil est réactivé, mettre à jour la colonne updated_at
             if ($isEnabled) {
                 $user->setUpdatedAt(new \DateTimeImmutable());
             }
 
-            // Hashage du mot de passe si un nouveau mot de passe est fourni
             $newPassword = $userForm->get('newPassword')->getData();
-            if ($newPassword) {
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $newPassword
-                );
-                $user->setPassword($hashedPassword);
-            }
+            $teamService->hashPassword($user, $newPassword);
 
-            // Persister les modifications
-            $user->setPerson($person);
-            $entityManager->persist($person);
-            $entityManager->persist($user);
-
-            // Enregistrer les modifications dans la base de données
             try {
-                $entityManager->flush();
+                $teamService->saveUserAndPerson($user, $person);
                 $this->addFlash('success', 'Le membre a été mis à jour avec succès.');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour du membre.');

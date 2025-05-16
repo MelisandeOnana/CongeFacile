@@ -5,10 +5,6 @@ namespace App\Controller\admin;
 use App\Entity\Position;
 use App\Form\DeleteType;
 use App\Form\PositionType;
-use App\Repository\PersonRepository;
-use App\Repository\PositionRepository;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -16,37 +12,24 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\PositionSearchType;
-use Exception;
+use App\Service\PositionService;
 
 #[IsGranted('ROLE_MANAGER')]
 class PositionController extends AbstractController
 {
     #[Route('/position', name: 'positions')]
-    public function index(PositionRepository $positionRepository, PersonRepository $personRepository, PaginatorInterface $paginator, HttpRequest $request): Response
+    public function index(PositionService $positionService, PaginatorInterface $paginator, HttpRequest $request): Response
     {
-        $positionCounts = [];
-
         $form = $this->createForm(PositionSearchType::class);
         $form->handleRequest($request);
 
-        // Récupérer les valeurs des filtres depuis la requête
         $filterName = $request->query->get('name');
         $filterNumber = $request->query->get('number');
 
-        $criteria = Criteria::create();
+        $filteredPositions = $positionService->getFilteredPositions($filterName);
+        $positionCounts = $positionService->getPositionCounts($filteredPositions);
 
-        if ($filterName) {
-            $criteria->andWhere(Criteria::expr()->contains('name', $filterName));
-        }
-
-        $criteria->orderBy(['id' => 'DESC']);
-        $filteredPositions = $positionRepository->matching($criteria);
-
-        foreach ($filteredPositions as $position) {
-            $positionCounts[$position->getId()] = $personRepository->countByPosition($position);
-        }
-
-        if (null != $filterNumber) {
+        if (null !== $filterNumber) {
             $filteredPositionsByNumber = [];
             foreach ($filteredPositions as $position) {
                 if ($positionCounts[$position->getId()] == $filterNumber) {
@@ -57,9 +40,9 @@ class PositionController extends AbstractController
         }
 
         $PostionsPagination = $paginator->paginate(
-            $filteredPositions, /* query NOT result */
-            $request->query->getInt('page', 1), /* page number */
-            10 /* limit par page */
+            $filteredPositions,
+            $request->query->getInt('page', 1),
+            10
         );
 
         return $this->render('admin/position/index.html.twig', [
@@ -70,55 +53,40 @@ class PositionController extends AbstractController
     }
 
     #[Route('/position/edit/{id}', name: 'position_edit')]
-    public function edit(PositionRepository $positionRepository, $id, HttpRequest $request, EntityManagerInterface $entityManager, PersonRepository $personRepository): Response
+    public function edit(Position $position, HttpRequest $request, PositionService $positionService): Response
     {
-        $position = $positionRepository->find($id);
+        $positionCount = $positionService->getPositionCounts([$position])[$position->getId()] ?? 0;
 
-        if (! $position) {
-            throw $this->createNotFoundException('Le poste n\'existe pas.');
-        }
-
-        $positionCount = $personRepository->countByPosition($position);
-
-        $delete = $request->query->get('delete');
         $formPosition = $this->createForm(PositionType::class, $position);
         $formPosition->handleRequest($request);
         $formDelete = $this->createForm(DeleteType::class);
         $formDelete->handleRequest($request);
 
         if ($formPosition->isSubmitted() && $formPosition->isValid()) {
-            $existingPosition = $positionRepository->findOneBy(['name' => $position->getName()]);
-            if ($existingPosition && $existingPosition->getId() !== $position->getId()) {
+            if (!$positionService->isNameUnique($position)) {
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
-
-                return $this->redirectToRoute('position_edit', ['id' => $id]);
+                return $this->redirectToRoute('position_edit', ['id' => $position->getId()]);
+            }
+            if ($positionService->save($position)) {
+                $this->addFlash('success', 'Le poste a été modifié avec succès.');
             } else {
-                $entityManager->persist($position);
-                try {
-                    $entityManager->flush();
-                        $this->addFlash('success', 'Le poste a été modifié avec succès.');
-                } catch (Exception $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
-                }
-
-                return $this->redirectToRoute('positions');
+                $this->addFlash('error', 'Une erreur est survenue lors de la modification du poste.');
             }
+            return $this->redirectToRoute('positions');
         }
 
-        if ($delete == 'true') {
-            if ($formDelete->isSubmitted() && $formDelete->isValid()) {
-                if ($positionCount > 0) {
-                    $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
-                    return $this->redirectToRoute('position_edit', ['id' => $id]);
-                } else {
-                    $entityManager->remove($position);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Le poste a été supprimé avec succès.');
-                    return $this->redirectToRoute('positions');
-                }
+        if ($formDelete->isSubmitted() && $formDelete->isValid()) {
+            if (!$positionService->canDelete($position)) {
+                $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
+                return $this->redirectToRoute('position_edit', ['id' => $position->getId()]);
             }
+            if ($positionService->delete($position)) {
+                $this->addFlash('success', 'Le poste a été supprimé avec succès.');
+            } else {
+                $this->addFlash('error', 'Une erreur est survenue lors de la suppression du poste.');
+            }
+            return $this->redirectToRoute('positions');
         }
-
 
         return $this->render('admin/position/position_edit.html.twig', [
             'position' => $position,
@@ -128,24 +96,21 @@ class PositionController extends AbstractController
     }
 
     #[Route('/position/new', name: 'position_new')]
-    public function new(PositionRepository $positionRepository, HttpRequest $request, EntityManagerInterface $entityManager): Response
+    public function new(HttpRequest $request, PositionService $positionService): Response
     {
         $position = new Position();
         $formPosition = $this->createForm(PositionType::class, $position);
         $formPosition->handleRequest($request);
 
         if ($formPosition->isSubmitted() && $formPosition->isValid()) {
-            if ($positionRepository->findOneBy(['name' => $position->getName()])) {
+            if (!$positionService->isNameUnique($position)) {
                 $this->addFlash('error', 'Un poste avec ce nom existe déjà.');
             } else {
-                $entityManager->persist($position);
-                try {
-                    $entityManager->flush();
+                if ($positionService->save($position)) {
                     $this->addFlash('success', 'Le poste a été créé avec succès.');
-                } catch (Exception $e) {
+                } else {
                     $this->addFlash('error', 'Une erreur est survenue lors de la création du poste.');
                 }
-
                 return $this->redirectToRoute('positions');
             }
         }
@@ -156,22 +121,17 @@ class PositionController extends AbstractController
     }
 
     #[Route('/position/delete/{id}', name: 'position_delete', methods: ['POST'])]
-    public function delete(Position $position, EntityManagerInterface $entityManager, PersonRepository $personRepository, HttpRequest $request): Response
+    public function delete(Position $position, PositionService $positionService): Response
     {
-        $positionCount = $personRepository->countByPosition($position);
-
-        if ($positionCount > 0) {
+        if (!$positionService->canDelete($position)) {
             $this->addFlash('error', 'Impossible de supprimer ce poste car il est associé à des collaborateurs.');
         } else {
-            $entityManager->remove($position);
-            try {
-                $entityManager->flush();
+            if ($positionService->delete($position)) {
                 $this->addFlash('success', 'Le poste a été supprimé avec succès.');
-            } catch (Exception $e) {
+            } else {
                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression du poste.');
             }
         }
-
         return $this->redirectToRoute('positions');
     }
 }
