@@ -1,7 +1,8 @@
 <ins>**Documentation**</ins>
 
-•	[Guide Utilisateur](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/GUIDE%20UTILISATEUR%20-%20CongeFacile.pdf) 
-•	[Cahier de recette](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf)
+* [Guide Utilisateur](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/GUIDE%20UTILISATEUR%20-%20CongeFacile.pdf) 
+* [Cahier de recette](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf)
+* [Cahier des charges](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CDC_Conge%C2%B4Facile%20(1).pdf)
 
 <ins>**Guide de démarrage du projet**</ins>
 
@@ -25,12 +26,12 @@
 8)	Dans le même terminal, exécuter la commande « php bin/console cache:clear » pour vider le cache prod et éviter les problèmes au chargement du site.
 9)	Envoyer l’ensemble des fichiers vers le serveur d’hébergement.
 10)	Dans le dossier Public ajouter un fichier htaccess pour rediriger toutes les requêtes vers index.php grace au script suiviant :
-    
+```
 RewriteEngine On 
 RewriteCond %{REQUEST_FILENAME} !-f 
 RewriteCond %{REQUEST_FILENAME} !-d 
 //Rediriger toutes les requêtes vers index.php
  RewriteRule ^ index.php [QSA,L]
- 
+ ```
 12)	 Ouvrir le site via l’url de cette manière « nomdedomaine/public/ »
 
