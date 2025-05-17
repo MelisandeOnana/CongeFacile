@@ -16,6 +16,8 @@ use App\Service\RequestService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use phpDocumentor\Reflection\PseudoTypes\FloatValue;
+use SebastianBergmann\Type\TypeName;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -104,9 +106,10 @@ class RequestController extends AbstractController
 
             $requests = $requestRepository->matching($criteria);
 
-            if ($filterNumber) {
+            if (is_numeric($filterNumber)) {
                 $requests = $requests->filter(function ($request) use ($filterNumber) {
-                    return $request->getWorkingDays() == $filterNumber;
+                    dump($request->getWorkingDays(), $filterNumber);
+                    return (float) $request->getWorkingDays() == (float) $filterNumber;
                 });
             }
 
@@ -142,9 +145,10 @@ class RequestController extends AbstractController
 
             $requests = $requestRepository->matching($criteria);
 
-            if ($filterNumber) {
+            if (is_numeric($filterNumber)) {
                 $requests = $requests->filter(function ($request) use ($filterNumber) {
-                    return $request->getWorkingDays() == $filterNumber;
+                    dump($request->getWorkingDays(), $filterNumber);
+                    return (float) $request->getWorkingDays() == (float) $filterNumber;
                 });
             }
 

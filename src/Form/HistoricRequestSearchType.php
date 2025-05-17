@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -85,10 +86,12 @@ class HistoricRequestSearchType extends AbstractType
                 'onchange' => "updateUrl('type', this.value)",
             ],
         ])
-        ->add('days', SearchType::class, [
+        ->add('days', NumberType::class, [
             'label' => 'Nb jours',
             'required' => false,
+            'scale' => 1,
             'attr' => [
+                'step' => '0.1',
                 'class' => 'appearance-none text-sm font-medium mb-5 w-full h-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 px-2',
                 'onchange' => "updateUrl('days', this.value)",
             
