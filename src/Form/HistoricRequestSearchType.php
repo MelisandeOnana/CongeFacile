@@ -109,4 +109,9 @@ class HistoricRequestSearchType extends AbstractType
             'types' => [],
         ]);
     }
+
+    public function getBlockPrefix(): string
+    {
+        return '';
+    }
 }

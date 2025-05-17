@@ -93,4 +93,9 @@ class PendingRequestSearchType extends AbstractType
             'types' => [],
         ]);
     }
+    
+    public function getBlockPrefix(): string
+    {
+        return '';
+    }
 }

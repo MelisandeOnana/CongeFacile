@@ -358,7 +358,7 @@ class RequestController extends AbstractController
 
         if ($filterNumber) {
             $requests = $requests->filter(function ($request) use ($filterNumber) {
-                return $request->getWorkingDays() == $filterNumber;
+                return (float) $request->getWorkingDays() == (float) $filterNumber;
             });
         }
 
