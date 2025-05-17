@@ -12,18 +12,18 @@ class RequestType
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     // @phpstan-ignore-next-line
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message: 'Le nom du type de demande ne peut pas être vide.')]
     private string $name;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
