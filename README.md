@@ -3,6 +3,8 @@
 * [Guide Utilisateur](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/GUIDE%20UTILISATEUR%20-%20CongeFacile.pdf) 
 * [Cahier de recette](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf)
 * [Cahier des charges](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CDC_Conge%C2%B4Facile%20(1).pdf)
+* [Maquette CongeFacile](https://www.figma.com/design/asceKpDZb7Y8zscQkZRgLT/Cong%C3%A9Facile?node-id=0-1&p=f)
+* [Documentation Techinque](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/DOCUMENT%20TECHNIQUE%20-%20CongeFacile.pdf)
 
 <ins>**Guide de démarrage du projet**</ins>
 
