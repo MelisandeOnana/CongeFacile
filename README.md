@@ -1,7 +1,7 @@
 <ins>**Documentation**</ins>
 
-•	[Guide Utilisateur](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf) 
-•	[Cahier de recette](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/GUIDE%20UTILISATEUR%20-%20CongeFacile.pdf))
+•	[Guide Utilisateur](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/GUIDE%20UTILISATEUR%20-%20CongeFacile.pdf) 
+•	[Cahier de recette](https://github.com/MelisandeOnana/CongeFacile/blob/master/docs/CAHIER%20%20DE%20%20RECETTES%20-%20CONGEFACILE.pdf)
 
 <ins>**Guide de démarrage du projet**</ins>
 
